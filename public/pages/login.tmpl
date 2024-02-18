@@ -3,9 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/styles/base.css">
+  <link rel="stylesheet" href="/assets/styles/pages/login.css">
+  {{ template "templates/head.tmpl" }}
   <title>Test</title>
 </head>
 <body>
-    <h1>Hello</h1>
+  <main class="container">
+    <img 
+      src="/assets/images/login.png"
+    />
+    <div>
+      <button>
+        <i class="ph ph-github-logo"></i>
+        Login with GitHub
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const button = document.querySelector('button');
+
+    button.onclick = e => {
+      console.log(e)
+    }
+
+  </script>
 </body>
 </html>

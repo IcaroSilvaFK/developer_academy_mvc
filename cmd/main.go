@@ -6,6 +6,7 @@ import (
 	"path"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,10 +25,16 @@ func main() {
 
 	expPath := path.Dir(ex)
 
-	pages := path.Join(expPath, "public", "pages", "*")
+	pages := path.Join(expPath, "public", "pages")
+	e.Static("/assets", "./public/assets")
 
-	e.Static("/styles", "./public/styles")
-	e.LoadHTMLGlob(pages)
+	paths, err := utils.ReadTemplatesFiles(pages)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	e.LoadHTMLFiles(paths...)
 
 	routes.NewWebRoutes(e)
 
