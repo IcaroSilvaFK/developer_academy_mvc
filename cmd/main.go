@@ -1,0 +1,35 @@
+package main
+
+import (
+	"log"
+	"os"
+	"path"
+
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+
+	e := gin.Default()
+
+	e.Use(gin.Logger())
+	e.Use(gin.Recovery())
+
+	ex, err := os.Executable()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	expPath := path.Dir(ex)
+
+	pages := path.Join(expPath, "public", "pages", "*")
+
+	e.Static("/styles", "./public/styles")
+	e.LoadHTMLGlob(pages)
+
+	routes.NewWebRoutes(e)
+
+	log.Fatal(e.Run())
+}
