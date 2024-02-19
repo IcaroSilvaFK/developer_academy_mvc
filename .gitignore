@@ -1,2 +1,7 @@
 main
 .vscode
+.docker
+tmp
+.env
+.env.local
+.env.prod

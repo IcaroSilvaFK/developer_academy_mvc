@@ -8,13 +8,13 @@
   {{ template "templates/head.tmpl" }}
   <title>Test</title>
 </head>
-<body>
+<body  x-data>
   <main class="container">
     <img 
       src="/assets/images/login.png"
     />
     <div>
-      <button>
+      <button @click="onLogin">
         <i class="ph ph-github-logo"></i>
         Login with GitHub
       </button>
@@ -22,11 +22,16 @@
   </main>
 
   <script>
-    const button = document.querySelector('button');
-
-    button.onclick = e => {
-      console.log(e)
+    async function onLogin() {
+      window.open("https://github.com/login/oauth/authorize?client_id=59928a2b5e7e2e57d58a&redirect_uri=http://localhost:8080", "_self")
     }
+
+    window.addEventListener("load", () => {
+      const url = new URL(window.location.href)
+      const code = url.searchParams.get("code")
+
+      console.log(code)
+    })
 
   </script>
 </body>
