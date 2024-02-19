@@ -1,6 +1,8 @@
 package services
 
 import (
+	"os"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
@@ -31,8 +33,8 @@ func (a *AuthService) Login(code string) (*models.UserModel, error) {
 	var res dtos.GithubTokenResponse
 
 	_, err := a.client.Post("https://github.com/login/oauth/access_token", map[string]string{
-		"client_id":     "59928a2b5e7e2e57d58a",
-		"client_secret": "2f77d4ab41ffd5e05ea22843f7baef3e8e2cdaaa",
+		"client_id":     os.Getenv(utils.GITHUB_CLIENT_ID),
+		"client_secret": os.Getenv(utils.GITHUB_CLIENT_SECRET),
 		"code":          code,
 	}, &res)
 
