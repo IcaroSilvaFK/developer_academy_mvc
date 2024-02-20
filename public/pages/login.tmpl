@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,10 @@
   {{ template "templates/head.tmpl" }}
   <title>Test</title>
 </head>
-<body  x-data>
+
+<body x-data>
   <main class="container">
-    <img 
-      src="/assets/images/login.png"
-    />
+    <img src="/assets/images/login.png" />
     <div>
       <button @click="onLogin">
         <i class="ph ph-github-logo"></i>
@@ -23,16 +23,21 @@
 
   <script>
     async function onLogin() {
-      window.open("https://github.com/login/oauth/authorize?client_id=59928a2b5e7e2e57d58a&redirect_uri=http://localhost:8080", "_self")
+      window.open(
+        "https://github.com/login/oauth/authorize?client_id=59928a2b5e7e2e57d58a&redirect_uri=http://localhost:8080",
+        "_self")
     }
 
-    window.addEventListener("load", () => {
+    window.addEventListener("load", async () => {
       const url = new URL(window.location.href)
       const code = url.searchParams.get("code")
 
-      console.log(code)
+      if (code) {
+        const request = await fetch(`/api/v1/login/${code}`)
+        console.log(await request.json())
+      }
     })
-
   </script>
 </body>
+
 </html>

@@ -10,13 +10,13 @@ type UserModel struct {
 	Name      string `json:"name"`
 	AvatarUrl string `json:"avatar_url"`
 	Email     string `json:"email" gorm:"index"`
-	Blog      string `json:"blog"`
+	Bio       string `json:"bio"`
 	Url       string `json:"url"`
 	gorm.Model
 }
 
 func NewUserModel(
-	email, name, avatarUrl, url, blog string,
+	email, name, avatarUrl, url, bio string,
 ) *UserModel {
 	return &UserModel{
 		ID:        utils.NewId(),
@@ -24,6 +24,7 @@ func NewUserModel(
 		Name:      name,
 		AvatarUrl: avatarUrl,
 		Url:       url,
+		Bio:       bio,
 	}
 }
 

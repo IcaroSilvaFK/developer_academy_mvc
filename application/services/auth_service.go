@@ -7,28 +7,29 @@ import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
+	"gorm.io/gorm"
 )
 
-type AuthService struct {
+type LoginService struct {
 	ur     repositories.UserRepositoryInterface
 	client utils.HttpClientInterface
 }
 
-type AuthServiceInterface interface {
+type LoginServiceInterface interface {
 	Login(code string) (*models.UserModel, error)
 }
 
 func NewAuthService(
 	ur repositories.UserRepositoryInterface,
 	client utils.HttpClientInterface,
-) AuthServiceInterface {
+) LoginServiceInterface {
 
-	return &AuthService{
+	return &LoginService{
 		ur, client,
 	}
 }
 
-func (a *AuthService) Login(code string) (*models.UserModel, error) {
+func (a *LoginService) Login(code string) (*models.UserModel, error) {
 
 	var res dtos.GithubTokenResponse
 
@@ -52,5 +53,22 @@ func (a *AuthService) Login(code string) (*models.UserModel, error) {
 		return nil, err
 	}
 
-	return nil, nil
+	uExists, err := a.ur.FindByEmail(u.Email)
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	if err == gorm.ErrRecordNotFound {
+
+		uExists = models.NewUserModel(
+			u.Email, u.Name, u.AvatarUrl, u.Url, u.Bio,
+		)
+		err = a.ur.Create(uExists)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return uExists, nil
 }

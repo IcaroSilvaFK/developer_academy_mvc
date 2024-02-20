@@ -42,6 +42,7 @@ func main() {
 	e.LoadHTMLFiles(paths...)
 
 	routes.NewWebRoutes(e)
+	routes.NewApiRoutes(e)
 
 	log.Fatal(e.Run())
 }
