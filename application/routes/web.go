@@ -8,6 +8,10 @@ import (
 func NewWebRoutes(en *gin.Engine) {
 
 	lController := di.NewLoginController()
+	hController := di.NewHomeController()
+	ccController := di.CreateNewChallengeController()
 
 	en.GET("/", lController.Login)
+	en.GET("/home", hController.Index)
+	en.GET("/new_challenge", ccController.Index)
 }

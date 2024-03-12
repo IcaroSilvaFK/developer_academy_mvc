@@ -6,12 +6,12 @@ import (
 )
 
 type UserModel struct {
-	ID        string `json:"id" gorm:"primarykey"`
-	Name      string `json:"name"`
-	AvatarUrl string `json:"avatar_url"`
-	Email     string `json:"email" gorm:"index"`
-	Bio       string `json:"bio"`
-	Url       string `json:"url"`
+	ID        string
+	Name      string
+	AvatarUrl string
+	Email     string `gorm:"unique;not null"`
+	Bio       string
+	Url       string
 	gorm.Model
 }
 

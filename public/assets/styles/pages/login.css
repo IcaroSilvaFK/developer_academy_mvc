@@ -1,39 +1,72 @@
 .container {
   display: flex;
   align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
 
-  > img {
-    width: 50%;
-    height: 100dvh;
-  }
-  > div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.container > img {
+  width: 50%;
+  height: 100dvh;
+}
 
-    flex: 1;
-    > button {
-      background-color: var(--brand-500);
-      color: var(--white);
-      border-radius: 8px;
-      width: 50%;
-      padding: 12px;
+.container > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 22px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
+  flex: 1;
+  width: 100%;
+}
 
-      font-size: 1.125rem;
-      i {
-        color: var(--white);
-        font-size: 1.375rem;
-      }
+.container > div > section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
 
-      &:hover {
-        filter: brightness(0.9);
-        transition: all 0.3s linear;
-      }
-    }
-  }
+.container > div > section > h1 {
+  color: var(--gray-900);
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.container > div > section > span {
+  color: var(--gray-400);
+  font-size: 1rem;
+}
+
+div > section {
+  display: flex;
+  flex-direction: column;
+}
+
+.container div > button {
+  background-color: var(--black);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 380px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  font-size: 1.125rem;
+}
+
+div > button i {
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.container div > button:hover {
+  background: var(--hover-button);
+  transition: all 0.3s linear;
 }

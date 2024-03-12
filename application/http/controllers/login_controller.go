@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/gin-gonic/gin"
 )
@@ -39,18 +39,16 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	r, err := c.svc.Login(code)
+	u, err := c.svc.Login(code)
 
 	if err != nil {
-
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
-
 		return
 	}
 
-	log.Println(r)
+	r := views.NewLoginResponseView(u)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"user": r,

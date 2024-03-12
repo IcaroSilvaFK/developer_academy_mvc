@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/styles/pages/home.css">
+  {{ template "templates/head.tmpl" }}
+  <title>Document</title>
+</head>
+
+<body x-data="{mock}">
+  {{template "templates/header.tmpl" }}
+
+  <main class="container__main">
+    <header class="main__header">
+      <h1>Challenges</h1>
+      <div>
+        <div class="header__input">
+          <i class="ph ph-magnifying-glass"></i>
+          <input placeholder="Search challenges" />
+        </div>
+        <a href="/new_challenge">
+          Create
+        </a>
+      </div>
+    </header>
+
+    <ul class="main__list_container">
+      <template x-for="data in mock" :key="data.id">
+        <li>
+          <div class="list_container__content">
+            <h3 x-text="data.title"></h3>
+            <p x-text="data.description"></p>
+            <time x-text="'Criado em ' + formatDate(data.created)"></time>
+          </div>
+          <footer>
+            <a x-bind:href="data.id">
+              visualizar
+            </a>
+          </footer>
+        </li>
+      </template>
+    </ul>
+  </main>
+
+  <script>
+    const mock = Array.from({
+      length: 50
+    }).map((_, idx) => ({
+      title: `${idx+1} Hackthon: Build a Chat App`,
+      description: `Build a real-time chat application using any framework or library`,
+      created: new Date(),
+      id: window.crypto.randomUUID()
+    }))
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat("pt-BR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(date);
+    }
+  </script>
+
+</body>
+
+</html>

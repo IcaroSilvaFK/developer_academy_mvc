@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/styles/pages/new_challenge.css">
+  {{ template "templates/head.tmpl" }}
+  <title>Document</title>
+</head>
+
+<body x-data>
+  {{template "templates/header.tmpl" }}
+  <main class="container__main">
+    <header>
+      <h1>Novo Desafio</h1>
+    </header>
+    <form>
+      <div class="container__input">
+        <label>
+          Título do desafio
+        </label>
+        <input placeholder="Digite o titúlo do desafio" />
+      </div>
+      <div class="container__input">
+        <label>
+          Breve Descrição
+        </label>
+        <textarea placeholder="Digite uma breve descrição do desafio"></textarea>
+      </div>
+      <div class="container__input">
+        <label>
+          YouTube Video Embed URL
+        </label>
+        <input type="text" placeholder="Digite a url do vídeo no YouTube">
+      </div>
+      <footer>
+        <button>
+          Enviar
+        </button>
+      </footer>
+    </form>
+  </main>
+</body>
+
+</html>

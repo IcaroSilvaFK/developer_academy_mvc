@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/assets/styles/base.css">
   <link rel="stylesheet" href="/assets/styles/pages/login.css">
   {{ template "templates/head.tmpl" }}
   <title>Test</title>
@@ -12,8 +11,11 @@
 
 <body x-data>
   <main class="container">
-    <img src="/assets/images/login.png" />
     <div>
+      <section>
+        <h1>Login</h1>
+        <span>The platform for developers</span>
+      </section>
       <button @click="onLogin">
         <i class="ph ph-github-logo"></i>
         Login with GitHub
@@ -27,14 +29,26 @@
         "https://github.com/login/oauth/authorize?client_id=59928a2b5e7e2e57d58a&redirect_uri=http://localhost:8080",
         "_self")
     }
+  </script>
+
+  <script type="module">
+    import {
+      UserService
+    } from '/assets/js/index.js'
+
+
+    const userService = new UserService()
 
     window.addEventListener("load", async () => {
       const url = new URL(window.location.href)
       const code = url.searchParams.get("code")
 
       if (code) {
-        const request = await fetch(`/api/v1/login/${code}`)
-        console.log(await request.json())
+        const authIsSuccess = await userService.auth(code)
+
+        if (authIsSuccess) {
+          window.location.replace("/home")
+        }
       }
     })
   </script>
