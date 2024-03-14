@@ -6,7 +6,7 @@ import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 )
 
-type LoginResponseView struct {
+type UserResponseView struct {
 	CreateAt  time.Time `json:"create_at"`
 	ID        string    `json:"id"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -17,9 +17,9 @@ type LoginResponseView struct {
 	Url       string    `json:"url"`
 }
 
-func NewLoginResponseView(u *models.UserModel) *LoginResponseView {
+func NewUserResponseView(u *models.UserModel) *UserResponseView {
 
-	return &LoginResponseView{
+	return &UserResponseView{
 		AvatarUrl: u.AvatarUrl,
 		Bio:       u.Bio,
 		Email:     u.Email,

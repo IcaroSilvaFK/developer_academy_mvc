@@ -1,0 +1,99 @@
+.container__main {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 22px;
+}
+
+.container__main > header {
+  padding: 12px 0;
+}
+
+.container__main > header span {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+}
+
+.container__section {
+  padding: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--gray-200);
+  margin-top: 12px;
+}
+
+.section__column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.section__column div {
+  flex: 1;
+}
+
+.section__column > div:first-child {
+  display: flex;
+  gap: 22px;
+}
+
+.container__col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.container__col label {
+  color: var(--gray-900);
+  font-weight: 500;
+}
+
+.container__col input,
+.container__col textarea {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--gray-200);
+  font-size: 0.875rem;
+}
+
+.container__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.container__card {
+  padding: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--gray-200);
+
+  display: flex;
+  align-items: center;
+}
+
+.container__card div {
+  flex: 1;
+}
+
+.container__card div h4 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+
+.container__card div p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--gray-400);
+}
+
+.container__card button {
+  background: var(--black);
+  color: var(--white);
+  padding: 12px 4px;
+  border-radius: 4px;
+}
+
+.container__card button:hover {
+  background: var(--hover-button);
+  transition: all 0.3s linear;
+}

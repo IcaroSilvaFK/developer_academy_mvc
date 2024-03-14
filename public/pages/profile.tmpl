@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/styles/pages/profile.css">
+  {{ template "templates/head.tmpl" }}
+  <title>Document</title>
+</head>
+<body x-data="{mock}">
+  {{template "templates/header.tmpl" }}
+
+  <main class="container__main">
+    <header>
+      <h2>Perfil</h2>
+      <span>Você pode visualizar seu perfil, mas não pode editar suas informações.</span>
+    </header>
+    <section class="container__section section__column">
+      <div>
+        <div class="container__col">
+          <label>Username</label>
+          <input type="text" value="Icaro Vieira" readonly>
+        </div>
+        <div class="container__col">
+          <label>Email</label>
+          <input type="text" value="icaro@icaro.com" readonly>
+        </div>
+      </div>
+      <div class="container__col">
+        <label>Bio</label>
+        <textarea readonly>Eu sou um texto de exemplo</textarea>
+      </div>
+    </section>
+
+
+    <header>
+      <h2>Desafios</h2>
+    </header>
+    <section class="container__section">
+      <ul class="container__cards">
+        <template x-for="challenge in mock">
+          <li class="container__card">
+            <div>
+              <h4 x-text="challenge.title"></h4>
+              <p x-text="challenge.description"></p>
+            </div>
+            <button>
+              <i class="ph ph-trash"></i>
+            </button>
+          </li>
+        </template>
+      </ul>
+    </section>
+    <script>
+      const mock = Array.from({length:10}).map((_, idx) => ({
+        title: `Desafio ${idx+1}`,
+        createdAt: dayjs(new Date()).fromNow(),
+        description: 'Esta é uma descrição teste',
+        id: window.crypto.randomUUID()
+      }))
+    </script>
+  </main>
+</body>
+</html>

@@ -1,15 +1,18 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 type LoginController struct {
-	svc services.LoginServiceInterface
+	svc  services.LoginServiceInterface
+	usvc services.UserServiceInterface
 }
 
 type LoginControllerInterface interface {
@@ -19,18 +22,37 @@ type LoginControllerInterface interface {
 
 func NewLoginController(
 	svc services.LoginServiceInterface,
+	usvc services.UserServiceInterface,
 ) LoginControllerInterface {
 	return &LoginController{
-		svc,
+		svc, usvc,
 	}
 }
 
 func (c *LoginController) Login(ctx *gin.Context) {
-	ctx.HTML(200, "login.tmpl", nil)
+
+	users, top, err := c.usvc.GetTenFirstUserAndCount()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var r []views.UserResponseView
+
+	for _, u := range users {
+		r = append(r, *views.NewUserResponseView(u))
+	}
+
+	ctx.HTML(200, "login.tmpl", gin.H{
+		"users":    r,
+		"quantity": top,
+		"error":    err,
+	})
 }
 
 func (c *LoginController) SignIn(ctx *gin.Context) {
 	code := ctx.Param("code")
+	session := sessions.Default(ctx)
 
 	if code == "" {
 		ctx.JSON(http.StatusNoContent, gin.H{
@@ -48,7 +70,9 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	r := views.NewLoginResponseView(u)
+	r := views.NewUserResponseView(u)
+
+	session.Set("user", r)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"user": r,

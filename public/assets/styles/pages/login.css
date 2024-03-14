@@ -70,3 +70,42 @@ div > button i {
   background: var(--hover-button);
   transition: all 0.3s linear;
 }
+
+.section__users {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.container__users {
+  display: flex;
+  align-items: center;
+}
+
+.container__users > li > img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--black);
+}
+
+.container__users > li:not(:first-child) {
+  margin-left: -18px;
+}
+
+.container__count_persons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.container__count_persons span:first-child {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.container__count_persons span:last-child {
+  color: var(--gray-400);
+}

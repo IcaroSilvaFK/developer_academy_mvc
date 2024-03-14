@@ -12,11 +12,13 @@ func NewLoginController() controllers.LoginControllerInterface {
 
 	db := database.GetConnection()
 	repo := repositories.NewUserRepository(db)
+	urepo := repositories.NewUserRepository(db)
 	chttp := utils.NewHttpClient()
+	usvc := services.NewUserService(urepo)
 	svc := services.NewAuthService(
 		repo,
 		chttp,
 	)
 
-	return controllers.NewLoginController(svc)
+	return controllers.NewLoginController(svc, usvc)
 }

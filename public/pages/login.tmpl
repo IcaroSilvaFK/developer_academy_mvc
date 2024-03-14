@@ -15,6 +15,21 @@
       <section>
         <h1>Login</h1>
         <span>The platform for developers</span>
+        <div class="section__users">
+          <ul class="container__users">
+            {{ range .users }}
+            <li>
+              <img src="{{ .AvatarUrl }}" alt="{{ .Name }}" />
+            </li>
+            {{ end }}
+          </ul>
+          <div class="container__count_persons">
+            {{ if gt .quantity  0}}
+            <span>+{{ .quantity }}</span>
+            {{ end }}
+            <span>pessoas já estão usando</span>
+          </div>
+        </div>
       </section>
       <button @click="onLogin">
         <i class="ph ph-github-logo"></i>

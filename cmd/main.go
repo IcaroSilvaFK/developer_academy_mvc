@@ -7,6 +7,8 @@ import (
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -17,10 +19,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	gin.ForceConsoleColor()
+
 	e := gin.Default()
+	store := cookie.NewStore([]byte("secret"))
 
 	e.Use(gin.Logger())
 	e.Use(gin.Recovery())
+	e.Use(sessions.Sessions("mysession", store))
 
 	ex, err := os.Executable()
 

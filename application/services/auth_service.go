@@ -59,7 +59,6 @@ func (a *LoginService) Login(code string) (*models.UserModel, error) {
 		return nil, err
 	}
 	if err == gorm.ErrRecordNotFound {
-
 		uExists = models.NewUserModel(
 			u.Email, u.Name, u.AvatarUrl, u.Url, u.Bio,
 		)

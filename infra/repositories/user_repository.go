@@ -12,6 +12,7 @@ type UserRepository struct {
 type UserRepositoryInterface interface {
 	Create(user *models.UserModel) error
 	FindByEmail(email string) (*models.UserModel, error)
+	FindFirstTenAndCount() ([]*models.UserModel, int, error)
 	FindById(id string) (*models.UserModel, error)
 	FindAll() (*[]models.UserModel, error)
 	Delete(id string) error
@@ -46,6 +47,21 @@ func (ur *UserRepository) FindAll() (*[]models.UserModel, error) {
 
 func (ur *UserRepository) Delete(id string) error {
 	return ur.db.Delete(&models.UserModel{}, "id = ?", id).Error
+}
+
+func (ur *UserRepository) FindFirstTenAndCount() ([]*models.UserModel, int, error) {
+
+	var count int64
+	var users []*models.UserModel
+
+	tx := ur.db.Begin()
+
+	tx.Model(&models.UserModel{}).Limit(10).Find(&users)
+	tx.Model(&models.UserModel{}).Count(&count)
+
+	err := tx.Commit().Error
+
+	return users, int(count), err
 }
 
 func (ur *UserRepository) Count() (int64, error) {
