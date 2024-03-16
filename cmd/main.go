@@ -5,16 +5,16 @@ import (
 	"os"
 	"path"
 
-	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
-	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 )
 
 func main() {
-
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +29,6 @@ func main() {
 	e.Use(sessions.Sessions("mysession", store))
 
 	ex, err := os.Executable()
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,7 +39,6 @@ func main() {
 	e.Static("/assets", "./public/assets")
 
 	paths, err := utils.ReadTemplatesFiles(pages)
-
 	if err != nil {
 		log.Fatal(err)
 	}

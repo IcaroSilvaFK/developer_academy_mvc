@@ -6,12 +6,13 @@ import (
 )
 
 type UserModel struct {
-	ID        string
-	Name      string
-	AvatarUrl string
-	Email     string `gorm:"unique;not null"`
-	Bio       string
-	Url       string
+	ID         string
+	Name       string
+	AvatarUrl  string
+	Email      string `gorm:"unique;not null"`
+	Bio        string
+	Url        string
+	Challanges []ChallengeModel `gorm:"foreignKey:UserId;references:ID"`
 	gorm.Model
 }
 

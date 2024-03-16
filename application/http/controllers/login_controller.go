@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -72,7 +73,10 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 
 	r := views.NewUserResponseView(u)
 
-	session.Set("user", r)
+	bt, _ := json.Marshal(r)
+
+	session.Set("user", string(bt))
+	session.Save()
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"user": r,

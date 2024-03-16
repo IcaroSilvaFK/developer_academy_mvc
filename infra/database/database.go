@@ -2,20 +2,20 @@ package database
 
 import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func GetConnection() *gorm.DB {
-	dsn := "root:root@tcp(127.0.0.1:3306)/mydb?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "host=localhost user=admin password=admin dbname=developer port=5432 sslmode=disable"
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic(err)
 	}
 
-	db.AutoMigrate(&models.UserModel{})
+	db.AutoMigrate(&models.UserModel{}, &models.ChallengeModel{})
 
 	return db
 }

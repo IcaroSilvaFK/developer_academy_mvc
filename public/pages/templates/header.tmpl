@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/assets/styles/components/header.css">
 <header class="header__container">
   <div>
-    <a class="header__title" href="/">
+    <a class="header__title" href="/home">
       <div>
         <i class="ph ph-flag"></i>
         <h2>Challenges</h2>
@@ -18,12 +18,9 @@
     </div>
   </div>
   <script defer type="module" src="/assets/js/index.js">
-    console.log("Hello World")
     const userService = new UserService()
 
     const user = userService.getProfile()
-
-    console.log(user)
   </script>
 </header>
 {{ end }}

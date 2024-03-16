@@ -1,6 +1,11 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+)
 
 type HomeController struct{}
 
@@ -13,5 +18,10 @@ func NewHomeController() HomeControllerInterface {
 }
 
 func (hc *HomeController) Index(ctx *gin.Context) {
+
+	session := sessions.Default(ctx)
+
+	fmt.Println(session.Get("user"))
+
 	ctx.HTML(200, "home.tmpl", nil)
 }
