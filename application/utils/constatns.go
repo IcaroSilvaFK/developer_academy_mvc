@@ -3,4 +3,5 @@ package utils
 const (
 	GITHUB_CLIENT_ID     = "GITHUB_CLIENT_ID"
 	GITHUB_CLIENT_SECRET = "GITHUB_CLIENT_SECRET"
+	PAGE_SIZE            = 10
 )

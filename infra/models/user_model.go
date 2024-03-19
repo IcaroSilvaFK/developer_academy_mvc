@@ -12,7 +12,8 @@ type UserModel struct {
 	Email      string `gorm:"unique;not null"`
 	Bio        string
 	Url        string
-	Challanges []ChallengeModel `gorm:"foreignKey:UserId;references:ID"`
+	Challanges []ChallengeModel        `gorm:"foreignKey:UserId;references:ID"`
+	Comments   []ChallengeCommentModel `gorm:"foreignKey:UserId;references:ID"`
 	gorm.Model
 }
 

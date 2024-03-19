@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/assets/styles/pages/profile.css">
+  <link rel="stylesheet" href="/assets/styles/pages/challenge.css">
   {{ template "templates/head.tmpl" }}
   <title>Document</title>
 </head>
@@ -12,6 +12,8 @@
 <body x-data="{comments}">
   {{template "templates/header.tmpl" }}
   <main class="container__main">
+    <div>
+
     <header>
       <div class="header__presentation">
         <span>Desafio</span>
@@ -55,6 +57,18 @@
           <i class="ph ph-chat-teardrop"></i>
         </button>
       </form>
+    </section>
+    </div>
+    <section class="container__help">
+      <header>
+        <i class="ph ph-lightbulb"></i>
+      <h3>Dicas sobre o tema</h3>
+      </header>
+      <ol>
+        <li>  Esboce a estrutura básica do novo componente, incluindo seus elementos principais e sua finalidade.</li>
+<li>Implemente o código necessário para o componente, seguindo as diretrizes de design e funcionalidade definidas.</li>
+<li>Teste o novo componente em diferentes cenários e ambientes para garantir sua integridade e compatibilidade com o sistema existente.</li>
+      </ol>
     </section>
   </main>
 

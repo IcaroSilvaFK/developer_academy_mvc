@@ -23,5 +23,5 @@ func (hc *HomeController) Index(ctx *gin.Context) {
 
 	fmt.Println(session.Get("user"))
 
-	ctx.HTML(200, "home.tmpl", nil)
+	ctx.HTML(200, "home.gotmpl", nil)
 }

@@ -2,6 +2,11 @@
   max-width: 1200px;
   padding: 22px;
   margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 12px;
+  align-items: flex-start;
 }
 
 .container__main > header {
@@ -126,4 +131,21 @@
 .container__comment p {
   font-size: 0.875rem;
   line-height: 1.5rem;
+}
+
+.container__help {
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--gray-200);
+}
+
+.container__help ol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.container__help ol li {
+  font-size: 14px;
 }

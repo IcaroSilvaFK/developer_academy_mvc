@@ -1,6 +1,11 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+)
 
 type ChallengeController struct {
 }
@@ -14,5 +19,14 @@ func NewChallengeController() ChallengeControllerInterface {
 }
 
 func (cc *ChallengeController) Index(ctx *gin.Context) {
-	ctx.HTML(200, "challenge.tmpl", nil)
+	ctx.HTML(http.StatusOK, "challenge.gotmpl", nil)
+}
+
+func (cc *ChallengeController) Create(ctx *gin.Context) {
+
+	session := sessions.Default(ctx)
+
+	session.Get("")
+
+	ctx.JSON(http.StatusCreated, nil)
 }

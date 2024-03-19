@@ -15,7 +15,12 @@ func GetConnection() *gorm.DB {
 		panic(err)
 	}
 
-	db.AutoMigrate(&models.UserModel{}, &models.ChallengeModel{})
+	db.AutoMigrate(
+		&models.UserModel{},
+		&models.ChallengeModel{},
+		&models.ChallengeCommentModel{},
+		&models.ChallengeHintsModel{},
+	)
 
 	return db
 }

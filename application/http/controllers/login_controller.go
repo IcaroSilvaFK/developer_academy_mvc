@@ -44,7 +44,7 @@ func (c *LoginController) Login(ctx *gin.Context) {
 		r = append(r, *views.NewUserResponseView(u))
 	}
 
-	ctx.HTML(200, "login.tmpl", gin.H{
+	ctx.HTML(200, "login.gotmpl", gin.H{
 		"users":    r,
 		"quantity": top,
 		"error":    err,
@@ -75,6 +75,7 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 
 	bt, _ := json.Marshal(r)
 
+	// TODO define in constant this key
 	session.Set("user", string(bt))
 	session.Save()
 

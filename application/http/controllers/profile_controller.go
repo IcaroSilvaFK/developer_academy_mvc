@@ -13,5 +13,5 @@ func NewProfileController() ProfileControllerInterface {
 }
 
 func (pc *ProfileController) Index(ctx *gin.Context) {
-	ctx.HTML(200, "profile.tmpl", nil)
+	ctx.HTML(200, "profile.gotmpl", nil)
 }

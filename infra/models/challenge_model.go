@@ -8,6 +8,8 @@ type ChallengeModel struct {
 	Description string
 	EmbedUrl    string
 	UserId      string
+	Comments    []ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID"`
+	Hint        ChallengeHintsModel     `gorm:"foreignKey:ChallengeId;references:ID"`
 	gorm.Model
 }
 
