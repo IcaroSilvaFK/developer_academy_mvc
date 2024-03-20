@@ -9,7 +9,7 @@
   <title>Document</title>
 </head>
 
-  <body x-data="{data: {{.challenges}}}">
+  <body x-data>
   {{template "templates/header.tmpl" }}
 
   <main class="container__main">
@@ -28,40 +28,34 @@
 
     <ul class="main__list_container">
 
-        {{}}
-      <template x-for="item in data" :key="item.ID">
+        {{range .challenges}}
         <li>
           <div class="list_container__content">
-            <h3 x-text="item.Title"></h3>
-            <p x-text="item.Description"></p>
-            <time x-text="'Criado em ' + formatDate(data.created)"></time>
+            <h3>{{ .Title }}</h3>
+            <p>{{ .Description }}</p>
+            <time x-text="'Criado em ' + formatDate(new Date('{{.CreatedAt}}'))"></time>
           </div>
           <footer>
-            <a x-bind:href="data.id">
+            <a href="/challenge/{{ .ID }}">
               visualizar
             </a>
           </footer>
         </li>
-      </template>
+        {{ end }}
     </ul>
   </main>
 
   <script>
-    const mock = Array.from({
-      length: 50
-    }).map((_, idx) => ({
-      title: `${idx+1} Hackthon: Build a Chat App`,
-      description: `Build a real-time chat application using any framework or library`,
-      created: new Date(),
-      id: window.crypto.randomUUID()
-    }))
 
     function formatDate(date) {
+
+  console.log(date)
+
       return new Intl.DateTimeFormat("pt-BR", {
         day: "numeric",
         month: "long",
         year: "numeric",
-      }).format(date);
+      }).format(new Date(date)) ;
     }
   </script>
 

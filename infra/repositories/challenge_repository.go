@@ -3,7 +3,6 @@ package repositories
 import (
 	"fmt"
 
-	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/gorm"
 )
@@ -27,17 +26,18 @@ func NewChallengeRepository(
 	}
 }
 
-func (c *ChallengeRepository) GetAll(page *int) ([]*models.ChallengeModel, error) {
+func (c *ChallengeRepository) GetAll(_ *int) ([]*models.ChallengeModel, error) {
 
-	if page == nil {
-		*page = 1
-	}
+	//if page == nil {
+	//	*page = 1
+	//}
 
-	offset := (*page - 1) * 10
+	//offset := (*page - 1) * 10
 
 	var r []*models.ChallengeModel
 
-	tx := c.db.Model(&models.ChallengeModel{}).Offset(offset).Limit(utils.PAGE_SIZE).Find(&r)
+	//TODO implment pagination method
+	tx := c.db.Model(&models.ChallengeModel{}).Find(&r)
 
 	if tx.Error != nil {
 		return nil, tx.Error
