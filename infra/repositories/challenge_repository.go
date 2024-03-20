@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/gorm"
@@ -13,7 +15,7 @@ type ChallengeRepository struct {
 type ChallengeRepositoryInterface interface {
 	GetAll(page *int) ([]*models.ChallengeModel, error)
 	GetById(id string) (*models.ChallengeModel, error)
-	Create(title, description, embedUrl, userId string) error
+	Create(*models.ChallengeModel) error
 	Delete(id string) error
 }
 
@@ -44,7 +46,7 @@ func (c *ChallengeRepository) GetAll(page *int) ([]*models.ChallengeModel, error
 	return r, nil
 }
 
-func (c *ChallengeRepository) GetBydId(id string) (*models.ChallengeModel, error) {
+func (c *ChallengeRepository) GetById(id string) (*models.ChallengeModel, error) {
 
 	var r *models.ChallengeModel
 
@@ -57,15 +59,12 @@ func (c *ChallengeRepository) GetBydId(id string) (*models.ChallengeModel, error
 	return r, nil
 }
 
-func (c *ChallengeRepository) Create(title, description, embedUrl, userId string) error {
-	result := c.db.Create(&models.ChallengeModel{
-		Title:       title,
-		Description: description,
-		EmbedUrl:    embedUrl,
-		UserId:      userId,
-	})
+func (c *ChallengeRepository) Create(cm *models.ChallengeModel) error {
+
+	result := c.db.Create(cm)
 
 	if result.Error != nil {
+		fmt.Println(result.Error)
 		return result.Error
 	}
 

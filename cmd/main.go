@@ -19,8 +19,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	gin.ForceConsoleColor()
-
 	e := gin.Default()
 	store := cookie.NewStore([]byte("secret"))
 
@@ -45,8 +43,8 @@ func main() {
 
 	e.LoadHTMLFiles(paths...)
 
-	routes.NewWebRoutes(e)
 	routes.NewApiRoutes(e)
+	routes.NewWebRoutes(e)
 
 	log.Fatal(e.Run())
 }

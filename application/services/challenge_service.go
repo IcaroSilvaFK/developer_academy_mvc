@@ -1,6 +1,8 @@
 package services
 
 import (
+	"log"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
 )
@@ -27,7 +29,11 @@ func NewChallengeService(
 
 func (c *ChallengeService) Create(title, description, embedUrl, userId string) error {
 
-	return c.repo.Create(title, description, embedUrl, userId)
+	cm := models.NewChallengeModel(title, description, embedUrl, userId)
+	log.Println("aq")
+	log.Println(cm)
+
+	return c.repo.Create(cm)
 }
 
 func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, error) {

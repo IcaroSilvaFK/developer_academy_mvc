@@ -9,7 +9,7 @@
   <title>Document</title>
 </head>
 
-<body x-data="{mock}">
+  <body x-data="{data: {{.challenges}}}">
   {{template "templates/header.tmpl" }}
 
   <main class="container__main">
@@ -27,11 +27,13 @@
     </header>
 
     <ul class="main__list_container">
-      <template x-for="data in mock" :key="data.id">
+
+        {{}}
+      <template x-for="item in data" :key="item.ID">
         <li>
           <div class="list_container__content">
-            <h3 x-text="data.title"></h3>
-            <p x-text="data.description"></p>
+            <h3 x-text="item.Title"></h3>
+            <p x-text="item.Description"></p>
             <time x-text="'Criado em ' + formatDate(data.created)"></time>
           </div>
           <footer>

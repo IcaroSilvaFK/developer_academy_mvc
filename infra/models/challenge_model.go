@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
+	"gorm.io/gorm"
+)
 
 type ChallengeModel struct {
 	ID          string
@@ -11,6 +14,17 @@ type ChallengeModel struct {
 	Comments    []ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID"`
 	Hint        ChallengeHintsModel     `gorm:"foreignKey:ChallengeId;references:ID"`
 	gorm.Model
+}
+
+func NewChallengeModel(title, description, embedUrl, userId string) *ChallengeModel {
+
+	return &ChallengeModel{
+		ID:          utils.NewId(),
+		Title:       title,
+		Description: description,
+		EmbedUrl:    embedUrl,
+		UserId:      userId,
+	}
 }
 
 func (c *ChallengeModel) TableName() string {

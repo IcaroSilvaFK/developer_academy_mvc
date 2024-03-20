@@ -63,3 +63,8 @@
   background: var(--hover-button);
   transition: all 0.3s linear;
 }
+
+input[error="true"],
+textarea[error="true"] {
+  outline: 2px solid var(--red-500);
+}

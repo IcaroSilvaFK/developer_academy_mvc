@@ -2,26 +2,48 @@ package controllers
 
 import (
 	"fmt"
+	"strconv"
 
-	"github.com/gin-contrib/sessions"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/gin-gonic/gin"
 )
 
-type HomeController struct{}
+type HomeController struct {
+	svc services.ChallengeServiceInterface
+}
 
 type HomeControllerInterface interface {
 	Index(ctx *gin.Context)
 }
 
-func NewHomeController() HomeControllerInterface {
-	return &HomeController{}
+func NewHomeController(
+	svc services.ChallengeServiceInterface,
+) HomeControllerInterface {
+	return &HomeController{
+		svc,
+	}
 }
 
 func (hc *HomeController) Index(ctx *gin.Context) {
 
-	session := sessions.Default(ctx)
+	q := ctx.Param("page")
 
-	fmt.Println(session.Get("user"))
+	v, err := strconv.Atoi(q)
 
-	ctx.HTML(200, "home.gotmpl", nil)
+	if err != nil {
+		v = 1
+	}
+
+	challenges, err := hc.svc.FindAll(&v)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	r := views.NewChallengeResponseOutputList(challenges)
+
+	ctx.HTML(200, "home.gotmpl", gin.H{
+		"challenges": r,
+	})
 }

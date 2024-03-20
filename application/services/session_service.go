@@ -41,6 +41,10 @@ func (ss *SessionService) Get(ctx *gin.Context, key string, i interface{}) {
 
 	r := s.Get(key)
 
+	if r == nil {
+		return
+	}
+
 	err := json.Unmarshal([]byte(r.(string)), i)
 
 	if err != nil {
