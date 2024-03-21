@@ -5,6 +5,7 @@ import (
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type ChallengeRepository struct {
@@ -26,6 +27,7 @@ func NewChallengeRepository(
 	}
 }
 
+// TODO add pagination
 func (c *ChallengeRepository) GetAll(_ *int) ([]*models.ChallengeModel, error) {
 
 	//if page == nil {
@@ -50,7 +52,7 @@ func (c *ChallengeRepository) GetById(id string) (*models.ChallengeModel, error)
 
 	var r *models.ChallengeModel
 
-	err := c.db.Model(&models.ChallengeModel{}).Select(&r, "id = ?", id).Error
+	err := c.db.Debug().Table("challenges").Where("id = ?", id).Preload(clause.Associations).Find(&r).Error
 
 	if err != nil {
 		return nil, err

@@ -9,7 +9,6 @@ import (
 )
 
 type SessionService struct {
-	session sessions.Session
 }
 
 type SessionServiceInterface interface {

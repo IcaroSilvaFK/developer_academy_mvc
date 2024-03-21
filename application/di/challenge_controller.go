@@ -11,7 +11,10 @@ func NewChallengeController() controllers.ChallengeControllerInterface {
 
 	db := database.GetConnection()
 	repo := repositories.NewChallengeRepository(db)
-	svc := services.NewChallengeService(repo)
+	hintRepo := repositories.NewChallengesHintsRepository(db)
+	hintSvc := services.NewChallengeHintService(hintRepo)
+	aiservice := services.NewAIService()
+	svc := services.NewChallengeService(repo, hintSvc, aiservice)
 
 	return controllers.NewChallengeController(svc)
 }

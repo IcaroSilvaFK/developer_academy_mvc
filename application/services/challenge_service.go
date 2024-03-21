@@ -1,14 +1,17 @@
 package services
 
 import (
-	"log"
+	"errors"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
 )
 
 type ChallengeService struct {
-	repo repositories.ChallengeRepositoryInterface
+	repo      repositories.ChallengeRepositoryInterface
+	hinrepo   ChallengeHintServiceInterface
+	iaservice AIServiceInterface
 }
 
 type ChallengeServiceInterface interface {
@@ -20,20 +23,41 @@ type ChallengeServiceInterface interface {
 
 func NewChallengeService(
 	repo repositories.ChallengeRepositoryInterface,
+	hinrepo ChallengeHintServiceInterface,
+	iaservice AIServiceInterface,
 ) ChallengeServiceInterface {
 
 	return &ChallengeService{
-		repo,
+		repo, hinrepo, iaservice,
 	}
 }
 
 func (c *ChallengeService) Create(title, description, embedUrl, userId string) error {
 
+	if c.iaservice.VerifyIfIsValidChallenge(title) {
+		return errors.New("ERROR")
+	}
 	cm := models.NewChallengeModel(title, description, embedUrl, userId)
-	log.Println("aq")
-	log.Println(cm)
 
-	return c.repo.Create(cm)
+	err := c.repo.Create(cm)
+
+	if err != nil {
+		return err
+	}
+
+	hint, err := c.iaservice.GenerateHintFromChallenge(title)
+
+	if err != nil {
+		return nil
+	}
+
+	err = c.hinrepo.Create(cm.ID, hint)
+
+	if err != nil {
+		utils.Error(err.Error(), err)
+	}
+
+	return nil
 }
 
 func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, error) {

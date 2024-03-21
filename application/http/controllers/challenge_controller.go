@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
 	"github.com/gin-contrib/sessions"
@@ -39,15 +38,15 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 	c, err := cc.svc.FindById(id)
 
 	if err != nil {
-
 		ctx.JSON(http.StatusBadRequest, nil)
 		return
 	}
 
-	r := views.CreateChallengeInputView(c)
+	d, _ := c.CreatedAt.UTC().MarshalText()
 
 	ctx.HTML(http.StatusOK, "challenge.gotmpl", gin.H{
-		"challenge": r,
+		"challenge": c,
+		"created":   string(d),
 	})
 }
 
