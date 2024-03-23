@@ -9,7 +9,7 @@
   <title>Document</title>
 </head>
 
-  <body x-data="{loading}">
+<body x-data="teste">
   {{template "templates/header.tmpl" }}
   <main class="container__main">
     <header>
@@ -20,98 +20,93 @@
         <label>
           Título do desafio
         </label>
-        <input  
-            name="title" 
-            placeholder="Digite o titúlo do desafio" 
-            @click="removeErrorAttribute"
-        />
+        <input name="title" placeholder="Digite o titúlo do desafio" @click="removeErrorAttribute" />
       </div>
       <div class="container__input">
         <label>
           Breve Descrição
         </label>
-        <textarea 
-            name="description" 
-            placeholder="Digite uma breve descrição do desafio"
-            @click="removeErrorAttribute"
-        ></textarea>
+        <textarea name="description" placeholder="Digite uma breve descrição do desafio"
+          @click="removeErrorAttribute"></textarea>
       </div>
       <div class="container__input">
         <label>
           YouTube Video Embed URL
         </label>
-        <textarea
-            name="embed_url" 
-            placeholder="Digite a url do vídeo no YouTube"
-            @click="removeErrorAttribute"
-          ></textarea>
+        <textarea name="embed_url" placeholder="Digite a url do vídeo no YouTube"
+          @click="removeErrorAttribute"></textarea>
       </div>
       <footer>
         <button>
-            <span x-show="!loading">
-              Enviar
-            </span>
-            <span x-show="loading"> Carregando... </span>
+          <span x-show="!loading">
+            Enviar
+          </span>
+          <span x-show="loading">
+            Criando...
+          </span>
         </button>
       </footer>
     </form>
   </main>
-    <script>  
-        let loading = false
-
-        const formKeys = ["title", "embed_url", "description"]
-
-        async function handleSubmit(ev) {
+  <script>
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("teste", () => ({
+        loading: false,
+        handleSubmit: async (ev) => {
           const target = ev.target
-
+          const formKeys = ["title", "embed_url", "description"]
           const payload = {}
 
-          for(const key of formKeys){
+          for (const key of formKeys) {
             const currentTargetValue = target[key].value
-            if(!currentTargetValue.trim()) {
+            if (!currentTargetValue.trim()) {
               target[key].setAttribute("error", "true")
               continue
             }
             payload[key] = currentTargetValue
           }
-          
-          console.log(Object.keys(payload)) 
-          if(!Object.keys(payload).length) return
 
-        try{
 
-          loading = true
+          if (!Object.keys(payload).length) return
 
-          await axios({
-            method: "POST",
-            url: "/api/v1/challenges",
-            data: payload
-          })
+          try {
+            this.loading = true
 
-          await new Promise(r => {
-              setTimeout(r, 20000)
+            await axios({
+              method: "POST",
+              url: "/api/v1/challenges",
+              data: payload
             })
 
+            for (const key of formKeys) {
+              target[key].value = ""
+            }
 
             bulmaToast.toast({
               type: "is-success",
               message: "Desafio criado com sucesso!"
             })
-        loading = false
-        }catch(err){
+
+
+          } catch (err) {
             console.log(err)
             bulmaToast.toast({
               type: "is-danger",
               message: "Parece que ocorreu um erro ao criar o desafio!"
             })
+          } finally {
+            this.loading = false
           }
-        }
-
-        function removeErrorAttribute(ev) {
+        },
+        removeErrorAttribute: (ev) => {
           ev.target.removeAttribute("error")
-        }
+        },
 
-    </script>
+      }))
+
+    })
+
+  </script>
 </body>
 
 </html>

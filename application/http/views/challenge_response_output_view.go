@@ -1,8 +1,6 @@
 package views
 
-import (
-	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
-)
+import "github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 
 type ResponseChallengeOutputView struct {
 	ID          string `json:"id"`

@@ -109,3 +109,13 @@ div > button i {
 .container__count_persons span:last-child {
   color: var(--gray-400);
 }
+
+.container__count_challenges b {
+  font-size: 1.5rem;
+}
+
+.container__count_challenges > span {
+  font-size: 1.25rem;
+  color: var(--gray-400);
+  text-transform: uppercase;
+}

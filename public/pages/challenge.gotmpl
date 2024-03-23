@@ -9,75 +9,69 @@
   <title>Document</title>
 </head>
 
-<body x-data="{comments}">
- 
+<body x-data>
   {{template "templates/header.tmpl" }}
   <main class="container__main">
     <div>
 
-    <header>
-      <div class="header__presentation">
-        <span>Desafio</span>
-        <span x-text="dayjs(new Date('{{ .created }}')).fromNow()"></span>
-      </div>
-      <div class="header__title">
-        <h2>{{ .challenge.Title }}</h2>
-        <p>
-          {{ .challenge.Description }}
-        </p>
-      </div>
-    </header>
-    <section class="container__video" >
-      
-    </section>
+      <header>
+        <div class="header__presentation">
+          <span>Desafio</span>
+          <span x-text="dayjs(new Date('{{ .created }}')).fromNow()"></span>
+        </div>
+        <div class="header__title">
+          <h2>{{ .challenge.Title }}</h2>
+          <p>
+            {{ .challenge.Description }}
+          </p>
+        </div>
+      </header>
+      <section class="container__video">
 
-    <section class="container__comments">
-      <h3>110 Comentários</h3>
-     
-      <ul>
-        <template x-for="comment in comments">
-            <li class="container__comment">
-              <img src="https://avatars.githubusercontent.com/u/86238635?v=4" alt="Icaro's avatar" />
-              <div>
-                <header>
-                  <b x-text="'@'+comment.user"></b>
-                  <span x-text="comment.createdAt"></span>
-                </header>
-                <p x-text="comment.comment"></p>
-              </div>
-              </li>
-        </template>
-      </ul>
+      </section>
 
-      <form>
-        <textarea
-          placeholder="Escreva seu comentário"
-        ></textarea>
-        <button>
-          <span>Comentar</span>
-          <i class="ph ph-chat-teardrop"></i>
-        </button>
-      </form>
-    </section>
+      <section class="container__comments">
+        {{ if gt .quantityComments 0}}
+        <h3>{{ .quantityComments }} Comentários</h3>
+
+        <ul>
+          {{ range .comments }}
+          <li class="container__comment">
+
+            <div>
+              <header>
+                <span x-text="dayjs(new Date('{{ .CreatedAt }}')).fromNow()"></span>
+              </header>
+              <p>{{ .Comment }}</p>
+            </div>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+        {{ if le .quantityComments 0}}
+        <span>Seja o pioneiro a deixar um comentário! <i class="ph ph-smiley-sticker"></i></span>
+        {{ end }}
+        <form @submit.prevent="onAddComment">
+          <textarea placeholder="Escreva seu comentário" name="comment"></textarea>
+          <button>
+            <span>Comentar</span>
+            <i class="ph ph-chat-teardrop"></i>
+          </button>
+        </form>
+      </section>
     </div>
     <section class="container__help">
       <header>
         <i class="ph ph-lightbulb"></i>
-      <h3>Dicas sobre o tema</h3>
+        <h3>Dicas sobre o tema</h3>
       </header>
       <ol>
-        
+
       </ol>
     </section>
   </main>
 
   <script>
-    const comments = Array.from({length: 10}).map((_, idx) => ({
-      user: `Alice ${idx+1}`,
-      comment: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Et natus impedit nemo possimus? Dolorem voluptates labore a beatae reprehenderit adipisci, ut maiores deleniti voluptatem quam odio, quasi aut mollitia voluptas?",
-      createdAt: dayjs(new Date()).fromNow()
-    }))
-
     document.querySelector(".container__video").innerHTML = `{{ .challenge.EmbedUrl }}`
 
     function sanitizeData(text) {
@@ -85,15 +79,43 @@
       const container = document.querySelector("ol")
       const result = []
 
-      for(const item of arr) {
-       const $li =  document.createElement("li")
-      
-       $li.textContent = item
+      for (const item of arr) {
+        const $li = document.createElement("li")
 
-       container.appendChild($li)
+        $li.textContent = item
+
+        container.appendChild($li)
       }
     }
     sanitizeData('{{.challenge.Hint.Text}}')
+
+
+    async function onAddComment(ev) {
+      const comment = ev.target.comment.value
+
+      if (!comment.trim()) return
+
+      try {
+
+        const payload = {
+          challenge_id: '{{.id}}',
+          user_id: '{{ .user.ID }}',
+          comment,
+        }
+
+        await axios({
+          method: "POST",
+          url: "/api/v1/challenges/comments",
+          data: payload
+        })
+
+
+        window.location.reload()
+      } catch (err) {
+        console.log(err)
+      }
+
+    }
   </script>
 </body>
 

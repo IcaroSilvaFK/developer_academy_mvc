@@ -26,7 +26,6 @@ func NewHomeController(
 }
 
 func (hc *HomeController) Index(ctx *gin.Context) {
-
 	q := ctx.Param("page")
 
 	v, err := strconv.Atoi(q)

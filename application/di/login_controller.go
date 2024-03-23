@@ -13,12 +13,21 @@ func NewLoginController() controllers.LoginControllerInterface {
 	db := database.GetConnection()
 	repo := repositories.NewUserRepository(db)
 	urepo := repositories.NewUserRepository(db)
-	chttp := utils.NewHttpClient()
+	challengerepo := repositories.NewChallengeRepository(db)
+	hintrepo := repositories.NewChallengesHintsRepository(db)
+
+	hintservice := services.NewChallengeHintService(hintrepo)
+	iaservice := services.NewAIService()
 	usvc := services.NewUserService(urepo)
+
+	chttp := utils.NewHttpClient()
+
+	challengeservice := services.NewChallengeService(challengerepo, hintservice, iaservice)
+
 	svc := services.NewAuthService(
 		repo,
 		chttp,
 	)
 
-	return controllers.NewLoginController(svc, usvc)
+	return controllers.NewLoginController(svc, usvc, challengeservice)
 }

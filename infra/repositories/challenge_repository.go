@@ -16,6 +16,7 @@ type ChallengeRepositoryInterface interface {
 	GetAll(page *int) ([]*models.ChallengeModel, error)
 	GetById(id string) (*models.ChallengeModel, error)
 	Create(*models.ChallengeModel) error
+	CountChallenges() (int, error)
 	Delete(id string) error
 }
 
@@ -71,6 +72,17 @@ func (c *ChallengeRepository) Create(cm *models.ChallengeModel) error {
 	}
 
 	return nil
+}
+
+func (c *ChallengeRepository) CountChallenges() (int, error) {
+
+	var count int64
+
+	if err := c.db.Table("challenges").Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }
 
 func (c *ChallengeRepository) Delete(id string) error {

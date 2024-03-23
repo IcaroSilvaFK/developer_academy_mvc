@@ -13,6 +13,7 @@ func NewApiRoutes(engine *gin.Engine) {
 
 	loginController := di.NewLoginController()
 	createChallengeController := di.NewCreateNewChallengeController()
+	commentsChallengeController := di.NewCommentsChallengeController()
 
 	group.GET("/heath", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
@@ -23,4 +24,5 @@ func NewApiRoutes(engine *gin.Engine) {
 	group.GET("/login/:code", loginController.SignIn)
 
 	group.POST("/challenges", createChallengeController.Create)
+	group.POST("/challenges/comments", commentsChallengeController.Create)
 }

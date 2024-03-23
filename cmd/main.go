@@ -10,11 +10,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/middlewares"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 )
 
 func main() {
+
+	// f, _ := os.Create("trace.out")
+
+	// defer f.Close()
+
+	// trace.Start(f)
+
+	// defer trace.Stop()
+
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
@@ -25,6 +36,7 @@ func main() {
 	e.Use(gin.Logger())
 	e.Use(gin.Recovery())
 	e.Use(sessions.Sessions("mysession", store))
+	e.Use(middlewares.AddCurrentInContextRequest(services.NewSessionService()))
 
 	ex, err := os.Executable()
 	if err != nil {

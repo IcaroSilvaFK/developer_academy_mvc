@@ -3,7 +3,9 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
+	apputils "github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -43,10 +45,17 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 	}
 
 	d, _ := c.CreatedAt.UTC().MarshalText()
+	u := apputils.GetCurrentUserInRequestContext(ctx)
+
+	countComments := len(c.Comments)
 
 	ctx.HTML(http.StatusOK, "challenge.gotmpl", gin.H{
-		"challenge": c,
-		"created":   string(d),
+		"challenge":        c,
+		"created":          string(d),
+		"quantityComments": countComments,
+		"comments":         views.NewCommentChallengeListOutputView(c.Comments),
+		"id":               id,
+		"user":             u,
 	})
 }
 

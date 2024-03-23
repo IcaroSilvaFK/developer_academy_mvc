@@ -5,6 +5,7 @@ import (
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,9 +34,7 @@ func (cc *CreateNewChallengeController) Index(ctx *gin.Context) {
 
 func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {
 
-	var u views.UserResponseView
-
-	cc.sessionService.Get(ctx, "user", &u)
+	u := utils.GetCurrentUserInRequestContext(ctx)
 
 	if u.ID == "" {
 		//TODO padronizar as respostas de erro

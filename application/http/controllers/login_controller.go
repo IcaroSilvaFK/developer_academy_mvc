@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
@@ -12,8 +13,9 @@ import (
 )
 
 type LoginController struct {
-	svc  services.LoginServiceInterface
-	usvc services.UserServiceInterface
+	svc              services.LoginServiceInterface
+	usvc             services.UserServiceInterface
+	challengeservice services.ChallengeServiceInterface
 }
 
 type LoginControllerInterface interface {
@@ -24,9 +26,10 @@ type LoginControllerInterface interface {
 func NewLoginController(
 	svc services.LoginServiceInterface,
 	usvc services.UserServiceInterface,
+	challengeservice services.ChallengeServiceInterface,
 ) LoginControllerInterface {
 	return &LoginController{
-		svc, usvc,
+		svc, usvc, challengeservice,
 	}
 }
 
@@ -38,6 +41,14 @@ func (c *LoginController) Login(ctx *gin.Context) {
 		fmt.Println(err)
 	}
 
+	countchallenges, err := c.challengeservice.CountChallenges()
+
+	fmt.Println(countchallenges, err)
+
+	if err != nil {
+		log.Println(err)
+	}
+
 	var r []views.UserResponseView
 
 	for _, u := range users {
@@ -45,9 +56,10 @@ func (c *LoginController) Login(ctx *gin.Context) {
 	}
 
 	ctx.HTML(200, "login.gotmpl", gin.H{
-		"users":    r,
-		"quantity": top,
-		"error":    err,
+		"users":      r,
+		"quantity":   top,
+		"error":      err,
+		"challenges": countchallenges,
 	})
 }
 

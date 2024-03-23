@@ -18,6 +18,7 @@ type ChallengeServiceInterface interface {
 	Create(title, description, embedUrl, userId string) error
 	FindAll(page *int) ([]*models.ChallengeModel, error)
 	FindById(id string) (*models.ChallengeModel, error)
+	CountChallenges() (int, error)
 	Delete(id string) error
 }
 
@@ -67,6 +68,10 @@ func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, error) 
 
 func (c *ChallengeService) FindById(id string) (*models.ChallengeModel, error) {
 	return c.repo.GetById(id)
+}
+
+func (c *ChallengeService) CountChallenges() (int, error) {
+	return c.repo.CountChallenges()
 }
 
 func (c *ChallengeService) Delete(id string) error {
