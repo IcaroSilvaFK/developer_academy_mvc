@@ -9,8 +9,8 @@
   <title>Document</title>
 </head>
 
-<body x-data="teste">
-  {{template "templates/header.tmpl" }}
+<body x-data="main">
+  {{template "templates/header.tmpl" . }}
   <main class="container__main">
     <header>
       <h1>Novo Desafio</h1>
@@ -37,22 +37,21 @@
           @click="removeErrorAttribute"></textarea>
       </div>
       <footer>
-        <button>
-          <span x-show="!loading">
-            Enviar
-          </span>
-          <span x-show="loading">
-            Criando...
-          </span>
+        <button disabled="loading">
+          <span x-text="loading ? 'Enviando...' : 'Enviar'"></span>
         </button>
       </footer>
     </form>
   </main>
   <script>
     document.addEventListener("alpine:init", () => {
-      Alpine.data("teste", () => ({
+      Alpine.data("main", () => ({
         loading: false,
-        handleSubmit: async (ev) => {
+        buttonText: "Enviar",
+        changeLoading() {
+          this.loading = !this.loading
+        },
+        async handleSubmit(ev) {
           const target = ev.target
           const formKeys = ["title", "embed_url", "description"]
           const payload = {}
@@ -68,10 +67,9 @@
 
 
           if (!Object.keys(payload).length) return
-
+          
           try {
-            this.loading = true
-
+            this.changeLoading()
             await axios({
               method: "POST",
               url: "/api/v1/challenges",
@@ -95,14 +93,14 @@
               message: "Parece que ocorreu um erro ao criar o desafio!"
             })
           } finally {
-            this.loading = false
+            this.changeLoading()
           }
         },
         removeErrorAttribute: (ev) => {
           ev.target.removeAttribute("error")
         },
-
-      }))
+        
+       }))
 
     })
 

@@ -9,9 +9,9 @@
   <title>Document</title>
 </head>
 
-<body x-data>
-  {{template "templates/header.tmpl" }}
-  <main class="container__main">
+<body>
+  {{template "templates/header.tmpl" .}}
+  <main x-data class="container__main">
     <div>
 
       <header>
@@ -37,7 +37,6 @@
         <ul>
           {{ range .comments }}
           <li class="container__comment">
-
             <div>
               <header>
                 <span x-text="dayjs(new Date('{{ .CreatedAt }}')).fromNow()"></span>
@@ -73,7 +72,7 @@
 
   <script>
     document.querySelector(".container__video").innerHTML = `{{ .challenge.EmbedUrl }}`
-
+    
     function sanitizeData(text) {
       const arr = text.split("\n")
       const container = document.querySelector("ol")

@@ -6,6 +6,7 @@ import (
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,14 +36,18 @@ func (hc *HomeController) Index(ctx *gin.Context) {
 	}
 
 	challenges, err := hc.svc.FindAll(&v)
+	u := utils.GetCurrentUserInRequestContext(ctx)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	fmt.Println(u)
+
 	r := views.NewChallengeResponseOutputList(challenges)
 
 	ctx.HTML(200, "home.gotmpl", gin.H{
 		"challenges": r,
+		"user":       u,
 	})
 }

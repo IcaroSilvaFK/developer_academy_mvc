@@ -1,6 +1,6 @@
 {{ define "templates/header.tmpl" }}
 <link rel="stylesheet" href="/assets/styles/components/header.css">
-<header class="header__container">
+<header class="header__container" x-data="user">
   <div>
     <a class="header__title" href="/home">
       <div>
@@ -11,16 +11,25 @@
     </a>
     <div class="header__profile">
       <div>
-        <span>@Icaro Vieira</span>
-        <span>icaro@icaro.com</span>
+        <span>@{{ .user.Name }}</span>
+        <span>{{ .user.Email }}</span>
       </div>
-      <img src="https://avatars.githubusercontent.com/u/86238635?v=4" alt="Icaro's avatar" />
+      <img src="{{ .user.AvatarUrl }}" alt="{{ .user.Name }}'s avatar" />
     </div>
   </div>
-  <script defer type="module" src="/assets/js/index.js">
+ <script type="module">
+    import {UserService} from '/assets/js/index.js'
+  
+   
     const userService = new UserService()
 
     const user = userService.getProfile()
+
+    console.log(user)
+    console.log(Alpine)
+
+    
   </script>
+   
 </header>
 {{ end }}

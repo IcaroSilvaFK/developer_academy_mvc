@@ -29,7 +29,12 @@ func NewCreateNewChallengeController(
 }
 
 func (cc *CreateNewChallengeController) Index(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "new_challenge.gotmpl", nil)
+
+	u := utils.GetCurrentUserInRequestContext(ctx)
+
+	ctx.HTML(http.StatusOK, "new_challenge.gotmpl", gin.H{
+		"user": u,
+	})
 }
 
 func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {

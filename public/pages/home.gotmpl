@@ -9,10 +9,10 @@
   <title>Document</title>
 </head>
 
-  <body x-data>
-  {{template "templates/header.tmpl" }}
+  <body>
+  {{template "templates/header.tmpl" .}}
 
-  <main class="container__main">
+  <main x-data class="container__main">
     <header class="main__header">
       <h1>Challenges</h1>
       <div>
@@ -49,7 +49,6 @@
 
     function formatDate(date) {
 
-  console.log(date)
 
       return new Intl.DateTimeFormat("pt-BR", {
         day: "numeric",
