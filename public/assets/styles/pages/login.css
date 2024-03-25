@@ -110,6 +110,11 @@ div > button i {
   color: var(--gray-400);
 }
 
+.container__count_persons i {
+  font-size: 22px;
+  color: var(--gray-400)
+}
+
 .container__count_challenges b {
   font-size: 1.5rem;
 }

@@ -33,9 +33,14 @@
 
           <div class="container__count_persons">
             {{ if gt .quantity 0}}
-            <span>+{{ .quantity }}</span>
+              <span>+{{ .quantity }}</span>
+              <span>pessoas já estão usando</span>             
             {{ end }}
-            <span>pessoas já estão usando</span>
+            {{ if le .quantity 0}}
+              <span></span>
+              <span>Seja o pioneiro a ingressar na plataforma!</span>
+              <i class="ph ph-code"></i>
+            {{ end }}
           </div>
         </div>
 
