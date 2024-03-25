@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type ChallengeModel struct {
@@ -11,8 +12,8 @@ type ChallengeModel struct {
 	Description string
 	EmbedUrl    string
 	UserId      string
-	Comments    []ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID"`
-	Hint        ChallengeHintsModel     `gorm:"foreignKey:ChallengeId;references:ID"`
+	Comments    []ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
+	Hint        ChallengeHintsModel     `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
 	gorm.Model
 }
 
@@ -25,6 +26,11 @@ func NewChallengeModel(title, description, embedUrl, userId string) *ChallengeMo
 		EmbedUrl:    embedUrl,
 		UserId:      userId,
 	}
+}
+
+func (c *ChallengeModel) BeforeDelete(tx *gorm.DB) (err error) {
+	tx.Clauses(clause.Returning{}).Where("challenge_id = ?", c.ID).Delete(&ChallengeHintsModel{})
+	return
 }
 
 func (c *ChallengeModel) TableName() string {

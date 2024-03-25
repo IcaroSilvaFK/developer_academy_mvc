@@ -7,7 +7,7 @@ import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	apputils "github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
-	"github.com/gin-contrib/sessions"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +17,7 @@ type ChallengeController struct {
 
 type ChallengeControllerInterface interface {
 	Index(ctx *gin.Context)
+	Destroy(ctx *gin.Context)
 }
 
 func NewChallengeController(
@@ -61,9 +62,24 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 
 func (cc *ChallengeController) Create(ctx *gin.Context) {
 
-	session := sessions.Default(ctx)
-
-	session.Get("")
-
 	ctx.JSON(http.StatusCreated, nil)
+}
+
+func (cc *ChallengeController) Destroy(ctx *gin.Context) {
+
+	id := ctx.Param("id")
+
+	if !utils.IsValidId(id) {
+
+		ctx.JSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	if err := cc.svc.Delete(id); err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, nil)
 }

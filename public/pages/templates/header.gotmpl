@@ -1,6 +1,6 @@
 {{ define "templates/header.tmpl" }}
 <link rel="stylesheet" href="/assets/styles/components/header.css">
-<header class="header__container" x-data="user">
+<header class="header__container">
   <div>
     <a class="header__title" href="/home">
       <div>
@@ -10,26 +10,14 @@
       <span>Platform for developer challenges</span>
     </a>
     <div class="header__profile">
-      <div>
-        <span>@{{ .user.Name }}</span>
-        <span>{{ .user.Email }}</span>
-      </div>
-      <img src="{{ .user.AvatarUrl }}" alt="{{ .user.Name }}'s avatar" />
+      <a href="/profile/{{ .user.ID }}">
+        <div>
+          <span>@{{ .user.Name }}</span>
+          <span>{{ .user.Email }}</span>
+        </div>      
+      </a>
+     <img src="{{ .user.AvatarUrl }}" alt="{{ .user.Name }}'s avatar" />
     </div>
   </div>
- <script type="module">
-    import {UserService} from '/assets/js/index.js'
-  
-   
-    const userService = new UserService()
-
-    const user = userService.getProfile()
-
-    console.log(user)
-    console.log(Alpine)
-
-    
-  </script>
-   
 </header>
 {{ end }}

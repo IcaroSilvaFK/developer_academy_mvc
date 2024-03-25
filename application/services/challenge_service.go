@@ -6,6 +6,7 @@ import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
+	infrautils "github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
 )
 
 type ChallengeService struct {
@@ -18,6 +19,7 @@ type ChallengeServiceInterface interface {
 	Create(title, description, embedUrl, userId string) error
 	FindAll(page *int) ([]*models.ChallengeModel, error)
 	FindById(id string) (*models.ChallengeModel, error)
+	FindByUserId(id string) ([]*models.ChallengeModel, error)
 	CountChallenges() (int, error)
 	Delete(id string) error
 }
@@ -62,12 +64,21 @@ func (c *ChallengeService) Create(title, description, embedUrl, userId string) e
 }
 
 func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, error) {
-
 	return c.repo.GetAll(page)
 }
 
 func (c *ChallengeService) FindById(id string) (*models.ChallengeModel, error) {
 	return c.repo.GetById(id)
+}
+
+func (c *ChallengeService) FindByUserId(id string) ([]*models.ChallengeModel, error) {
+
+	if !infrautils.IsValidId(id) {
+		//TODO add new error on refactor this code
+		return nil, errors.New("Id is invalid")
+	}
+
+	return c.repo.GetByUserId(id)
 }
 
 func (c *ChallengeService) CountChallenges() (int, error) {

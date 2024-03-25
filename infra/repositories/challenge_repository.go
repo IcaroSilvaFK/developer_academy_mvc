@@ -15,6 +15,7 @@ type ChallengeRepository struct {
 type ChallengeRepositoryInterface interface {
 	GetAll(page *int) ([]*models.ChallengeModel, error)
 	GetById(id string) (*models.ChallengeModel, error)
+	GetByUserId(id string) ([]*models.ChallengeModel, error)
 	Create(*models.ChallengeModel) error
 	CountChallenges() (int, error)
 	Delete(id string) error
@@ -62,6 +63,19 @@ func (c *ChallengeRepository) GetById(id string) (*models.ChallengeModel, error)
 	return r, nil
 }
 
+func (c *ChallengeRepository) GetByUserId(id string) ([]*models.ChallengeModel, error) {
+
+	var result []*models.ChallengeModel
+
+	err := c.db.Debug().Table("challenges").Find(&result, "user_id = ?", id).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func (c *ChallengeRepository) Create(cm *models.ChallengeModel) error {
 
 	result := c.db.Create(cm)
@@ -86,8 +100,9 @@ func (c *ChallengeRepository) CountChallenges() (int, error) {
 }
 
 func (c *ChallengeRepository) Delete(id string) error {
-
-	r := c.db.Model(&models.ChallengeModel{}).Delete(&id)
+	r := c.db.Debug().Table("challenges").Where("id = ?", id).Delete(&models.ChallengeModel{
+		ID: id,
+	})
 
 	if r.Error != nil {
 		return r.Error

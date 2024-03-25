@@ -7,44 +7,52 @@
   {{ template "templates/head.tmpl" }}
   <title>Document</title>
 </head>
-<body x-data="{mock}">
-  {{template "templates/header.tmpl" }}
-
-  <main class="container__main">
-    <header>
-      <h2>Perfil</h2>
-      <span>Você pode visualizar seu perfil, mas não pode editar suas informações.</span>
-    </header>
-    <section class="container__section section__column">
+<body>
+  {{template "templates/header.tmpl" .}}
+  
+  <main x-data="main" class="container__main">
+   <section class="container__section section__column">
+      <header>
+        <h2>Perfil</h2>
+        <span>Você pode visualizar seu perfil, mas não pode editar suas informações.</span>
+      </header>
+       
       <div>
         <div class="container__col">
           <label>Username</label>
-          <input type="text" value="Icaro Vieira" readonly>
+          <input type="text" value="{{ .user.Name }}" readonly>
         </div>
         <div class="container__col">
           <label>Email</label>
-          <input type="text" value="icaro@icaro.com" readonly>
+          <input type="text" value="{{ .user.Email }}" readonly>
         </div>
       </div>
       <div class="container__col">
         <label>Bio</label>
-        <textarea readonly>Eu sou um texto de exemplo</textarea>
+        <textarea readonly>{{ .user.Bio }}</textarea>
       </div>
     </section>
 
 
+   <section class="container__section">
+     
     <header>
       <h2>Desafios</h2>
+
+      <p>
+        Meus desafios
+        <i class="ph ph-rocket"></i>
+      </p>
     </header>
-    <section class="container__section">
-      <ul class="container__cards">
-        <template x-for="challenge in mock">
+       
+       <ul class="container__cards">
+        <template x-for="challenge in challenges">
           <li class="container__card">
             <div>
               <h4 x-text="challenge.title"></h4>
               <p x-text="challenge.description"></p>
             </div>
-            <button>
+            <button @click="deleteChallenge(challenge.id)">
               <i class="ph ph-trash"></i>
             </button>
           </li>
@@ -52,6 +60,40 @@
       </ul>
     </section>
     <script>
+
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("main", () => ({
+          challenges: {{ .challenges }},
+          async deleteChallenge(id) {
+            try{
+             
+              await axios({
+                method: "DELETE",
+                url: `/api/v1/challenges/${id}`
+              })
+
+              this.removeChallenge(id)
+
+              bulmaToast.toast({
+                type: "is-success",
+                message: "Desafio deletado com sucesso!"
+              })
+
+            }catch(err){
+              console.log(err)
+              
+              bulmaToast.toast({
+                type: "is-danger",
+                message: "Parece que tivemos um problema ao deletar o desafio"
+              })
+
+            }
+          },
+          removeChallenge(id){
+            this.challenges = this.challenges.filter(challenge => challenge.id !== id)
+          }
+        }))
+      })
       const mock = Array.from({length:10}).map((_, idx) => ({
         title: `Desafio ${idx+1}`,
         createdAt: dayjs(new Date()).fromNow(),

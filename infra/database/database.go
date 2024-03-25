@@ -1,13 +1,17 @@
 package database
 
 import (
+	"os"
+
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func GetConnection() *gorm.DB {
-	dsn := "host=localhost user=admin password=admin dbname=developer port=5432 sslmode=disable"
+
+	dsn := os.Getenv(utils.DATABASE_URL)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 

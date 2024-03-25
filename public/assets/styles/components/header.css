@@ -42,15 +42,20 @@
   gap: 12px;
 }
 
-.header__container > div > .header__profile > div {
+.header__container > div > .header__profile > a > div {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 4px;
 }
 .header__profile > div > span:first-child {
   font-weight: bold;
   font-size: 1rem;
   font-style: italic;
+}
+
+.header__profile > a {
+ color: inherit
 }
 
 .header__profile > div > span:last-child {

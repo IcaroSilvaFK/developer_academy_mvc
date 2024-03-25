@@ -21,6 +21,16 @@
   margin-top: 12px;
 }
 
+.container__section header {
+  padding: 12px 0;
+}
+
+
+.container__section header h2 {
+  font-size: 22px;
+  color: var(--gray-900);
+}
+
 .section__column {
   display: flex;
   flex-direction: column;
@@ -54,6 +64,10 @@
   font-size: 0.875rem;
 }
 
+.container__col textarea {
+  height: 150px
+}
+
 .container__cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -74,6 +88,7 @@
   flex: 1;
 }
 
+
 .container__card div h4 {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -84,6 +99,12 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: var(--gray-400);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis
 }
 
 .container__card button {

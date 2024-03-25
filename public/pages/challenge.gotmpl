@@ -11,9 +11,8 @@
 
 <body>
   {{template "templates/header.tmpl" .}}
-  <main x-data class="container__main">
+  <main x-data="content" class="container__main">
     <div>
-
       <header>
         <div class="header__presentation">
           <span>Desafio</span>
@@ -26,30 +25,32 @@
           </p>
         </div>
       </header>
-      <section class="container__video">
+      <section class="container__video" x-html="video">
 
       </section>
+      
+      <section x-show="quantityComments > 0" class="container__comments">
+        <h3 x-text="quantityComments > 1 ? quantityComments + ' Comentários' : quantityComments + ' Comentário'">
+    
+        </h3>
+         <ul>
+          <template x-for="comment in comments">
+              <li class="container__comment">
+              <div>
+              
+                <header>
+                <span x-text="dayjs(new Date(comment.created_at)).fromNow()"></span>
+                </header>
+                <p x-text="comment.comment"></p>
+                </div>
+              </li>
+          </template>
+       </ul>
 
-      <section class="container__comments">
-        {{ if gt .quantityComments 0}}
-        <h3>{{ .quantityComments }} Comentários</h3>
-
-        <ul>
-          {{ range .comments }}
-          <li class="container__comment">
-            <div>
-              <header>
-                <span x-text="dayjs(new Date('{{ .CreatedAt }}')).fromNow()"></span>
-              </header>
-              <p>{{ .Comment }}</p>
-            </div>
-          </li>
-          {{ end }}
-        </ul>
-        {{ end }}
-        {{ if le .quantityComments 0}}
-        <span>Seja o pioneiro a deixar um comentário! <i class="ph ph-smiley-sticker"></i></span>
-        {{ end }}
+          <span x-show="quantityComments <= 0">
+            Seja o pioneiro a deixar um comentário! <i class="ph ph-smiley-sticker"></i>
+          </span>
+       
         <form @submit.prevent="onAddComment">
           <textarea placeholder="Escreva seu comentário" name="comment"></textarea>
           <button>
@@ -65,56 +66,70 @@
         <h3>Dicas sobre o tema</h3>
       </header>
       <ol>
-
+        <template x-for="h in hint">
+            <li x-text="h"></li>
+        </template>
       </ol>
     </section>
   </main>
 
   <script>
-    document.querySelector(".container__video").innerHTML = `{{ .challenge.EmbedUrl }}`
+
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("content", ()=>({
+        comments: {{.comments}},
+        hint: [],
+        video: {{.challenge.EmbedUrl}},
+        quantityComments: {{.quantityComments}},
+        addNewComment(comment) {
+          this.comments = [...this.comments, comment]
+          this.quantityComments = this.quantityComments +  1 
+        },
+        async onAddComment(ev) {
+          const comment = ev.target.comment.value
+
+          if (!comment.trim()) return
+
+          try {
+
+            const payload = {
+              challenge_id: '{{.id}}',
+              user_id: '{{ .user.ID }}',
+              comment,
+            }
+
+          const { data } =   await axios({
+              method: "POST",
+              url: "/api/v1/challenges/comments",
+              data: payload
+            })
+
+            this.addNewComment(data)
+
+              ev.target.comment.value = ""
+      
+          
+          } catch (err) {
+            console.log(err)
+          }
+        },
+        sanitizeData(text) {
+          const arr = text.split("\n")
+          
+          const result = []
+
+          for (const item of arr) {
+            result.push(item)
+          }
+
+          return result
+        },
+        init() {
+          this.hint =this.sanitizeData({{.challenge.Hint.Text}})
+        }     
+      }))
+    })
     
-    function sanitizeData(text) {
-      const arr = text.split("\n")
-      const container = document.querySelector("ol")
-      const result = []
-
-      for (const item of arr) {
-        const $li = document.createElement("li")
-
-        $li.textContent = item
-
-        container.appendChild($li)
-      }
-    }
-    sanitizeData('{{.challenge.Hint.Text}}')
-
-
-    async function onAddComment(ev) {
-      const comment = ev.target.comment.value
-
-      if (!comment.trim()) return
-
-      try {
-
-        const payload = {
-          challenge_id: '{{.id}}',
-          user_id: '{{ .user.ID }}',
-          comment,
-        }
-
-        await axios({
-          method: "POST",
-          url: "/api/v1/challenges/comments",
-          data: payload
-        })
-
-
-        window.location.reload()
-      } catch (err) {
-        console.log(err)
-      }
-
-    }
   </script>
 </body>
 
