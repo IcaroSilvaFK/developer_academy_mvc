@@ -31,8 +31,8 @@ func main() {
 	mode := os.Getenv(utils.MODE)
 	err := godotenv.Load()
 
-	if err != nil && mode != utils.PRODUCTION_MODE {
-		log.Fatal(err)
+	if mode != utils.PRODUCTION_MODE && err != nil {
+		log.Println(err)
 	}
 
 	e := gin.Default()
