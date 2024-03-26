@@ -30,10 +30,10 @@
       </section>
       
       <section >
-        <h3  x-show="quantityComments > 0" x-text="quantityComments > 1 ? quantityComments + ' Comentários' : quantityComments + ' Comentário'">
+        <h3 x-text="quantityComments > 1 ? quantityComments + ' Comentários' : quantityComments + ' Comentário'">
     
         </h3>
-         <ul x-show="quantityComments > 0">
+         <ul>
           <template x-for="comment in comments">
               <li class="container__comment">
               <div>
