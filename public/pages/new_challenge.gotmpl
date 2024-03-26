@@ -9,10 +9,10 @@
   <title>Document</title>
 </head>
 
-<body x-data="main">
+<body>
   {{template "templates/header.tmpl" . }}
-  <main class="container__main">
-    <header>
+  <main x-data="main" class="container__main">
+    <header> 
       <h1>Novo Desafio</h1>
     </header>
     <form @submit.prevent="handleSubmit">
@@ -37,7 +37,7 @@
           @click="removeErrorAttribute"></textarea>
       </div>
       <footer>
-        <button disabled="loading">
+        <button :disabled="loading" type="submit">
           <span x-text="loading ? 'Enviando...' : 'Enviar'"></span>
         </button>
       </footer>
@@ -45,6 +45,7 @@
   </main>
   <script>
     document.addEventListener("alpine:init", () => {
+      console.log("Alpine loaded success")
       Alpine.data("main", () => ({
         loading: false,
         buttonText: "Enviar",
@@ -52,6 +53,8 @@
           this.loading = !this.loading
         },
         async handleSubmit(ev) {
+         
+          console.log("chamou")
           const target = ev.target
           const formKeys = ["title", "embed_url", "description"]
           const payload = {}
