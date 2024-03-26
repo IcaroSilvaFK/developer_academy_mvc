@@ -8,7 +8,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/middlewares"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/routes"
