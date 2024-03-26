@@ -26,9 +26,9 @@ func main() {
 
 	// defer trace.Stop()
 
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	e := gin.Default()
 	store := cookie.NewStore([]byte("secret"))
