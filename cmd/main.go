@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -8,6 +9,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+
 	// "github.com/joho/godotenv"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/middlewares"
@@ -61,9 +63,9 @@ func main() {
 	port := os.Getenv(utils.PORT)
 
 	if port == "" {
-		port = ":8080"
+		port = "8080"
 	}
 
 	log.Printf("Server runing at %s", port)
-	log.Fatal(e.Run(port))
+	log.Fatal(e.Run(fmt.Sprintf(":%v", port)))
 }
