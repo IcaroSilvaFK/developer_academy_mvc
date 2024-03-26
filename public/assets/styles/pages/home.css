@@ -104,6 +104,12 @@
 .list_container__content > p {
   color: var(--gray-300);
   font-size: 0.875rem;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis
 }
 
 .container__empty_challenges {
