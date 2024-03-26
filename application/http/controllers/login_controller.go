@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -43,8 +45,6 @@ func (c *LoginController) Login(ctx *gin.Context) {
 
 	countchallenges, err := c.challengeservice.CountChallenges()
 
-	fmt.Println(countchallenges, err)
-
 	if err != nil {
 		log.Println(err)
 	}
@@ -60,6 +60,7 @@ func (c *LoginController) Login(ctx *gin.Context) {
 		"quantity":   top,
 		"error":      err,
 		"challenges": countchallenges,
+		"client_id":  os.Getenv(utils.GITHUB_CLIENT_ID),
 	})
 }
 

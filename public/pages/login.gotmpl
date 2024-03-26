@@ -53,9 +53,10 @@
   </main>
 
   <script>
-    async function onLogin() {
+  async function onLogin() {
+      
       window.open(
-        "https://github.com/login/oauth/authorize?client_id=c2ecc0c6d42d70cf9db1",
+        "https://github.com/login/oauth/authorize?client_id={{.client_id}}",
         "_self")
     }
   </script>

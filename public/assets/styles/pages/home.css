@@ -105,3 +105,25 @@
   color: var(--gray-300);
   font-size: 0.875rem;
 }
+
+.container__empty_challenges {
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  gap: 6px;
+  padding: 22px;
+}
+
+.container__empty_challenges span {
+  font-size: 18px;
+  color: var(--gray-800);
+}
+
+.container__empty_challenges a{
+  color: var(--gray-300);
+  text-decoration: underline;
+}
+
+.container__empty_challenges i {
+  font-size: 26px;
+}
