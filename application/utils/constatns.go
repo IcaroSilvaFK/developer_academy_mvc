@@ -10,4 +10,5 @@ const (
 	NOT_FOUND_ERROR       = "NOT FOUND ERROR"
 	FORBIDDEN_ERROR       = "FORBIDDEN ERROR"
 	DATABASE_URL          = "DATABASE_URL"
+	PORT                  = "PORT"
 )

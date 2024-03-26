@@ -58,5 +58,12 @@ func main() {
 	routes.NewApiRoutes(e)
 	routes.NewWebRoutes(e)
 
-	log.Fatal(e.Run())
+	port := os.Getenv(utils.PORT)
+
+	if port == "" {
+		port = ":8080"
+	}
+
+	log.Printf("Server runing at %s", port)
+	log.Fatal(e.Run(port))
 }
