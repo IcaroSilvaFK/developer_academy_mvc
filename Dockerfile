@@ -1,10 +1,10 @@
-FROM golang:latest as builder
+FROM golang:latest
 
 WORKDIR /app
 
 COPY . .
 
-RUN GOOS=linux CGO_ENABLE=0 go build -ldflags="-w -s" -o main ./cmd/main.go
+RUN go build -o main ./cmd/main.go
 
 CMD ["./main"]
 
