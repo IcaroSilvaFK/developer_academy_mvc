@@ -11,4 +11,6 @@ const (
 	FORBIDDEN_ERROR       = "FORBIDDEN ERROR"
 	DATABASE_URL          = "DATABASE_URL"
 	PORT                  = "PORT"
+	MODE                  = "DEV"
+	PRODUCTION_MODE       = "PRODUCTION_MODE"
 )

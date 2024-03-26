@@ -28,7 +28,10 @@ func main() {
 
 	// defer trace.Stop()
 
-	if err := godotenv.Load(); err != nil {
+	mode := os.Getenv(utils.MODE)
+	err := godotenv.Load()
+
+	if err != nil && mode != utils.PRODUCTION_MODE {
 		log.Fatal(err)
 	}
 
