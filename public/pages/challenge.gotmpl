@@ -28,12 +28,12 @@
       <section class="container__video" x-html="video">
 
       </section>
-      
+
       <section class="container__comments">
         <h3 x-text="quantityComments > 1 ? quantityComments + ' Comentários' : quantityComments + ' Comentário'">
-    
+
         </h3>
-         <ul>
+        <ul>
           <template x-for="comment in comments">
             <li class="container__comment">
               <div>
@@ -42,23 +42,19 @@
                 </header>
                 <p x-text="comment.comment"></p>
               </div>
-              
-              <button 
-                title="Deletar comentário" 
-                class="button__delete_comment" 
-                x-show="comment.user_id === '{{.user.ID}}'"
-                @click="deleteComment(comment.id)"
-              >
+
+              <button title="Deletar comentário" class="button__delete_comment"
+                x-show="comment.user_id === '{{.user.ID}}'" @click="deleteComment(comment.id)">
                 <i class="ph ph-trash"></i>
               </button>
             </li>
           </template>
-       </ul>
+        </ul>
 
-          <span x-show="quantityComments <= 0">
-            Seja o pioneiro a deixar um comentário! <i class="ph ph-smiley-sticker"></i>
-          </span>
-       
+        <span x-show="quantityComments <= 0">
+          Seja o pioneiro a deixar um comentário! <i class="ph ph-smiley-sticker"></i>
+        </span>
+
         <form @submit.prevent="onAddComment">
           <textarea placeholder="Escreva seu comentário" name="comment"></textarea>
           <button :disabled="isAddingComment">
@@ -75,7 +71,7 @@
       </header>
       <ol>
         <template x-for="h in hint">
-            <li x-text="h"></li>
+          <li x-text="h"></li>
         </template>
       </ol>
     </section>
@@ -84,93 +80,93 @@
   <script>
 
     document.addEventListener("alpine:init", () => {
-      Alpine.data("content", ()=>({
+      Alpine.data("content", () => ({
         comments: {{.comments}},
-        hint: [],
-        video: {{.challenge.EmbedUrl}},
-        quantityComments: {{.quantityComments}},
-        isAddingComment: false,
-        addNewComment(comment) {
-          this.comments = [...this.comments, comment]
-          this.quantityComments = this.comments.length 
+      hint: [],
+      video: {{.challenge.EmbedUrl}},
+      quantityComments: {{.quantityComments}},
+      isAddingComment: false,
+      addNewComment(comment) {
+      this.comments = [...this.comments, comment]
+          this.quantityComments = this.comments.length
+    },
+      async onAddComment(ev) {
+      const comment = ev.target.comment.value
+
+          if(!comment.trim()) return
+
+    try {
+      this.handleToggleLoading()
+      const payload = {
+        challenge_id: '{{.id}}',
+        user_id: '{{ .user.ID }}',
+        comment,
+      }
+
+      const {data} = await axios({
+        method: "POST",
+        url: "/api/v1/challenges/comments",
+        data: payload
+      })
+
+      this.addNewComment(data)
+      ev.target.comment.value = ""
+
+      bulmaToast.toast({
+        type: "is-success",
+        message: "Comentário adicionado com sucesso!"
+      })
+    } catch (err) {
+      console.log(err)
+      bulmaToast.toast({
+        type: "is-danger",
+        message: "Estamos com problemas para adicionar o comentário."
+      })
+    } finally {
+      this.handleToggleLoading()
+    }
         },
-        async onAddComment(ev) {
-          const comment = ev.target.comment.value
+    sanitizeData(text) {
+      const arr = text.split("\n")
 
-          if (!comment.trim()) return
+      const result = []
 
-          try {
-            this.handleToggleLoading()
-            const payload = {
-              challenge_id: '{{.id}}',
-              user_id: '{{ .user.ID }}',
-              comment,
-            }
+      for (const item of arr) {
+        result.push(item)
+      }
 
-          const { data } =   await axios({
-              method: "POST",
-              url: "/api/v1/challenges/comments",
-              data: payload
-            })
-
-            this.addNewComment(data)
-            ev.target.comment.value = ""
-
-            bulmaToast.toast({
-              type: "is-success",
-              message:"Comentário adicionado com sucesso!"
-            })
-          } catch (err) {
-            console.log(err)
-            bulmaToast.toast({
-              type: "is-danger",
-              message: "Estamos com problemas para adicionar o comentário."
-            })
-          }finally {
-            this.handleToggleLoading()
-          }
-        },
-        sanitizeData(text) {
-          const arr = text.split("\n")
-          
-          const result = []
-
-          for (const item of arr) {
-            result.push(item)
-          }
-
-          return result
-        },
+      return result
+    },
         async deleteComment(id) {
-          try{
-            await axios({
-              url: `/api/v1/challenges/comments/${id}`,
-              method: "DELETE" 
-            })
-            this.comments = this.comments.filter(comment => comment.id !== id)         
-            this.quantityComments = this.comments.length             
-            bulmaToast.toast({
-              type: "is-success",
-              message: "Comentário deletado com sucesso!"
-            })
+      try {
+        await axios({
+          url: `/api/v1/challenges/comments/${id}`,
+          method: "DELETE"
+        })
+        this.comments = this.comments.filter(comment => comment.id !== id)
+        this.quantityComments = this.comments.length
+        bulmaToast.toast({
+          type: "is-success",
+          message: "Comentário deletado com sucesso!"
+        })
 
-          }catch(err){
-            console.log(err)
-            bulmaToast.toast({
-              type: "is-danger",
-              message: "Estamos com problemas para deletar o comentário por favor tente novamente mais tarde!"
-            })
-          }
-        },
-        handleToggleLoading() {
-          this.isAddingComment = !this.isAddingComment 
-        },
-        init() {
-          this.hint =this.sanitizeData({{.challenge.Hint.Text}})
+      } catch (err) {
+        console.log(err)
+        bulmaToast.toast({
+          type: "is-danger",
+          message: "Estamos com problemas para deletar o comentário por favor tente novamente mais tarde!"
+        })
+      }
+    },
+    handleToggleLoading() {
+      this.isAddingComment = !this.isAddingComment
+    },
+    init() {
+      this.hint = this.sanitizeData({{.challenge.Hint.Text}})
         }     
       }))
     })
-    
+
   </script>
 </body>
 

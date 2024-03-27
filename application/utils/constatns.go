@@ -14,4 +14,5 @@ const (
 	MODE                  = "DEV"
 	PRODUCTION_MODE       = "PRODUCTION_MODE"
 	SESSION_KEY           = "SESSION_KEY"
+	SESSION_NAME          = "developer_academy"
 )

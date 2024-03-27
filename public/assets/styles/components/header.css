@@ -3,13 +3,13 @@
   justify-content: center;
 }
 
-.header__container > div {
+.header__container>div {
   max-width: 1200px;
   width: 100%;
   padding: 22px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap;*/
 }
 
 .header__title {
@@ -18,7 +18,7 @@
   gap: 6px;
 }
 
-.header__title > div {
+.header__title>div {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -26,45 +26,49 @@
   font-size: 1rem;
 }
 
-.header__title > div > i {
+.header__title>div>i {
   font-size: 1.625rem;
 }
-.header__title > span {
+
+.header__title>span {
   color: var(--gray-400);
   font-size: 0.875rem;
 }
 
-.header__title > div > h2 {
+.header__title>div>h2 {
   font-size: 1rem;
 }
+
 .header__profile {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.header__container > div > .header__profile > a > div {
+.header__container>div>.header__profile>a>div {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
 }
-.header__profile > div > span:first-child {
+
+.header__profile>div>span:first-child {
   font-weight: bold;
   font-size: 1rem;
   font-style: italic;
 }
 
-.header__profile > a {
- color: inherit
+
+.header__profile>a {
+  color: inherit
 }
 
-.header__profile > div > span:last-child {
+.header__profile>div>span:last-child {
   font-size: 0.875rem;
   color: var(--gray-400);
 }
 
-.header__container > div > .header__profile > img {
+.header__profile>img {
   width: 65px;
   height: 65px;
   border-radius: 50%;
@@ -73,11 +77,24 @@
 }
 
 @media screen and (max-width: 500px) {
-  .header__container > div {
+  .header__container>div {
     justify-content: flex-start
   }
 
   .header__profile {
+    font-size: 12px;
+  }
+
+  .header__profile>a>div>span {
+    text-wrap: nowrap;
+  }
+
+  .header__profile>a>div>span:last-child {
     display: none
+  }
+
+  .header__profile>img {
+    width: 45px;
+    height: 45px;
   }
 }

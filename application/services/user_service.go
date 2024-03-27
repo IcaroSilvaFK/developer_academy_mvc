@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
 )
@@ -10,7 +11,7 @@ type UserService struct {
 }
 
 type UserServiceInterface interface {
-	GetTenFirstUserAndCount() ([]*models.UserModel, int, error)
+	GetTenFirstUserAndCount() ([]*models.UserModel, int, *utils.RestErr)
 }
 
 func NewUserService(
@@ -22,6 +23,14 @@ func NewUserService(
 	}
 }
 
-func (us *UserService) GetTenFirstUserAndCount() ([]*models.UserModel, int, error) {
-	return us.ur.FindFirstTenAndCount()
+func (us *UserService) GetTenFirstUserAndCount() ([]*models.UserModel, int, *utils.RestErr) {
+
+	m, i, err := us.ur.FindFirstTenAndCount()
+
+	if err != nil {
+		message := "Error on get first ten users"
+		return nil, 0, utils.NewInternalServerError(&message)
+	}
+
+	return m, i, nil
 }

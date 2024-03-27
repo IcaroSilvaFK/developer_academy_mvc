@@ -29,7 +29,7 @@ func NewChallengeModel(title, description, embedUrl, userId string) *ChallengeMo
 }
 
 func (c *ChallengeModel) BeforeDelete(tx *gorm.DB) (err error) {
-	tx.Clauses(clause.Returning{}).Where("challenge_id = ?", c.ID).Delete(&ChallengeHintsModel{})
+	tx.Debug().Clauses(clause.Returning{}).Where("challenge_id = ?", c.ID).Delete(&ChallengeHintsModel{})
 	return
 }
 

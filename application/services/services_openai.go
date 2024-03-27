@@ -60,7 +60,7 @@ func (as *AIService) GenerateHintFromChallenge(title string) (string, error) {
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleUser,
-					Content: fmt.Sprintf("De uma lista com 3 items  sobre '%s' somente a lista", title),
+					Content: fmt.Sprintf("De uma lista com 3 items  sobre '%s' somente a lista e o assunto sobre programação", title),
 				},
 			},
 		},

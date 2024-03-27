@@ -3,12 +3,13 @@
   margin: 0 auto;
   padding-bottom: 22px;
 }
-.container__main > header {
+
+.container__main>header {
   padding: 22px 0;
   border-bottom: 1px solid var(--gray-200);
 }
 
-.container__main > form {
+.container__main>form {
   margin-top: 12px;
   display: flex;
   flex-direction: column;
@@ -45,11 +46,11 @@
   height: 150px;
 }
 
-.container__main > form > footer {
+.container__main>form>footer {
   margin-top: 16px;
 }
 
-.container__main > form > footer > button {
+.container__main>form>footer>button {
   background-color: var(--black);
   color: var(--white);
   width: 100%;
@@ -59,7 +60,7 @@
   font-size: 1rem;
 }
 
-.container__main > form > footer > button:hover {
+.container__main>form>footer>button:hover {
   background: var(--hover-button);
   transition: all 0.3s linear;
 }
@@ -67,4 +68,10 @@
 input[error="true"],
 textarea[error="true"] {
   outline: 2px solid var(--red-500);
+}
+
+@media screen and (max-width: 500px) {
+  .container__main {
+    padding: 0 22px;
+  }
 }
