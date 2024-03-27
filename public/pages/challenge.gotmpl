@@ -35,15 +35,23 @@
         </h3>
          <ul>
           <template x-for="comment in comments">
-              <li class="container__comment">
+            <li class="container__comment">
               <div>
-              
                 <header>
-                <span x-text="dayjs(new Date(comment.created_at)).fromNow()"></span>
+                  <span x-text="dayjs(new Date(comment.created_at)).fromNow()"></span>
                 </header>
                 <p x-text="comment.comment"></p>
-                </div>
-              </li>
+              </div>
+              
+              <button 
+                title="Deletar comentário" 
+                class="button__delete_comment" 
+                x-show="comment.user_id === '{{.user.ID}}'"
+                @click="deleteComment(comment.id)"
+              >
+                <i class="ph ph-trash"></i>
+              </button>
+            </li>
           </template>
        </ul>
 
@@ -53,8 +61,8 @@
        
         <form @submit.prevent="onAddComment">
           <textarea placeholder="Escreva seu comentário" name="comment"></textarea>
-          <button>
-            <span>Comentar</span>
+          <button :disabled="isAddingComment">
+            <span x-text="!isAddingComment ? 'Comentar': 'Adicionando comentário...'"></span>
             <i class="ph ph-chat-teardrop"></i>
           </button>
         </form>
@@ -81,9 +89,10 @@
         hint: [],
         video: {{.challenge.EmbedUrl}},
         quantityComments: {{.quantityComments}},
+        isAddingComment: false,
         addNewComment(comment) {
           this.comments = [...this.comments, comment]
-          this.quantityComments = this.quantityComments +  1 
+          this.quantityComments = this.comments.length 
         },
         async onAddComment(ev) {
           const comment = ev.target.comment.value
@@ -91,7 +100,7 @@
           if (!comment.trim()) return
 
           try {
-
+            this.handleToggleLoading()
             const payload = {
               challenge_id: '{{.id}}',
               user_id: '{{ .user.ID }}',
@@ -105,12 +114,20 @@
             })
 
             this.addNewComment(data)
+            ev.target.comment.value = ""
 
-              ev.target.comment.value = ""
-      
-          
+            bulmaToast.toast({
+              type: "is-success",
+              message:"Comentário adicionado com sucesso!"
+            })
           } catch (err) {
             console.log(err)
+            bulmaToast.toast({
+              type: "is-danger",
+              message: "Estamos com problemas para adicionar o comentário."
+            })
+          }finally {
+            this.handleToggleLoading()
           }
         },
         sanitizeData(text) {
@@ -123,6 +140,30 @@
           }
 
           return result
+        },
+        async deleteComment(id) {
+          try{
+            await axios({
+              url: `/api/v1/challenges/comments/${id}`,
+              method: "DELETE" 
+            })
+            this.comments = this.comments.filter(comment => comment.id !== id)         
+            this.quantityComments = this.comments.length             
+            bulmaToast.toast({
+              type: "is-success",
+              message: "Comentário deletado com sucesso!"
+            })
+
+          }catch(err){
+            console.log(err)
+            bulmaToast.toast({
+              type: "is-danger",
+              message: "Estamos com problemas para deletar o comentário por favor tente novamente mais tarde!"
+            })
+          }
+        },
+        handleToggleLoading() {
+          this.isAddingComment = !this.isAddingComment 
         },
         init() {
           this.hint =this.sanitizeData({{.challenge.Hint.Text}})

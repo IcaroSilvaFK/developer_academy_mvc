@@ -9,8 +9,8 @@
   <title>Test</title>
 </head>
 
-<body x-data>
-  <main class="container">
+<body>
+  <main x-data class="container">
     <div>
       <section>
         <h1>Login</h1>
@@ -53,11 +53,11 @@
   </main>
 
   <script>
-  async function onLogin() {
-      
+   async function onLogin() {
       window.open(
         "https://github.com/login/oauth/authorize?client_id={{.client_id}}",
-        "_self")
+        "_self"
+      )
     }
   </script>
 
@@ -81,7 +81,7 @@
         }
       }
     })
-  </script>
+   </script>
 </body>
 
 </html>

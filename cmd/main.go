@@ -36,11 +36,11 @@ func main() {
 	}
 
 	e := gin.Default()
-	store := cookie.NewStore([]byte("secret"))
+	store := cookie.NewStore([]byte(os.Getenv(utils.SESSION_KEY)))
 
 	e.Use(gin.Logger())
 	e.Use(gin.Recovery())
-	e.Use(sessions.Sessions("mysession", store))
+	e.Use(sessions.Sessions("developer_academy", store))
 	e.Use(middlewares.AddCurrentInContextRequest(services.NewSessionService()))
 
 	ex, err := os.Executable()

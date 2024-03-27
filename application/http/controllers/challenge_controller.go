@@ -34,14 +34,14 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 
 	if id == "" || !utils.IsValidId(id) {
 		//TODO implment redirect to error page
-		ctx.JSON(http.StatusBadRequest, nil)
+		ctx.Redirect(http.StatusPermanentRedirect, "/errors/missing")
 		return
 	}
 
 	c, err := cc.svc.FindById(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, nil)
+		ctx.JSON(err.Code, err)
 		return
 	}
 
@@ -60,24 +60,18 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 	})
 }
 
-func (cc *ChallengeController) Create(ctx *gin.Context) {
-
-	ctx.JSON(http.StatusCreated, nil)
-}
-
 func (cc *ChallengeController) Destroy(ctx *gin.Context) {
 
 	id := ctx.Param("id")
 
 	if !utils.IsValidId(id) {
-
-		ctx.JSON(http.StatusBadRequest, nil)
+		err := apputils.NewBadRequestException("The id provided is invalid or is not uuid")
+		ctx.JSON(err.Code, err)
 		return
 	}
 
 	if err := cc.svc.Delete(id); err != nil {
-
-		ctx.JSON(http.StatusInternalServerError, nil)
+		ctx.JSON(err.Code, err)
 		return
 	}
 

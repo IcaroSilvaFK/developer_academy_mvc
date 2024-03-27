@@ -1,16 +1,13 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
-	"github.com/gin-contrib/sessions"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +15,7 @@ type LoginController struct {
 	svc              services.LoginServiceInterface
 	usvc             services.UserServiceInterface
 	challengeservice services.ChallengeServiceInterface
+	sessionservice   services.SessionServiceInterface
 }
 
 type LoginControllerInterface interface {
@@ -29,9 +27,10 @@ func NewLoginController(
 	svc services.LoginServiceInterface,
 	usvc services.UserServiceInterface,
 	challengeservice services.ChallengeServiceInterface,
+	sessionservice services.SessionServiceInterface,
 ) LoginControllerInterface {
 	return &LoginController{
-		svc, usvc, challengeservice,
+		svc, usvc, challengeservice, sessionservice,
 	}
 }
 
@@ -40,13 +39,13 @@ func (c *LoginController) Login(ctx *gin.Context) {
 	users, top, err := c.usvc.GetTenFirstUserAndCount()
 
 	if err != nil {
-		fmt.Println(err)
+		utils.Error("Error on request top ten users", err)
 	}
 
 	countchallenges, err := c.challengeservice.CountChallenges()
 
 	if err != nil {
-		log.Println(err)
+		utils.Error("Error on count challenges", err)
 	}
 
 	var r []views.UserResponseView
@@ -55,7 +54,7 @@ func (c *LoginController) Login(ctx *gin.Context) {
 		r = append(r, *views.NewUserResponseView(u))
 	}
 
-	ctx.HTML(200, "login.gotmpl", gin.H{
+	ctx.HTML(http.StatusOK, "login.gotmpl", gin.H{
 		"users":      r,
 		"quantity":   top,
 		"error":      err,
@@ -66,31 +65,23 @@ func (c *LoginController) Login(ctx *gin.Context) {
 
 func (c *LoginController) SignIn(ctx *gin.Context) {
 	code := ctx.Param("code")
-	session := sessions.Default(ctx)
 
 	if code == "" {
-		ctx.JSON(http.StatusNoContent, gin.H{
-			"message": "Bad request missing code",
-		})
+		err := utils.NewBadRequestException("Missing a param code in request")
+		ctx.JSON(err.Code, err)
 		return
 	}
 
 	u, err := c.svc.Login(code)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		ctx.JSON(err.Code, err)
 		return
 	}
 
 	r := views.NewUserResponseView(u)
 
-	bt, _ := json.Marshal(r)
-
-	// TODO define in constant this key
-	session.Set("user", string(bt))
-	session.Save()
+	c.sessionservice.Set(ctx, "user", r)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"user": r,

@@ -33,7 +33,7 @@ func (as *AIService) VerifyIfIsValidChallenge(title string) bool {
 	res, err := as.c.Moderations(
 		as.context,
 		openai.ModerationRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: openai.ModerationTextStable,
 			Input: title,
 		},
 	)
@@ -43,7 +43,7 @@ func (as *AIService) VerifyIfIsValidChallenge(title string) bool {
 	}
 
 	for _, r := range res.Results {
-		if r.Categories.Sexual || r.Categories.Violence {
+		if r.Categories.Sexual || r.Categories.Violence || r.Categories.Hate {
 			return false
 		}
 	}

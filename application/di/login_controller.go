@@ -23,11 +23,12 @@ func NewLoginController() controllers.LoginControllerInterface {
 	chttp := utils.NewHttpClient()
 
 	challengeservice := services.NewChallengeService(challengerepo, hintservice, iaservice)
+	sessionservice := services.NewSessionService()
 
 	svc := services.NewAuthService(
 		repo,
 		chttp,
 	)
 
-	return controllers.NewLoginController(svc, usvc, challengeservice)
+	return controllers.NewLoginController(svc, usvc, challengeservice, sessionservice)
 }

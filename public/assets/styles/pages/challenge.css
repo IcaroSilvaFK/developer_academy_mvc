@@ -108,6 +108,7 @@
 .container__comment {
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 12px;
 }
 
@@ -148,4 +149,10 @@
 
 .container__help ol li {
   font-size: 14px;
+}
+
+
+.button__delete_comment {
+  color: var(--red-500);
+  font-size: 22px;
 }

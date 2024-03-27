@@ -16,7 +16,7 @@ type LoginService struct {
 }
 
 type LoginServiceInterface interface {
-	Login(code string) (*models.UserModel, error)
+	Login(code string) (*models.UserModel, *utils.RestErr)
 }
 
 func NewAuthService(
@@ -29,7 +29,7 @@ func NewAuthService(
 	}
 }
 
-func (a *LoginService) Login(code string) (*models.UserModel, error) {
+func (a *LoginService) Login(code string) (*models.UserModel, *utils.RestErr) {
 
 	var res dtos.GithubTokenResponse
 
@@ -40,7 +40,7 @@ func (a *LoginService) Login(code string) (*models.UserModel, error) {
 	}, &res)
 
 	if err != nil {
-		return nil, err
+		return nil, utils.NewForbiddenException("Fail on request access token on github.")
 	}
 
 	var u dtos.GithubResponse
@@ -50,13 +50,14 @@ func (a *LoginService) Login(code string) (*models.UserModel, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, utils.NewForbiddenException("Fail on get user details in github.")
 	}
 
 	uExists, err := a.ur.FindByEmail(u.Email)
 
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, err
+		message := "Error on find user"
+		return nil, utils.NewInternalServerError(&message)
 	}
 	if err == gorm.ErrRecordNotFound {
 		uExists = models.NewUserModel(
@@ -65,7 +66,8 @@ func (a *LoginService) Login(code string) (*models.UserModel, error) {
 		err = a.ur.Create(uExists)
 
 		if err != nil {
-			return nil, err
+			message := "Error on create user"
+			return nil, utils.NewInternalServerError(&message)
 		}
 	}
 

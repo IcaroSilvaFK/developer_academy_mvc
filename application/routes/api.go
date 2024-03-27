@@ -26,5 +26,6 @@ func NewApiRoutes(engine *gin.Engine) {
 
 	group.POST("/challenges", createChallengeController.Create)
 	group.POST("/challenges/comments", commentsChallengeController.Create)
+	group.DELETE("/challenges/comments/:id", commentsChallengeController.Destroy)
 	group.DELETE("/challenges/:id", challengeController.Destroy)
 }

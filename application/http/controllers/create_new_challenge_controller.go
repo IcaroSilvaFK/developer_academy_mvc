@@ -42,23 +42,21 @@ func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {
 	u := utils.GetCurrentUserInRequestContext(ctx)
 
 	if u.ID == "" {
-		//TODO padronizar as respostas de erro
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"err": "Usuário inválido",
-		})
+		err := utils.NewBadRequestException("ID is required but is missing in current request")
+		ctx.JSON(err.Code, err)
 		return
 	}
 
 	var c views.CreateChallengeInputView
 
 	if err := ctx.Bind(&c); err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		erno := utils.NewBadRequestException(err.Error())
+		ctx.JSON(erno.Code, erno)
 		return
 	}
 
 	if err := cc.svc.Create(c.Title, c.Description, c.EmbedUrl, u.ID); err != nil {
-
-		ctx.JSON(http.StatusInternalServerError, nil)
+		ctx.JSON(err.Code, err)
 		return
 	}
 

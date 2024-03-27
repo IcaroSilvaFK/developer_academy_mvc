@@ -69,7 +69,7 @@ func (cc *CommentChallengeRepository) FindByChallengeId(challengeId string) ([]*
 
 func (cc *CommentChallengeRepository) Delete(commentId string) error {
 
-	err := cc.db.Model(&models.ChallengeCommentModel{}).Delete(commentId).Error
+	err := cc.db.Model(&models.ChallengeCommentModel{}).Where("id = ?", commentId).Delete(commentId).Error
 
 	if err != nil {
 		return err
