@@ -155,4 +155,5 @@
 .button__delete_comment {
   color: var(--red-500);
   font-size: 22px;
+  background: transparent;
 }
