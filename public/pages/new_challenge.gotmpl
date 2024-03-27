@@ -45,16 +45,14 @@
   </main>
   <script>
     document.addEventListener("alpine:init", () => {
-      console.log("Alpine loaded success")
+     
       Alpine.data("main", () => ({
         loading: false,
         buttonText: "Enviar",
         changeLoading() {
           this.loading = !this.loading
         },
-        async handleSubmit(ev) {
-         
-          console.log("chamou")
+        async handleSubmit(ev) {      
           const target = ev.target
           const formKeys = ["title", "embed_url", "description"]
           const payload = {}

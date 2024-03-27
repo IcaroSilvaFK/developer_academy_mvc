@@ -10,6 +10,7 @@ require (
 	github.com/sashabaranov/go-openai v1.20.4
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.27.0
+	golang.org/x/time v0.5.0
 	gorm.io/driver/postgres v1.5.7
 	gorm.io/gorm v1.25.7
 )

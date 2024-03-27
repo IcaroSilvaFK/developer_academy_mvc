@@ -10,6 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .main__header > div {
@@ -133,3 +135,4 @@
 .container__empty_challenges i {
   font-size: 26px;
 }
+

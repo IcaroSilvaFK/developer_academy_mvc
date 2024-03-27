@@ -9,6 +9,7 @@
   padding: 22px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .header__title {
@@ -36,7 +37,7 @@
 .header__title > div > h2 {
   font-size: 1rem;
 }
-.header__container > div > .header__profile {
+.header__profile {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -69,4 +70,14 @@
   border-radius: 50%;
 
   object-fit: cover;
+}
+
+@media screen and (max-width: 500px) {
+  .header__container > div {
+    justify-content: flex-start
+  }
+
+  .header__profile {
+    display: none
+  }
 }

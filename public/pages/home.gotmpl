@@ -9,9 +9,8 @@
   <title>DEVELOPER ACADEMY | HOME</title>
 </head>
 
-  <body>
+<body>
   {{template "templates/header.tmpl" .}}
-
   <main x-data="container" class="container__main">
     <header class="main__header">
       <h1>Challenges</h1>
@@ -26,27 +25,26 @@
       </div>
     </header>
 
-
-    <div class="container__empty_challenges" x-show="filteredChallenges.length <= 0"> 
+    <div class="container__empty_challenges" x-show="filteredChallenges.length <= 0">
       <span>
         Parece que ainda não temos desafios cadastrados. <a href="/new_challenge">Clique aqui</a> para criar um novo.
       </span>
       <i class="ph ph-code"></i>
     </div>
     <ul class="main__list_container">
-        <template x-for="challenge in filteredChallenges">
-          <li>
-            <div class="list_container__content">
-              <h3 x-text="challenge.title"></h3>
-              <p x-text="challenge.description"></p>
-              <time x-text="'Criado em ' + formatDate(new Date(challenge.created_at))"></time> 
-            </div>
-            <footer>
-              <a :href="'/challenge/'+challenge.id">visualizar</a>
-            </footer>
-          </li>
-        </template>
-      </ul>
+      <template x-for="challenge in filteredChallenges">
+        <li>
+          <div class="list_container__content">
+            <h3 x-text="challenge.title"></h3>
+            <p x-text="challenge.description"></p>
+            <time x-text="'Criado em ' + formatDate(new Date(challenge.created_at))"></time>
+          </div>
+          <footer>
+            <a :href="'/challenge/'+challenge.id">visualizar</a>
+          </footer>
+        </li>
+      </template>
+    </ul>
   </main>
 
   <script>
@@ -54,35 +52,35 @@
     document.addEventListener("alpine:init", () => {
       Alpine.data("container", () => ({
         challenges: {{.challenges}},
-        filter: "",
-        filteredChallenges: {{.challenges}},
-        onSearch(ev) {
-          const value = ev.target.value
+      filter: "",
+      filteredChallenges: {{.challenges}},
+      onSearch(ev) {
+      const value = ev.target.value
           
           if(!this.challenges) return
-          
-          if(!value.trim()){
-            this.filteredChallenges = this.challenges
-            return
-          }
 
-          this.filteredChallenges = this.challenges.filter(challenge => this.toUpper(challenge.title).includes(this.toUpper(value)) || this.toUpper(challenge.description).includes(this.toUpper(value)))
+    if (!value.trim()) {
+      this.filteredChallenges = this.challenges
+      return
+    }
+
+    this.filteredChallenges = this.challenges.filter(challenge => this.toUpper(challenge.title).includes(this.toUpper(value)) || this.toUpper(challenge.description).includes(this.toUpper(value)))
         },
-        init() {
-           this.filteredChallenges = this.challenges
-        },
-        toUpper(str) {
-          return str.toUpperCase()
-        }
+    init() {
+      this.filteredChallenges = this.challenges
+    },
+    toUpper(str) {
+      return str.toUpperCase()
+    }
       }))
     })
-  
+
     function formatDate(date) {
       return new Intl.DateTimeFormat("pt-BR", {
         day: "numeric",
         month: "long",
         year: "numeric",
-      }).format(new Date(date)) ;
+      }).format(new Date(date));
     }
   </script>
 
