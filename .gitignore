@@ -6,3 +6,5 @@ tmp
 .env.local
 .env.prod
 disassembly
+build
+trace.out
