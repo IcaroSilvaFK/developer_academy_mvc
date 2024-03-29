@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
@@ -49,8 +50,6 @@ func (ga *GitlabAuthAdapter) SignIn(code string) (dtos.GithubResponse, error) {
 	if err != nil {
 		return dtos.GithubResponse{}, err
 	}
-
-	u.Email = u.PublicEmail
 
 	return u, nil
 }
