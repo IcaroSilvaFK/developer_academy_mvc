@@ -1,7 +1,6 @@
 package adapters
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
