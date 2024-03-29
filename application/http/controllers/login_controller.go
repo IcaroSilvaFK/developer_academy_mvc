@@ -55,16 +55,18 @@ func (c *LoginController) Login(ctx *gin.Context) {
 	}
 
 	ctx.HTML(http.StatusOK, "login.gotmpl", gin.H{
-		"users":      r,
-		"quantity":   top,
-		"error":      err,
-		"challenges": countchallenges,
-		"client_id":  os.Getenv(utils.GITHUB_CLIENT_ID),
+		"users":            r,
+		"quantity":         top,
+		"error":            err,
+		"challenges":       countchallenges,
+		"client_id":        os.Getenv(utils.GITHUB_CLIENT_ID),
+		"gitlab_client_id": os.Getenv(utils.GITLAB_APP_ID),
 	})
 }
 
 func (c *LoginController) SignIn(ctx *gin.Context) {
 	code := ctx.Param("code")
+	provider := ctx.Query("provider")
 
 	if code == "" {
 		err := utils.NewBadRequestException("Missing a param code in request")
@@ -72,7 +74,7 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	u, err := c.svc.Login(code)
+	u, err := c.svc.Login(code, provider)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -84,6 +86,6 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 	c.sessionservice.Set(ctx, "user", r)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"user": r,
+		"user": "",
 	})
 }

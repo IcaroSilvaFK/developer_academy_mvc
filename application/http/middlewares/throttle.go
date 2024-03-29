@@ -20,6 +20,5 @@ func Throllet(maxEventsPerSec int, maxBurstSize int) gin.HandlerFunc {
 
 		ctx.Error(errors.New("Limit exceeded"))
 		ctx.AbortWithStatus(http.StatusTooManyRequests)
-
 	}
 }

@@ -1,9 +1,9 @@
 package services
 
 import (
-	"os"
+	"fmt"
 
-	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/adapters"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -16,7 +16,7 @@ type LoginService struct {
 }
 
 type LoginServiceInterface interface {
-	Login(code string) (*models.UserModel, *utils.RestErr)
+	Login(code, provider string) (*models.UserModel, *utils.RestErr)
 }
 
 func NewAuthService(
@@ -29,28 +29,16 @@ func NewAuthService(
 	}
 }
 
-func (a *LoginService) Login(code string) (*models.UserModel, *utils.RestErr) {
+func (a *LoginService) Login(code, provider string) (*models.UserModel, *utils.RestErr) {
 
-	var res dtos.GithubTokenResponse
+	adapter := a.instaceAdapter(provider)
 
-	_, err := a.client.Post("https://github.com/login/oauth/access_token", map[string]string{
-		"client_id":     os.Getenv(utils.GITHUB_CLIENT_ID),
-		"client_secret": os.Getenv(utils.GITHUB_CLIENT_SECRET),
-		"code":          code,
-	}, &res)
+	u, err := adapter.SignIn(code)
+
+	fmt.Println(u)
 
 	if err != nil {
 		return nil, utils.NewForbiddenException("Fail on request access token on github.")
-	}
-
-	var u dtos.GithubResponse
-
-	_, err = a.client.Get("https://api.github.com/user", &u, map[string]string{
-		"Authorization": "token " + res.AccessToken,
-	})
-
-	if err != nil {
-		return nil, utils.NewForbiddenException("Fail on get user details in github.")
 	}
 
 	uExists, err := a.ur.FindByEmail(u.Email)
@@ -72,4 +60,17 @@ func (a *LoginService) Login(code string) (*models.UserModel, *utils.RestErr) {
 	}
 
 	return uExists, nil
+}
+
+func (s *LoginService) instaceAdapter(provider string) adapters.AdapterAuthInterface {
+
+	httpClient := utils.NewHttpClient()
+
+	switch provider {
+	case "gitlab":
+		return adapters.NewGitlabAdapter(httpClient)
+	default:
+		return adapters.NewGithubAdapter(httpClient)
+	}
+
 }

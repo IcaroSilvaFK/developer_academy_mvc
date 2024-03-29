@@ -14,7 +14,8 @@ func NewHomeController() controllers.HomeControllerInterface {
 	hintRepo := repositories.NewChallengesHintsRepository(db)
 	hintSvc := services.NewChallengeHintService(hintRepo)
 	iaService := services.NewAIService()
-	svc := services.NewChallengeService(repo, hintSvc, iaService)
+	cacheSvc := services.NewCacheService()
+	svc := services.NewChallengeService(repo, hintSvc, iaService, cacheSvc)
 
 	return controllers.NewHomeController(svc)
 }

@@ -18,6 +18,9 @@ type CommentsChallengeController struct {
 type CommentsChallengeControllerInterface interface {
 	Create(ctx *gin.Context)
 	Destroy(ctx *gin.Context)
+	FindUserComments(ctx *gin.Context)
+	FindCommentById(ctx *gin.Context)
+	FindChallengesComments(ctx *gin.Context)
 }
 
 func NewCommentsChallengeController(
@@ -65,7 +68,7 @@ func (cc *CommentsChallengeController) Destroy(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	if !infrautils.IsValidId(id) {
-		err := utils.NewBadRequestException("The id provided is not valid")
+		err := utils.NewBadRequestException(utils.INVALID_ID_MESSAGE)
 		ctx.JSON(err.Code, err)
 		return
 	}
@@ -78,4 +81,72 @@ func (cc *CommentsChallengeController) Destroy(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusNoContent, nil)
+}
+
+func (cc *CommentsChallengeController) FindUserComments(ctx *gin.Context) {
+
+	id := ctx.Param("userId")
+
+	if !infrautils.IsValidId(id) {
+		err := utils.NewBadRequestException(utils.INVALID_ID_MESSAGE)
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	comments, err := cc.svc.FindByUserId(id)
+
+	if err != nil {
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	r := views.NewCommentChallengeListOutputView(comments)
+
+	ctx.JSON(http.StatusOK, r)
+}
+
+func (cc *CommentsChallengeController) FindCommentById(ctx *gin.Context) {
+
+	id := ctx.Param("id")
+
+	if !infrautils.IsValidId(id) {
+		err := utils.NewBadRequestException(utils.INVALID_ID_MESSAGE)
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	c, err := cc.svc.FindById(id)
+
+	if err != nil {
+
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	r := views.NewCommentChallengeOutputView(c)
+
+	ctx.JSON(http.StatusOK, r)
+}
+
+func (cc *CommentsChallengeController) FindChallengesComments(ctx *gin.Context) {
+
+	id := ctx.Param("challengeId")
+
+	if !infrautils.IsValidId(id) {
+		err := utils.NewBadRequestException(utils.INVALID_ID_MESSAGE)
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	comments, err := cc.svc.FindByChallengeId(id)
+
+	if err != nil {
+
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	r := views.NewCommentChallengeListOutputView(comments)
+
+	ctx.JSON(http.StatusOK, r)
 }

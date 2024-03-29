@@ -7,12 +7,12 @@
   padding: 22px
 }
 
-.container > img {
+.container>img {
   width: 50%;
   height: 100dvh;
 }
 
-.container > div {
+.container>div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,30 +23,30 @@
   width: 100%;
 }
 
-.container > div > section {
+.container>div>section {
   display: flex;
   flex-direction: column;
   gap: 12px;
   text-align: center;
 }
 
-.container > div > section > h1 {
+.container>div>section>h1 {
   color: var(--gray-900);
   font-size: 1.875rem;
   line-height: 2.25rem;
 }
 
-.container > div > section > span {
+.container>div>section>span {
   color: var(--gray-400);
   font-size: 1rem;
 }
 
-div > section {
+div>section {
   display: flex;
   flex-direction: column;
 }
 
-.container div > button {
+.container div>button {
   background-color: var(--black);
   color: var(--white);
   border-radius: 8px;
@@ -62,13 +62,23 @@ div > section {
   font-size: 1.125rem;
 }
 
-div > button i {
+.container div>button:last-child {
+  background: var(--gitlab-color)
+}
+
+div>button i {
   color: var(--white);
   font-size: 1.5rem;
 }
 
-.container div > button:hover {
+.container div>button:first-of-type:hover {
   background: var(--hover-button);
+  transition: all 0.3s linear;
+}
+
+
+.container div>button:last-child:hover {
+  filter: brightness(.9);
   transition: all 0.3s linear;
 }
 
@@ -83,7 +93,7 @@ div > button i {
   align-items: center;
 }
 
-.container__users > li > img {
+.container__users>li>img {
   width: 45px;
   height: 45px;
   object-fit: cover;
@@ -91,7 +101,7 @@ div > button i {
   border: 2px solid var(--black);
 }
 
-.container__users > li:not(:first-child) {
+.container__users>li:not(:first-child) {
   margin-left: -18px;
 }
 
@@ -120,7 +130,7 @@ div > button i {
   font-size: 1.5rem;
 }
 
-.container__count_challenges > span {
+.container__count_challenges>span {
   font-size: 1.25rem;
   color: var(--gray-400);
   text-transform: uppercase;

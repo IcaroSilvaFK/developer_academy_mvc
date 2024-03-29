@@ -15,4 +15,9 @@ const (
 	PRODUCTION_MODE       = "PRODUCTION_MODE"
 	SESSION_KEY           = "SESSION_KEY"
 	SESSION_NAME          = "developer_academy"
+	INVALID_ID_MESSAGE    = "The id provided is invalid or is not uuid"
+	GITLAB_APP_ID         = "GITLAB_APP_ID"
+	GITLAB_SECRET         = "GITLAB_SECRET"
+
+	GITLAB_REDIRECT_URI = "GITLAB_REDIRECT_URI"
 )

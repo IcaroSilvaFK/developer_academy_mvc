@@ -14,7 +14,7 @@ type UserRepositoryInterface interface {
 	FindByEmail(email string) (*models.UserModel, error)
 	FindFirstTenAndCount() ([]*models.UserModel, int, error)
 	FindById(id string) (*models.UserModel, error)
-	FindAll() (*[]models.UserModel, error)
+	FindAll() ([]*models.UserModel, error)
 	Delete(id string) error
 	Count() (int64, error)
 }
@@ -40,9 +40,9 @@ func (ur *UserRepository) FindById(id string) (*models.UserModel, error) {
 	return &user, ur.db.First(&user, "id = ?", id).Error
 }
 
-func (ur *UserRepository) FindAll() (*[]models.UserModel, error) {
-	var users []models.UserModel
-	return &users, ur.db.Find(&users).Error
+func (ur *UserRepository) FindAll() ([]*models.UserModel, error) {
+	var users []*models.UserModel
+	return users, ur.db.Find(&users).Error
 }
 
 func (ur *UserRepository) Delete(id string) error {

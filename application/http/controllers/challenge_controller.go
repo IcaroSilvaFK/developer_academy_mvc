@@ -18,6 +18,9 @@ type ChallengeController struct {
 type ChallengeControllerInterface interface {
 	Index(ctx *gin.Context)
 	Destroy(ctx *gin.Context)
+	GetAllChallenges(ctx *gin.Context)
+	FindById(ctx *gin.Context)
+	FindUserId(ctx *gin.Context)
 }
 
 func NewChallengeController(
@@ -32,7 +35,7 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 
 	id := ctx.Param("id")
 
-	if id == "" || !utils.IsValidId(id) {
+	if !utils.IsValidId(id) {
 		//TODO implment redirect to error page
 		ctx.Redirect(http.StatusPermanentRedirect, "/errors/missing")
 		return
@@ -61,11 +64,10 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 }
 
 func (cc *ChallengeController) Destroy(ctx *gin.Context) {
-
 	id := ctx.Param("id")
 
 	if !utils.IsValidId(id) {
-		err := apputils.NewBadRequestException("The id provided is invalid or is not uuid")
+		err := apputils.NewBadRequestException(apputils.INVALID_ID_MESSAGE)
 		ctx.JSON(err.Code, err)
 		return
 	}
@@ -76,4 +78,66 @@ func (cc *ChallengeController) Destroy(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusNoContent, nil)
+}
+
+func (cc *ChallengeController) GetAllChallenges(ctx *gin.Context) {
+
+	challenges, err := cc.svc.FindAll(nil)
+
+	if err != nil {
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	r := views.NewChallengeResponseOutputList(challenges)
+
+	ctx.JSON(http.StatusOK, r)
+}
+
+func (cc *ChallengeController) FindById(ctx *gin.Context) {
+
+	id := ctx.Param("id")
+
+	if !utils.IsValidId(id) {
+		err := apputils.NewBadRequestException(apputils.INVALID_ID_MESSAGE)
+
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	c, err := cc.svc.FindById(id)
+
+	if err != nil {
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	r := views.NewChallengeResponseOutput(c)
+
+	ctx.JSON(http.StatusOK, r)
+}
+
+func (cc *ChallengeController) FindUserId(ctx *gin.Context) {
+
+	id := ctx.Param("userId")
+
+	if !utils.IsValidId(id) {
+		err := apputils.NewBadRequestException(apputils.INVALID_ID_MESSAGE)
+
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	c, err := cc.svc.FindByUserId(id)
+
+	if err != nil {
+
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	r := views.NewChallengeResponseOutputList(c)
+
+	ctx.JSON(http.StatusOK, r)
+
 }

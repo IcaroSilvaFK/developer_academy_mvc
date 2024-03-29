@@ -12,8 +12,8 @@ type ChallengeModel struct {
 	Description string
 	EmbedUrl    string
 	UserId      string
-	Comments    []ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
-	Hint        ChallengeHintsModel     `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
+	Comments    []*ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
+	Hint        ChallengeHintsModel      `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
 	gorm.Model
 }
 

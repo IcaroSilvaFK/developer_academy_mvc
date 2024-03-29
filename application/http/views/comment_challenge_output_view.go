@@ -23,12 +23,12 @@ func NewCommentChallengeOutputView(c *models.ChallengeCommentModel) CommentChall
 	}
 }
 
-func NewCommentChallengeListOutputView(list []models.ChallengeCommentModel) []CommentChallengeOutputView {
+func NewCommentChallengeListOutputView(list []*models.ChallengeCommentModel) []CommentChallengeOutputView {
 
 	r := make([]CommentChallengeOutputView, 0)
 
 	for _, comment := range list {
-		r = append(r, NewCommentChallengeOutputView(&comment))
+		r = append(r, NewCommentChallengeOutputView(comment))
 	}
 
 	return r

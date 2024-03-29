@@ -15,6 +15,7 @@ type ChallengeService struct {
 	repo      repositories.ChallengeRepositoryInterface
 	hinrepo   ChallengeHintServiceInterface
 	iaservice AIServiceInterface
+	cache     CacheServiceInterface
 }
 
 type ChallengeServiceInterface interface {
@@ -30,10 +31,11 @@ func NewChallengeService(
 	repo repositories.ChallengeRepositoryInterface,
 	hinrepo ChallengeHintServiceInterface,
 	iaservice AIServiceInterface,
+	cacheSvc CacheServiceInterface,
 ) ChallengeServiceInterface {
 
 	return &ChallengeService{
-		repo, hinrepo, iaservice,
+		repo, hinrepo, iaservice, cacheSvc,
 	}
 }
 
@@ -71,11 +73,25 @@ func (c *ChallengeService) Create(title, description, embedUrl, userId string) *
 
 func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.RestErr) {
 
+	var res []*models.ChallengeModel
+
+	if err := c.cache.Get("challenges", &res); err != nil {
+		utils.Error("Erro on get in cache", err)
+	}
+
+	if len(res) > 0 {
+		return res, nil
+	}
+
 	res, err := c.repo.GetAll(page)
 
 	if err != nil {
 		message := "Error on get all challenges please try again later"
 		return nil, utils.NewInternalServerError(&message)
+	}
+
+	if err := c.cache.Set("challenges", res); err != nil {
+		utils.Error("Error on insert items in cache", err)
 	}
 
 	return res, nil

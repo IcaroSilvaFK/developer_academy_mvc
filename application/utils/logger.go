@@ -16,7 +16,7 @@ var (
 
 func init() {
 	logConfig := zap.Config{
-		OutputPaths: []string{getOutputLogs()},
+		OutputPaths: []string{getOutputLogs(), "/tmp/logs"},
 		Level:       zap.NewAtomicLevelAt(getLevelLogs()),
 		Encoding:    "json",
 		EncoderConfig: zapcore.EncoderConfig{
@@ -29,7 +29,7 @@ func init() {
 		},
 	}
 
-	log, _ = logConfig.Build()
+	log = zap.Must(logConfig.Build())
 
 }
 

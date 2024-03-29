@@ -33,13 +33,13 @@
 
           <div class="container__count_persons">
             {{ if gt .quantity 0}}
-              <span>+{{ .quantity }}</span>
-              <span>pessoas já estão usando</span>             
+            <span>+{{ .quantity }}</span>
+            <span>pessoas já estão usando</span>
             {{ end }}
             {{ if le .quantity 0}}
-              <span></span>
-              <span>Seja o pioneiro a ingressar na plataforma!</span>
-              <i class="ph ph-code"></i>
+            <span></span>
+            <span>Seja o pioneiro a ingressar na plataforma!</span>
+            <i class="ph ph-code"></i>
             {{ end }}
           </div>
         </div>
@@ -49,13 +49,26 @@
         <i class="ph ph-github-logo"></i>
         Login with GitHub
       </button>
+
+      <button @click="loginWithGitlab">
+        <i class="ph ph-gitlab-logo"></i>
+        Login with Gitlab
+      </button>
     </div>
   </main>
 
   <script>
-   async function onLogin() {
+    async function onLogin() {
       window.open(
         "https://github.com/login/oauth/authorize?client_id={{.client_id}}",
+        "_self"
+      )
+    }
+    function loginWithGitlab() {
+      const url = `${window.location.href}?provider=gitlab`
+
+      window.open(
+        `https://gitlab.com/oauth/authorize?client_id={{.gitlab_client_id}}&redirect_uri=${url}&response_type=code&scope=read_user`,
         "_self"
       )
     }
@@ -72,16 +85,21 @@
     window.addEventListener("load", async () => {
       const url = new URL(window.location.href)
       const code = url.searchParams.get("code")
+      let provider = url.searchParams.get("provider")
+
+      if (!provider) {
+        provider = "github"
+      }
 
       if (code) {
-        const authIsSuccess = await userService.auth(code)
+        const authIsSuccess = await userService.auth(code, provider)
 
         if (authIsSuccess) {
           window.location.replace("/home")
         }
       }
     })
-   </script>
+  </script>
 </body>
 
 </html>

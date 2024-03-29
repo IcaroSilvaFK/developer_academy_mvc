@@ -5,9 +5,10 @@ type GithubTokenResponse struct {
 }
 
 type GithubResponse struct {
-	AvatarUrl string `json:"avatar_url"`
-	Bio       string `json:"bio"`
-	Email     string `json:"email"`
-	Name      string `json:"name"`
-	Url       string `json:"url"`
+	AvatarUrl   string `json:"avatar_url,omitempty"`
+	Bio         string `json:"bio"`
+	Email       string `json:"email"`
+	Name        string `json:"name"`
+	Url         string `json:"url"`
+	PublicEmail string `json:"public_email"`
 }

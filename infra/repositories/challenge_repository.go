@@ -54,7 +54,7 @@ func (c *ChallengeRepository) GetById(id string) (*models.ChallengeModel, error)
 
 	var r *models.ChallengeModel
 
-	err := c.db.Debug().Table("challenges").Where("id = ?", id).Preload(clause.Associations).Find(&r).Error
+	err := c.db.Table("challenges").Where("id = ?", id).Preload(clause.Associations).Find(&r).Error
 
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (c *ChallengeRepository) GetByUserId(id string) ([]*models.ChallengeModel, 
 
 	var result []*models.ChallengeModel
 
-	err := c.db.Debug().Table("challenges").Find(&result, "user_id = ?", id).Error
+	err := c.db.Table("challenges").Find(&result, "user_id = ?", id).Error
 
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func (c *ChallengeRepository) CountChallenges() (int, error) {
 }
 
 func (c *ChallengeRepository) Delete(id string) error {
-	r := c.db.Debug().Table("challenges").Where("id = ?", id).Delete(&models.ChallengeModel{
+	r := c.db.Table("challenges").Where("id = ?", id).Delete(&models.ChallengeModel{
 		ID: id,
 	})
 

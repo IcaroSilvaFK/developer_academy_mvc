@@ -12,9 +12,12 @@ func NewProfileController() controllers.ProfileControllerInterface {
 	db := database.GetConnection()
 	repo := repositories.NewChallengeRepository(db)
 	hintRepo := repositories.NewChallengesHintsRepository(db)
+	urepo := repositories.NewUserRepository(db)
 	hintSvc := services.NewChallengeHintService(hintRepo)
 	aiservice := services.NewAIService()
-	svc := services.NewChallengeService(repo, hintSvc, aiservice)
+	cacheSvc := services.NewCacheService()
+	svc := services.NewChallengeService(repo, hintSvc, aiservice, cacheSvc)
+	usvc := services.NewUserService(urepo)
 
-	return controllers.NewProfileController(svc)
+	return controllers.NewProfileController(svc, usvc)
 }

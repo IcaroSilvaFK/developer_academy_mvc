@@ -1,9 +1,9 @@
 export class UserService {
   #key = "@user_profile";
 
-  async auth(code) {
+  async auth(code,provider) {
     try {
-      const request = await fetch(`/api/v1/login/${code}`);
+      const request = await fetch(`/api/v1/login/${code}?provider=${provider}`);
       const user = await request.json();
 
       localStorage.setItem(this.#key, JSON.stringify(user));
