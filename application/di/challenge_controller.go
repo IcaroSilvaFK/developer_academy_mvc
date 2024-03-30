@@ -7,6 +7,8 @@ import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
 )
 
+var cache = services.NewCacheService()
+
 func NewChallengeController() controllers.ChallengeControllerInterface {
 
 	db := database.GetConnection()
@@ -14,8 +16,7 @@ func NewChallengeController() controllers.ChallengeControllerInterface {
 	hintRepo := repositories.NewChallengesHintsRepository(db)
 	hintSvc := services.NewChallengeHintService(hintRepo)
 	aiservice := services.NewAIService()
-	cacheSvc := services.NewCacheService()
-	svc := services.NewChallengeService(repo, hintSvc, aiservice, cacheSvc)
+	svc := services.NewChallengeService(repo, hintSvc, aiservice, cache)
 
 	return controllers.NewChallengeController(svc)
 }
