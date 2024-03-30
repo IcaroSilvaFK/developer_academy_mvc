@@ -166,5 +166,9 @@ func (c *ChallengeService) Delete(id string) *utils.RestErr {
 		return utils.NewInternalServerError(&message)
 	}
 
+	if err := c.cache.Delete(c.ck); err != nil {
+		utils.Error("Failed to delete challanges to cache", err)
+	}
+
 	return nil
 }

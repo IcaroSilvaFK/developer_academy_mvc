@@ -5,11 +5,11 @@
   padding: 22px;
 }
 
-.container__main > header {
+.container__main>header {
   padding: 12px 0;
 }
 
-.container__main > header span {
+.container__main>header span {
   font-size: 0.875rem;
   color: var(--gray-400);
 }
@@ -36,11 +36,12 @@
   flex-direction: column;
   gap: 12px;
 }
+
 .section__column div {
   flex: 1;
 }
 
-.section__column > div:first-child {
+.section__column>div:first-child {
   display: flex;
   gap: 22px;
 }
@@ -70,7 +71,7 @@
 
 .container__cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 12px;
   flex-wrap: wrap;
 }
@@ -88,6 +89,14 @@
   flex: 1;
 }
 
+.container__card div a {
+  color: inherit;
+}
+
+.container__card div a:hover {
+  color: var(--gray-400);
+  transition: color .3s linear
+}
 
 .container__card div h4 {
   font-size: 1rem;
@@ -117,4 +126,20 @@
 .container__card button:hover {
   background: var(--hover-button);
   transition: all 0.3s linear;
+}
+
+@media screen and (max-width: 500px) {
+
+  .container__card div p {
+    -webkit-line-clamp: 2;
+  }
+
+
+  .container__card div h4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis
+  }
 }

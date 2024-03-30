@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,17 @@
   {{ template "templates/head.tmpl" }}
   <title>DEVELOPER ACADEMY | Perfil</title>
 </head>
+
 <body>
   {{template "templates/header.tmpl" .}}
-  
+
   <main x-data="main" class="container__main">
-   <section class="container__section section__column">
+    <section class="container__section section__column">
       <header>
         <h2>Perfil</h2>
         <span>Você pode visualizar seu perfil, mas não pode editar suas informações.</span>
       </header>
-       
+
       <div>
         <div class="container__col">
           <label>Username</label>
@@ -34,22 +36,25 @@
     </section>
 
 
-   <section class="container__section">
-     
-    <header>
-      <h2>Desafios</h2>
+    <section class="container__section">
 
-      <p>
-        Meus desafios
-        <i class="ph ph-rocket"></i>
-      </p>
-    </header>
-       
-       <ul class="container__cards">
+      <header>
+        <h2>Desafios</h2>
+
+        <p>
+          Meus desafios
+          <i class="ph ph-rocket"></i>
+        </p>
+      </header>
+
+      <ul class="container__cards">
         <template x-for="challenge in challenges">
           <li class="container__card">
             <div>
-              <h4 x-text="challenge.title"></h4>
+              <a :href="'/challenge/'+ challenge.id">
+
+                <h4 x-text="challenge.title"></h4>
+              </a>
               <p x-text="challenge.description"></p>
             </div>
             <button @click="deleteChallenge(challenge.id)">
@@ -63,13 +68,13 @@
 
       document.addEventListener("alpine:init", () => {
         Alpine.data("main", () => ({
-          challenges: {{ .challenges }},
-          async deleteChallenge(id) {
-            try{
-             
-              await axios({
-                method: "DELETE",
-                url: `/api/v1/challenges/${id}`
+          challenges: {{ .challenges}},
+        async deleteChallenge(id) {
+        try{
+
+          await axios({
+            method: "DELETE",
+            url: `/api/v1/challenges/${id}`
               })
 
               this.removeChallenge(id)
@@ -95,7 +100,7 @@
         }))
       })
       const mock = Array.from({length:10}).map((_, idx) => ({
-        title: `Desafio ${idx+1}`,
+        title: `Desafio ${idx+ 1}`,
         createdAt: dayjs(new Date()).fromNow(),
         description: 'Esta é uma descrição teste',
         id: window.crypto.randomUUID()
@@ -103,4 +108,5 @@
     </script>
   </main>
 </body>
+
 </html>
