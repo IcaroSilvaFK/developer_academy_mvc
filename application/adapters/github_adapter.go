@@ -14,13 +14,13 @@ type GithubAuthAdpter struct {
 func NewGithubAdapter(
 	hc utils.HttpClientInterface,
 ) AdapterAuthInterface {
-	return &GitlabAuthAdapter{
+
+	return &GithubAuthAdpter{
 		hc,
 	}
 }
 
 func (aa *GithubAuthAdpter) SignIn(code string) (dtos.GithubResponse, error) {
-
 	var res dtos.GithubTokenResponse
 
 	_, err := aa.hc.Post("https://github.com/login/oauth/access_token", map[string]string{

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-
 	"io"
 	"net/http"
 	"strings"
@@ -58,6 +57,7 @@ func (c *HttpClient) Get(url string, body interface{}, headers map[string]string
 	if err != nil {
 		return r, err
 	}
+
 	defer r.Body.Close()
 
 	err = c.toJson(r.Body, body)

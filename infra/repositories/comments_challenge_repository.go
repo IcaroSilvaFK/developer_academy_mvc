@@ -26,8 +26,6 @@ func NewCommentChallengeRepository(
 
 func (cc *CommentChallengeRepository) Create(c *models.ChallengeCommentModel) error {
 
-	// c := models.NewChallengeCommentMode(challengeId, userId, comment)
-
 	err := cc.db.Model(&models.ChallengeCommentModel{}).Create(c).Error
 
 	return err

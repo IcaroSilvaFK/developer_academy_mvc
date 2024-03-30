@@ -1,8 +1,6 @@
 package services
 
 import (
-	"fmt"
-
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -16,6 +14,7 @@ type ChallengeService struct {
 	hinrepo   ChallengeHintServiceInterface
 	iaservice AIServiceInterface
 	cache     CacheServiceInterface
+	ck        string
 }
 
 type ChallengeServiceInterface interface {
@@ -35,14 +34,13 @@ func NewChallengeService(
 ) ChallengeServiceInterface {
 
 	return &ChallengeService{
-		repo, hinrepo, iaservice, cacheSvc,
+		repo, hinrepo, iaservice, cacheSvc, "challenges",
 	}
 }
 
 func (c *ChallengeService) Create(title, description, embedUrl, userId string) *utils.RestErr {
 
 	if !c.iaservice.VerifyIfIsValidChallenge(title) {
-		fmt.Println("aq")
 		return utils.NewBadRequestException("Te request contains params inappropriate")
 	}
 	cm := models.NewChallengeModel(title, description, embedUrl, userId)
@@ -63,6 +61,10 @@ func (c *ChallengeService) Create(title, description, embedUrl, userId string) *
 
 	err = c.hinrepo.Create(cm.ID, hint)
 
+	if err := c.cache.Delete(c.ck); err != nil {
+		utils.Error("Error on delete cache from challenges", err)
+	}
+
 	if err != nil {
 		message := "Error on create hint from challenge"
 		return utils.NewInternalServerError(&message)
@@ -75,7 +77,7 @@ func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.
 
 	var res []*models.ChallengeModel
 
-	if err := c.cache.Get("challenges", &res); err != nil {
+	if err := c.cache.Get(c.ck, &res); err != nil {
 		utils.Error("Erro on get in cache", err)
 	}
 
@@ -90,7 +92,7 @@ func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.
 		return nil, utils.NewInternalServerError(&message)
 	}
 
-	if err := c.cache.Set("challenges", res); err != nil {
+	if err := c.cache.Set(c.ck, res); err != nil {
 		utils.Error("Error on insert items in cache", err)
 	}
 
@@ -113,7 +115,6 @@ func (c *ChallengeService) FindById(id string) (*models.ChallengeModel, *utils.R
 		message := "Error on find challenge"
 		return nil, utils.NewInternalServerError(&message)
 	}
-
 	return r, nil
 }
 

@@ -1,8 +1,6 @@
 package services
 
 import (
-	"fmt"
-
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/adapters"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
@@ -31,14 +29,16 @@ func NewAuthService(
 
 func (a *LoginService) Login(code, provider string) (*models.UserModel, *utils.RestErr) {
 
-	adapter := a.instaceAdapter(provider)
+	prov := a.instaceProvider(provider)
 
-	u, err := adapter.SignIn(code)
+	u, err := prov.SignIn(code)
 
-	fmt.Println(u)
+	if u.Email == "" {
+		return nil, utils.NewForbiddenException("Fail on request access user in auth")
+	}
 
 	if err != nil {
-		return nil, utils.NewForbiddenException("Fail on request access token on github.")
+		return nil, utils.NewForbiddenException("Fail on request access in user account.")
 	}
 
 	uExists, err := a.ur.FindByEmail(u.Email)
@@ -62,15 +62,20 @@ func (a *LoginService) Login(code, provider string) (*models.UserModel, *utils.R
 	return uExists, nil
 }
 
-func (s *LoginService) instaceAdapter(provider string) adapters.AdapterAuthInterface {
+func (s *LoginService) instaceProvider(provider string) adapters.AdapterAuthInterface {
 
 	httpClient := utils.NewHttpClient()
 
 	switch provider {
 	case "gitlab":
-		return adapters.NewGitlabAdapter(httpClient)
+		{
+			utils.Info("gitlab login")
+			return adapters.NewGitlabAdapter(httpClient)
+		}
 	default:
-		return adapters.NewGithubAdapter(httpClient)
+		{
+			utils.Info("github login")
+			return adapters.NewGithubAdapter(httpClient)
+		}
 	}
-
 }

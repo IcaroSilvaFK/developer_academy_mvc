@@ -41,7 +41,7 @@ func (c *ChallengeRepository) GetAll(_ *int) ([]*models.ChallengeModel, error) {
 	var r []*models.ChallengeModel
 
 	//TODO implment pagination method
-	tx := c.db.Model(&models.ChallengeModel{}).Find(&r)
+	tx := c.db.Model(&models.ChallengeModel{}).Order(clause.OrderByColumn{Column: clause.Column{Name: "created_at"}, Desc: true}).Find(&r)
 
 	if tx.Error != nil {
 		return nil, tx.Error
