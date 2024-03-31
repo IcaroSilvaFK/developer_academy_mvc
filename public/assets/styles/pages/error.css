@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100dvh;
+}
+
+
+.container h3 {
+  font-size: 1.875rem;
+  color: var(--gray-900);
+  font-weight: 700;
+  line-height: 2.25rem;
+}
+
+.container svg {
+  width: 3rem;
+  height: 3rem;
+  color: var(--gray-900);
+}
+
+.container span {
+  color: var(--gray-400);
+}
+
+.container button {
+  border: 1px solid var(--gray-200);
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  background: var(--white);
+  border-radius: 4px;
+}

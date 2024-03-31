@@ -5,6 +5,7 @@ import (
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
 	infrautils "github.com/IcaroSilvaFK/developer_academy_mvc/infra/utils"
+	"go.uber.org/zap"
 
 	"gorm.io/gorm"
 )
@@ -81,9 +82,10 @@ func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.
 		utils.Error("Erro on get in cache", err)
 	}
 
-	// if len(res) > 0 {
-	// 	return res, nil
-	// }
+	if len(res) > 0 {
+		utils.Info("Response from cache", zap.String("redis", "ok"))
+		return res, nil
+	}
 
 	res, err := c.repo.GetAll(page)
 

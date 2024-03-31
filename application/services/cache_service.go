@@ -3,14 +3,20 @@ package services
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
 	"time"
 
-	"github.com/allegro/bigcache/v3"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
+	"github.com/redis/go-redis/v9"
 )
 
 type CacheService struct {
-	cache *bigcache.BigCache
+	cache *redis.Client
 }
+
+var ctx = context.Background()
 
 type CacheServiceInterface interface {
 	Get(string, interface{}) error
@@ -20,21 +26,29 @@ type CacheServiceInterface interface {
 
 func NewCacheService() CacheServiceInterface {
 
-	c, _ := bigcache.New(context.Background(), bigcache.DefaultConfig(10*time.Minute))
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     os.Getenv(utils.REDIS_SERVER),
+		Password: os.Getenv(utils.REDIS_PASS),
+		DB:       0,
+	})
 
 	return &CacheService{
-		c,
+		rdb,
 	}
 }
 
 func (c CacheService) Get(key string, dest interface{}) error {
-	r, err := c.cache.Get(key)
+	r, err := c.cache.Get(ctx, key).Result()
+
+	if err == redis.Nil {
+		return errors.New(fmt.Sprintf("The key %s not exists in redis", key))
+	}
 
 	if err != nil {
 		return err
 	}
 
-	if err := json.Unmarshal(r, dest); err != nil {
+	if err := json.Unmarshal([]byte(r), dest); err != nil {
 		return err
 	}
 
@@ -49,9 +63,9 @@ func (c CacheService) Set(key string, data interface{}) error {
 		return err
 	}
 
-	return c.cache.Set(key, bt)
+	return c.cache.Set(ctx, key, bt, 5*time.Minute).Err()
 }
 
 func (c CacheService) Delete(key string) error {
-	return c.cache.Delete(key)
+	return c.cache.Del(ctx, key).Err()
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
@@ -35,14 +36,14 @@ func (hc *HomeController) Index(ctx *gin.Context) {
 		v = 1
 	}
 
-	challenges, err := hc.svc.FindAll(&v)
-	u := utils.GetCurrentUserInRequestContext(ctx)
+	challenges, restErr := hc.svc.FindAll(&v)
 
-	if err != nil {
-		fmt.Println(err)
+	if restErr != nil {
+		ctx.Redirect(http.StatusPermanentRedirect, "/error")
+		return
 	}
 
-	fmt.Println(u)
+	u := utils.GetCurrentUserInRequestContext(ctx)
 
 	r := views.NewChallengeResponseOutputList(challenges)
 

@@ -36,15 +36,14 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	if !utils.IsValidId(id) {
-		//TODO implment redirect to error page
-		ctx.Redirect(http.StatusPermanentRedirect, "/errors/missing")
+		ctx.Redirect(http.StatusPermanentRedirect, "/error")
 		return
 	}
 
 	c, err := cc.svc.FindById(id)
 
 	if err != nil {
-		ctx.JSON(err.Code, err)
+		ctx.Redirect(http.StatusPermanentRedirect, "/error")
 		return
 	}
 

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log/slog"
 	"net/http"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
@@ -41,7 +40,9 @@ func (pc *ProfileController) Index(ctx *gin.Context) {
 	challenges, err := pc.svc.FindByUserId(userId)
 
 	if err != nil {
-		slog.Error(err.Error())
+		utils.Error("Error while search user", err)
+		ctx.Redirect(http.StatusPermanentRedirect, "/error")
+		return
 	}
 
 	result := views.NewChallengeResponseOutputList(challenges)
