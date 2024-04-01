@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -8,7 +10,9 @@ import (
 )
 
 type CommentChallengeService struct {
-	repo repositories.CommentChallengeRepositoryInterface
+	repo         repositories.CommentChallengeRepositoryInterface
+	cache        CacheServiceInterface
+	challengeKey string
 }
 
 type CommentChallengeServiceInterface interface {
@@ -21,9 +25,10 @@ type CommentChallengeServiceInterface interface {
 
 func NewCommentChallengeServicer(
 	repo repositories.CommentChallengeRepositoryInterface,
+	cache CacheServiceInterface,
 ) CommentChallengeServiceInterface {
 	return &CommentChallengeService{
-		repo,
+		repo, cache, "challenges",
 	}
 }
 
@@ -31,6 +36,9 @@ func (cs *CommentChallengeService) Create(challengeId, userId, comment string) (
 
 	c := models.NewChallengeCommentModel(challengeId, userId, comment)
 
+	if err := cs.cache.Delete(fmt.Sprintf("%s-%s", cs.challengeKey, challengeId)); err != nil {
+		utils.Error(fmt.Sprintf("Error on delete %s challenge from cache", challengeId), err)
+	}
 	err := cs.repo.Create(c)
 
 	if err != nil {

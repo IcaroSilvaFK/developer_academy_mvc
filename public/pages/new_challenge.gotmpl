@@ -12,7 +12,7 @@
 <body>
   {{template "templates/header.tmpl" . }}
   <main x-data="main" class="container__main">
-    <header> 
+    <header>
       <h1>Novo Desafio</h1>
     </header>
     <form @submit.prevent="handleSubmit">
@@ -45,18 +45,16 @@
   </main>
   <script>
     document.addEventListener("alpine:init", () => {
-     
+
       Alpine.data("main", () => ({
         loading: false,
-        buttonText: "Enviar",
         changeLoading() {
           this.loading = !this.loading
         },
-        async handleSubmit(ev) {      
+        async handleSubmit(ev) {
           const target = ev.target
           const formKeys = ["title", "embed_url", "description"]
           const payload = {}
-
           for (const key of formKeys) {
             const currentTargetValue = target[key].value
             if (!currentTargetValue.trim()) {
@@ -66,9 +64,8 @@
             payload[key] = currentTargetValue
           }
 
-
           if (!Object.keys(payload).length) return
-          
+
           try {
             this.changeLoading()
             await axios({
@@ -100,8 +97,7 @@
         removeErrorAttribute: (ev) => {
           ev.target.removeAttribute("error")
         },
-        
-       }))
+      }))
 
     })
 

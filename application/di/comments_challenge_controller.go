@@ -12,7 +12,9 @@ func NewCommentsChallengeController() controllers.CommentsChallengeControllerInt
 	db := database.GetConnection()
 
 	repo := repositories.NewCommentChallengeRepository(db)
-	svc := services.NewCommentChallengeServicer(repo)
+
+	cache := services.NewCacheService()
+	svc := services.NewCommentChallengeServicer(repo, cache)
 
 	return controllers.NewCommentsChallengeController(svc)
 }
