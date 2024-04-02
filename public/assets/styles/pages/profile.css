@@ -31,6 +31,15 @@
   color: var(--gray-900);
 }
 
+.container__section header span {
+  display: flex;
+  align-items: center;
+}
+
+.container__section header span i {
+  color: var(--gitlab-color)
+}
+
 .section__column {
   display: flex;
   flex-direction: column;
