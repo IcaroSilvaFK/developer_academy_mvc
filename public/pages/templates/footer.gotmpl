@@ -1,0 +1,15 @@
+{{ define "templates/footer.tmpl"}}
+<link rel="stylesheet" href="/assets/styles/components/footer.css">
+</link>
+
+<footer x-data="{
+  year: new Date().getFullYear()
+}" class="container__footer">
+  <span>
+    &COPY;
+  </span>
+
+  <span x-text="year + ' Developer Academy. Todos os direitos reservados.'"></span>
+</footer>
+
+{{ end }}

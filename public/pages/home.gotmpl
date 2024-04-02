@@ -13,14 +13,14 @@
   {{template "templates/header.tmpl" .}}
   <main x-data="container" class="container__main">
     <header class="main__header">
-      <h1>Challenges</h1>
+      <h1>Desafios</h1>
       <div>
         <div class="header__input">
           <i class="ph ph-magnifying-glass"></i>
           <input placeholder="Search challenges" x-on:change.debounce="onSearch" />
         </div>
         <a href="/new_challenge">
-          Create
+          Novo desafio <i class="ph ph-plus"></i>
         </a>
       </div>
     </header>
@@ -46,6 +46,8 @@
       </template>
     </ul>
   </main>
+
+  {{ template "templates/footer.tmpl" }}
 
   <script>
 

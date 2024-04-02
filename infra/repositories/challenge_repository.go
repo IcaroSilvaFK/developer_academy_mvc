@@ -92,7 +92,7 @@ func (c *ChallengeRepository) CountChallenges() (int, error) {
 
 	var count int64
 
-	if err := c.db.Table("challenges").Count(&count).Error; err != nil {
+	if err := c.db.Table("challenges").Where("deleted_at IS NULL").Count(&count).Error; err != nil {
 		return 0, err
 	}
 

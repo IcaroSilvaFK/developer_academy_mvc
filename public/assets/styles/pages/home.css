@@ -14,14 +14,15 @@
   gap: 6px;
 }
 
-.main__header > div {
+.main__header>div {
   display: flex;
+  justify-content: flex-end;
   gap: 12px;
-  max-width: 450px;
+  max-width: 50%;
   flex: 1;
 }
 
-.main__header > div > a {
+.main__header>div>a {
   background: var(--black);
   color: var(--white);
   padding: 8px 16px;
@@ -43,12 +44,12 @@
   border-radius: 4px;
 }
 
-.header__input > i {
+.header__input>i {
   color: var(--gray-400);
   font-size: 1.375rem;
 }
 
-.header__input > input {
+.header__input>input {
   flex: 1;
   font-size: 1rem;
 }
@@ -58,7 +59,7 @@
   outline: none;
 }
 
-.header__input > input:focus {
+.header__input>input:focus {
   box-shadow: none;
 }
 
@@ -69,7 +70,7 @@
   padding: 22px 0;
 }
 
-.main__list_container > li {
+.main__list_container>li {
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -77,13 +78,13 @@
   border: 1px solid var(--gray-200);
 }
 
-.main__list_container > li > footer {
+.main__list_container>li>footer {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
 
-.main__list_container > li > footer > a {
+.main__list_container>li>footer>a {
   border: 1px solid var(--gray-200);
   font-size: 0.875rem;
   padding: 6px 16px;
@@ -100,10 +101,11 @@
   padding-bottom: 16px;
 }
 
-.list_container__content > h3 {
+.list_container__content>h3 {
   font-size: 1.25rem;
 }
-.list_container__content > p {
+
+.list_container__content>p {
   color: var(--gray-300);
   font-size: 0.875rem;
 
@@ -116,8 +118,8 @@
 
 .container__empty_challenges {
   display: flex;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 22px;
 }
@@ -127,7 +129,7 @@
   color: var(--gray-800);
 }
 
-.container__empty_challenges a{
+.container__empty_challenges a {
   color: var(--gray-300);
   text-decoration: underline;
 }
@@ -136,3 +138,23 @@
   font-size: 26px;
 }
 
+@media screen and (max-width: 500px) {
+
+  .main__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .main__header>div {
+    max-width: 100%;
+    width: 100%;
+    flex: 1;
+
+    flex-direction: column;
+  }
+
+  .header__input {
+    max-width: 100%;
+  }
+
+}

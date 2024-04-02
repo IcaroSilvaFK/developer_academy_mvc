@@ -1,0 +1,12 @@
+.container__footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 12px;
+}
+
+.container__footer span {
+  font-size: 14px;
+  color: var(--gray-400)
+}
