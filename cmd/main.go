@@ -39,10 +39,11 @@ func main() {
 	store := cookie.NewStore([]byte(os.Getenv(utils.SESSION_KEY)))
 
 	e.Use(middlewares.Throllet(1000, 20))
-	e.Use(gin.Logger())
+	// e.Use(gin.Logger())
 	e.Use(gin.Recovery())
 	e.Use(sessions.Sessions(utils.SESSION_NAME, store))
 	e.Use(middlewares.AddCurrentInContextRequest(services.NewSessionService()))
+	e.Use(middlewares.Logger())
 
 	ex, err := os.Executable()
 	if err != nil {
