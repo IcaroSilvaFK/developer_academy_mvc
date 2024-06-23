@@ -1,6 +1,8 @@
 package services
 
 import (
+	"context"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/adapters"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
@@ -9,39 +11,41 @@ import (
 )
 
 type LoginService struct {
-	ur     repositories.UserRepositoryInterface
-	client utils.HttpClientInterface
+	ur            repositories.UserRepositoryInterface
+	githubAdapter adapters.AdapterAuthInterface
+	gitlabAdapter adapters.AdapterAuthInterface
 }
 
 type LoginServiceInterface interface {
-	Login(code, provider string) (*models.UserModel, *utils.RestErr)
+	Login(ctx context.Context, code, provider string) (*models.UserModel, *utils.RestErr)
 }
 
 func NewAuthService(
 	ur repositories.UserRepositoryInterface,
-	client utils.HttpClientInterface,
+	githubAdapter adapters.AdapterAuthInterface,
+	gitlabAdapter adapters.AdapterAuthInterface,
 ) LoginServiceInterface {
 
 	return &LoginService{
-		ur, client,
+		ur, githubAdapter, gitlabAdapter,
 	}
 }
 
-func (a *LoginService) Login(code, provider string) (*models.UserModel, *utils.RestErr) {
+func (a *LoginService) Login(ctx context.Context, code, provider string) (*models.UserModel, *utils.RestErr) {
 
 	prov := a.instaceProvider(provider)
 
-	u, err := prov.SignIn(code)
+	u, restErr := prov.SignIn(ctx, code)
 
 	if u.Email == "" {
 		return nil, utils.NewForbiddenException("Fail on request access user in auth")
 	}
 
-	if err != nil {
-		return nil, utils.NewForbiddenException("Fail on request access in user account.")
+	if restErr != nil {
+		return nil, restErr
 	}
 
-	uExists, err := a.ur.FindByEmail(u.Email)
+	uExists, err := a.ur.FindByEmail(ctx, u.Email)
 
 	if err != nil && err != gorm.ErrRecordNotFound {
 		message := "Error on find user"
@@ -51,7 +55,7 @@ func (a *LoginService) Login(code, provider string) (*models.UserModel, *utils.R
 		uExists = models.NewUserModel(
 			u.Email, u.Name, u.AvatarUrl, u.Url, u.Bio,
 		)
-		err = a.ur.Create(uExists)
+		err = a.ur.Create(ctx, uExists)
 
 		if err != nil {
 			message := "Error on create user"
@@ -63,19 +67,16 @@ func (a *LoginService) Login(code, provider string) (*models.UserModel, *utils.R
 }
 
 func (s *LoginService) instaceProvider(provider string) adapters.AdapterAuthInterface {
-
-	httpClient := utils.NewHttpClient()
-
 	switch provider {
 	case "gitlab":
 		{
 			utils.Info("gitlab login")
-			return adapters.NewGitlabAdapter(httpClient)
+			return s.gitlabAdapter
 		}
 	default:
 		{
 			utils.Info("github login")
-			return adapters.NewGithubAdapter(httpClient)
+			return s.githubAdapter
 		}
 	}
 }

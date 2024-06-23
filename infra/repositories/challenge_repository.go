@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
@@ -13,12 +14,12 @@ type ChallengeRepository struct {
 }
 
 type ChallengeRepositoryInterface interface {
-	GetAll(page *int) ([]*models.ChallengeModel, error)
-	GetById(id string) (*models.ChallengeModel, error)
-	GetByUserId(id string) ([]*models.ChallengeModel, error)
-	Create(*models.ChallengeModel) error
-	CountChallenges() (int, error)
-	Delete(id string) error
+	GetAll(ctx context.Context, page *int) ([]*models.ChallengeModel, error)
+	GetById(ctx context.Context, id string) (*models.ChallengeModel, error)
+	GetByUserId(ctx context.Context, id string) ([]*models.ChallengeModel, error)
+	Create(ctx context.Context, u *models.ChallengeModel) error
+	CountChallenges(ctx context.Context) (int, error)
+	Delete(ctx context.Context, id string) error
 }
 
 func NewChallengeRepository(
@@ -30,7 +31,7 @@ func NewChallengeRepository(
 }
 
 // TODO add pagination
-func (c *ChallengeRepository) GetAll(_ *int) ([]*models.ChallengeModel, error) {
+func (c *ChallengeRepository) GetAll(ctx context.Context, _ *int) ([]*models.ChallengeModel, error) {
 
 	//if page == nil {
 	//	*page = 1
@@ -41,7 +42,7 @@ func (c *ChallengeRepository) GetAll(_ *int) ([]*models.ChallengeModel, error) {
 	var r []*models.ChallengeModel
 
 	//TODO implment pagination method
-	tx := c.db.Model(&models.ChallengeModel{}).Order(clause.OrderByColumn{Column: clause.Column{Name: "created_at"}, Desc: true}).Find(&r)
+	tx := c.db.WithContext(ctx).Model(&models.ChallengeModel{}).Order(clause.OrderByColumn{Column: clause.Column{Name: "created_at"}, Desc: true}).Find(&r)
 
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -50,11 +51,11 @@ func (c *ChallengeRepository) GetAll(_ *int) ([]*models.ChallengeModel, error) {
 	return r, nil
 }
 
-func (c *ChallengeRepository) GetById(id string) (*models.ChallengeModel, error) {
+func (c *ChallengeRepository) GetById(ctx context.Context, id string) (*models.ChallengeModel, error) {
 
 	var r *models.ChallengeModel
 
-	err := c.db.Table("challenges").Where("id = ?", id).Preload(clause.Associations).Find(&r).Error
+	err := c.db.WithContext(ctx).Table("challenges").Where("id = ?", id).Preload(clause.Associations).Find(&r).Error
 
 	if err != nil {
 		return nil, err
@@ -63,11 +64,11 @@ func (c *ChallengeRepository) GetById(id string) (*models.ChallengeModel, error)
 	return r, nil
 }
 
-func (c *ChallengeRepository) GetByUserId(id string) ([]*models.ChallengeModel, error) {
+func (c *ChallengeRepository) GetByUserId(ctx context.Context, id string) ([]*models.ChallengeModel, error) {
 
 	var result []*models.ChallengeModel
 
-	err := c.db.Table("challenges").Find(&result, "user_id = ?", id).Error
+	err := c.db.WithContext(ctx).Table("challenges").Find(&result, "user_id = ?", id).Error
 
 	if err != nil {
 		return nil, err
@@ -76,9 +77,9 @@ func (c *ChallengeRepository) GetByUserId(id string) ([]*models.ChallengeModel, 
 	return result, nil
 }
 
-func (c *ChallengeRepository) Create(cm *models.ChallengeModel) error {
+func (c *ChallengeRepository) Create(ctx context.Context, cm *models.ChallengeModel) error {
 
-	result := c.db.Create(cm)
+	result := c.db.WithContext(ctx).Create(cm)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -88,19 +89,19 @@ func (c *ChallengeRepository) Create(cm *models.ChallengeModel) error {
 	return nil
 }
 
-func (c *ChallengeRepository) CountChallenges() (int, error) {
+func (c *ChallengeRepository) CountChallenges(ctx context.Context) (int, error) {
 
 	var count int64
 
-	if err := c.db.Table("challenges").Where("deleted_at IS NULL").Count(&count).Error; err != nil {
+	if err := c.db.WithContext(ctx).Table("challenges").Where("deleted_at IS NULL").Count(&count).Error; err != nil {
 		return 0, err
 	}
 
 	return int(count), nil
 }
 
-func (c *ChallengeRepository) Delete(id string) error {
-	r := c.db.Table("challenges").Where("id = ?", id).Delete(&models.ChallengeModel{
+func (c *ChallengeRepository) Delete(ctx context.Context, id string) error {
+	r := c.db.WithContext(ctx).Table("challenges").Where("id = ?", id).Delete(&models.ChallengeModel{
 		ID: id,
 	})
 

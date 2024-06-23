@@ -15,6 +15,9 @@
       <section>
         <h1>DEVELOPER ACADEMY</h1>
         <span>A plataforma para desenvolvedores</span>
+        <p>
+        Desafios propostos pela comunidade de desenvolvimento, abrangendo todos os níveis de habilidade. Utilizando diversas tecnologias do desenvolvimento moderno.
+        </p>
         <div class="container__count_challenges">
           <b>
             <span>+</span>
@@ -32,12 +35,15 @@
           </ul>
 
           <div class="container__count_persons">
+            {{ if  or (gt .quantity 0) (gt (len .users) 0) }}
             {{ if gt .quantity 0}}
-            <span>+{{ .quantity }}</span>
+            <span class="count__users">+{{ .quantity }}</span>
             <span>pessoas já estão usando</span>
+            {{ else }}
+            <p>Venha fazer parte desta comunidade</span>
             {{ end }}
-            {{ if le .quantity 0}}
-            <span></span>
+            <!-- <span>+{{ .quantity }}</span> -->
+            {{ else }}
             <span>Seja o pioneiro a ingressar na plataforma!</span>
             <i class="ph ph-code"></i>
             {{ end }}
@@ -80,7 +86,6 @@
     import {
       UserService
     } from '/assets/js/index.js'
-
 
     const userService = new UserService()
 

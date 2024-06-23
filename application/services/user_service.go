@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
@@ -14,10 +15,10 @@ type UserService struct {
 }
 
 type UserServiceInterface interface {
-	GetTenFirstUserAndCount() ([]*models.UserModel, int, *utils.RestErr)
-	FindAllUsers() ([]*models.UserModel, *utils.RestErr)
-	FindUserById(string) (*models.UserModel, *utils.RestErr)
-	Delete(string) *utils.RestErr
+	GetTenFirstUserAndCount(context.Context) ([]*models.UserModel, int, *utils.RestErr)
+	FindAllUsers(context.Context) ([]*models.UserModel, *utils.RestErr)
+	FindUserById(context.Context, string) (*models.UserModel, *utils.RestErr)
+	Delete(context.Context, string) *utils.RestErr
 }
 
 func NewUserService(
@@ -29,21 +30,21 @@ func NewUserService(
 	}
 }
 
-func (us *UserService) GetTenFirstUserAndCount() ([]*models.UserModel, int, *utils.RestErr) {
+func (us *UserService) GetTenFirstUserAndCount(ctx context.Context) ([]*models.UserModel, int, *utils.RestErr) {
 
-	m, i, err := us.ur.FindFirstTenAndCount()
+	u, c, err := us.ur.FindFirstTenAndCount(ctx)
 
 	if err != nil {
 		message := "Error on get first ten users"
 		return nil, 0, utils.NewInternalServerError(&message)
 	}
 
-	return m, i, nil
+	return u, c, nil
 }
 
-func (us *UserService) FindAllUsers() ([]*models.UserModel, *utils.RestErr) {
+func (us *UserService) FindAllUsers(ctx context.Context) ([]*models.UserModel, *utils.RestErr) {
 
-	users, err := us.ur.FindAll()
+	users, err := us.ur.FindAll(ctx)
 
 	if err != nil {
 		message := "Error on find users"
@@ -52,9 +53,9 @@ func (us *UserService) FindAllUsers() ([]*models.UserModel, *utils.RestErr) {
 
 	return users, nil
 }
-func (us *UserService) FindUserById(id string) (*models.UserModel, *utils.RestErr) {
+func (us *UserService) FindUserById(ctx context.Context, id string) (*models.UserModel, *utils.RestErr) {
 
-	u, err := us.ur.FindById(id)
+	u, err := us.ur.FindById(ctx, id)
 
 	if err == gorm.ErrRecordNotFound {
 
@@ -69,9 +70,9 @@ func (us *UserService) FindUserById(id string) (*models.UserModel, *utils.RestEr
 	return u, nil
 }
 
-func (us *UserService) Delete(id string) *utils.RestErr {
+func (us *UserService) Delete(ctx context.Context, id string) *utils.RestErr {
 
-	err := us.ur.Delete(id)
+	err := us.ur.Delete(ctx, id)
 
 	if err == gorm.ErrRecordNotFound {
 
@@ -81,7 +82,6 @@ func (us *UserService) Delete(id string) *utils.RestErr {
 	if err != nil {
 		message := fmt.Sprintf("Error on delete user id %s", id)
 		return utils.NewInternalServerError(&message)
-
 	}
 
 	return nil

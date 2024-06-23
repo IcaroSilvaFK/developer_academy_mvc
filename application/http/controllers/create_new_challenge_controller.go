@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
@@ -37,9 +38,21 @@ func (cc *CreateNewChallengeController) Index(ctx *gin.Context) {
 	})
 }
 
+// @Summary	Create new challenge
+// @Description	Create new challenge
+// @Tags			challenges
+// @Accept    json
+// @Param		request body views.CreateChallengeInputView required "body"
+// @Produce		json
+// @Success		201
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges [post]
 func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {
 
 	u := utils.GetCurrentUserInRequestContext(ctx)
+
+	fmt.Println("aq")
 
 	if u.ID == "" {
 		err := utils.NewBadRequestException("ID is required but is missing in current request")
@@ -55,7 +68,7 @@ func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {
 		return
 	}
 
-	if err := cc.svc.Create(c.Title, c.Description, c.EmbedUrl, u.ID); err != nil {
+	if err := cc.svc.Create(ctx.Request.Context(), c.Title, c.Description, c.EmbedUrl, u.ID); err != nil {
 		ctx.JSON(err.Code, err)
 		return
 	}

@@ -4,11 +4,12 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
 )
 
-func Throllet(maxEventsPerSec int, maxBurstSize int) gin.HandlerFunc {
+func Throttle(maxEventsPerSec int, maxBurstSize int) gin.HandlerFunc {
 	limiter := rate.NewLimiter(rate.Limit(maxEventsPerSec), maxBurstSize)
 
 	return func(ctx *gin.Context) {
@@ -18,7 +19,7 @@ func Throllet(maxEventsPerSec int, maxBurstSize int) gin.HandlerFunc {
 			return
 		}
 
-		ctx.Error(errors.New("Limit exceeded"))
+		ctx.Error(errors.New(utils.LIMIT_EXCEEDED))
 		ctx.AbortWithStatus(http.StatusTooManyRequests)
 	}
 }

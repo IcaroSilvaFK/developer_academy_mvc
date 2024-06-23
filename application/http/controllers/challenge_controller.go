@@ -40,7 +40,7 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 		return
 	}
 
-	c, err := cc.svc.FindById(id)
+	c, err := cc.svc.FindById(ctx.Request.Context(), id)
 
 	if err != nil {
 		ctx.Redirect(http.StatusPermanentRedirect, "/error")
@@ -62,6 +62,15 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 	})
 }
 
+// @Summary	Create new challenge comment
+// @Description	Create new challenge comment
+// @Tags			challenges
+// @Param		  id path string true "the id from challenge"
+// @Produce		json
+// @Success		204
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/{id} [delete]
 func (cc *ChallengeController) Destroy(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -71,7 +80,7 @@ func (cc *ChallengeController) Destroy(ctx *gin.Context) {
 		return
 	}
 
-	if err := cc.svc.Delete(id); err != nil {
+	if err := cc.svc.Delete(ctx.Request.Context(), id); err != nil {
 		ctx.JSON(err.Code, err)
 		return
 	}
@@ -79,9 +88,17 @@ func (cc *ChallengeController) Destroy(ctx *gin.Context) {
 	ctx.JSON(http.StatusNoContent, nil)
 }
 
+// @Summary	Find all challenges
+// @Description	Find all challenges
+// @Tags			challenges
+// @Produce		json
+// @Success		200 {array}  	views.ResponseChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges [get]
 func (cc *ChallengeController) GetAllChallenges(ctx *gin.Context) {
 
-	challenges, err := cc.svc.FindAll(nil)
+	challenges, err := cc.svc.FindAll(ctx.Request.Context(), nil)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -93,6 +110,15 @@ func (cc *ChallengeController) GetAllChallenges(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, r)
 }
 
+// @Summary	Find all challenges
+// @Description	Find all challenges
+// @Tags			challenges
+// @Param     id path string true "The id from challegen"
+// @Produce		json
+// @Success		200 {object}  	views.ResponseChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/{id} [get]
 func (cc *ChallengeController) FindById(ctx *gin.Context) {
 
 	id := ctx.Param("id")
@@ -104,7 +130,7 @@ func (cc *ChallengeController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	c, err := cc.svc.FindById(id)
+	c, err := cc.svc.FindById(ctx.Request.Context(), id)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -116,6 +142,15 @@ func (cc *ChallengeController) FindById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, r)
 }
 
+// @Summary	Find all challenges
+// @Description	Find all challenges
+// @Tags			challenges
+// @Param     userId path string true "The id from challegen"
+// @Produce		json
+// @Success		200 {object}  	views.ResponseChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/users/{userId} [get]
 func (cc *ChallengeController) FindUserId(ctx *gin.Context) {
 
 	id := ctx.Param("userId")
@@ -127,7 +162,7 @@ func (cc *ChallengeController) FindUserId(ctx *gin.Context) {
 		return
 	}
 
-	c, err := cc.svc.FindByUserId(id)
+	c, err := cc.svc.FindByUserId(ctx.Request.Context(), id)
 
 	if err != nil {
 

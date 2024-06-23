@@ -18,7 +18,6 @@ type UserResponseView struct {
 }
 
 func NewUserResponseView(u *models.UserModel) *UserResponseView {
-
 	return &UserResponseView{
 		AvatarUrl: u.AvatarUrl,
 		Bio:       u.Bio,

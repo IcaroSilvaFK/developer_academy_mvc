@@ -32,6 +32,16 @@ func NewCommentsChallengeController(
 	}
 }
 
+// @Summary	Create new challenge comment
+// @Description	Create new challenge comment
+// @Tags			comments
+// @Accept    json
+// @Param		request body views.CommentChallengeInputView required "body"
+// @Produce		json
+// @Success		201 {object}  views.CommentChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/comments [post]
 func (cc *CommentsChallengeController) Create(ctx *gin.Context) {
 
 	u := utils.GetCurrentUserInRequestContext(ctx)
@@ -52,7 +62,7 @@ func (cc *CommentsChallengeController) Create(ctx *gin.Context) {
 		return
 	}
 
-	c, err := cc.svc.Create(input.ChallengeId, u.ID, input.Comment)
+	c, err := cc.svc.Create(ctx.Request.Context(), input.ChallengeId, u.ID, input.Comment)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, nil)
@@ -64,6 +74,15 @@ func (cc *CommentsChallengeController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, result)
 }
 
+// @Summary	Delete comment
+// @Description	Delete comment
+// @Tags			comments
+// @Param     id path string true "Comment id"
+// @Produce		json
+// @Success		204
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/comments/{id} [delete]
 func (cc *CommentsChallengeController) Destroy(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -73,7 +92,7 @@ func (cc *CommentsChallengeController) Destroy(ctx *gin.Context) {
 		return
 	}
 
-	err := cc.svc.Delete(id)
+	err := cc.svc.Delete(ctx.Request.Context(), id)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -83,6 +102,15 @@ func (cc *CommentsChallengeController) Destroy(ctx *gin.Context) {
 	ctx.JSON(http.StatusNoContent, nil)
 }
 
+// @Summary	Find user comments
+// @Description	Find user comments
+// @Tags			comments
+// @Param     userId path string true "Comment id"
+// @Produce		json
+// @Success		200 {array} views.CommentChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/comments/users/{userId} [get]
 func (cc *CommentsChallengeController) FindUserComments(ctx *gin.Context) {
 
 	id := ctx.Param("userId")
@@ -93,7 +121,7 @@ func (cc *CommentsChallengeController) FindUserComments(ctx *gin.Context) {
 		return
 	}
 
-	comments, err := cc.svc.FindByUserId(id)
+	comments, err := cc.svc.FindByUserId(ctx.Request.Context(), id)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -105,6 +133,15 @@ func (cc *CommentsChallengeController) FindUserComments(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, r)
 }
 
+// @Summary	Find user comments
+// @Description	Find user comments
+// @Tags			comments
+// @Param     id path string true "Comment id"
+// @Produce		json
+// @Success		200 {array} views.CommentChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/comments/{id} [get]
 func (cc *CommentsChallengeController) FindCommentById(ctx *gin.Context) {
 
 	id := ctx.Param("id")
@@ -115,7 +152,7 @@ func (cc *CommentsChallengeController) FindCommentById(ctx *gin.Context) {
 		return
 	}
 
-	c, err := cc.svc.FindById(id)
+	c, err := cc.svc.FindById(ctx.Request.Context(), id)
 
 	if err != nil {
 
@@ -128,6 +165,15 @@ func (cc *CommentsChallengeController) FindCommentById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, r)
 }
 
+// @Summary	Find user comments
+// @Description	Find user comments
+// @Tags			comments
+// @Param     challengeId path string true "Comment id"
+// @Produce		json
+// @Success		200 {array} views.CommentChallengeOutputView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/challenges/comments/challenge/{challengeId} [get]
 func (cc *CommentsChallengeController) FindChallengesComments(ctx *gin.Context) {
 
 	id := ctx.Param("challengeId")
@@ -138,7 +184,7 @@ func (cc *CommentsChallengeController) FindChallengesComments(ctx *gin.Context) 
 		return
 	}
 
-	comments, err := cc.svc.FindByChallengeId(id)
+	comments, err := cc.svc.FindByChallengeId(ctx.Request.Context(), id)
 
 	if err != nil {
 

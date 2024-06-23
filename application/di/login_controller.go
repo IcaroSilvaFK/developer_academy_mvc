@@ -1,6 +1,7 @@
 package di
 
 import (
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/adapters"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/controllers"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
@@ -25,10 +26,13 @@ func NewLoginController() controllers.LoginControllerInterface {
 
 	challengeservice := services.NewChallengeService(challengerepo, hintservice, iaservice, cacheSvc)
 	sessionservice := services.NewSessionService()
+	githubAdapter := adapters.NewGithubAdapter(chttp)
+	gitlabAdapter := adapters.NewGitlabAdapter(chttp)
 
 	svc := services.NewAuthService(
 		repo,
-		chttp,
+		githubAdapter,
+		gitlabAdapter,
 	)
 
 	return controllers.NewLoginController(svc, usvc, challengeservice, sessionservice)

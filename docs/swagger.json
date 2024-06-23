@@ -1,0 +1,26 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This api was designed to be able to use the DEVELOPER ACADEMY platform externally",
+        "title": "DEVELOPER ACADEMY",
+        "termsOfService": "http://swagger.io/support",
+        "contact": {
+            "name": "Icaro Vieira",
+            "url": "http://",
+            "email": "icarovsilva1@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://mit-license.org/"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {},
+    "securityDefinitions": {
+        "Session": {
+            "type": "basic"
+        }
+    }
+}

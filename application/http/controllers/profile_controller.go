@@ -37,7 +37,7 @@ func (pc *ProfileController) Index(ctx *gin.Context) {
 
 	u := utils.GetCurrentUserInRequestContext(ctx)
 
-	challenges, err := pc.svc.FindByUserId(userId)
+	challenges, err := pc.svc.FindByUserId(ctx.Request.Context(), userId)
 
 	if err != nil {
 		utils.Error("Error while search user", err)
@@ -53,6 +53,15 @@ func (pc *ProfileController) Index(ctx *gin.Context) {
 	})
 }
 
+// @Summary	The route returns user details
+// @Description	Find current user passed id details
+// @Tags			users
+// @Param     id path string true "User id"
+// @Produce		json
+// @Success		200 {object} 	views.UserResponseView
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/users/{id} [get]
 func (pc *ProfileController) FindByUserId(ctx *gin.Context) {
 
 	id := ctx.Param("id")
@@ -63,19 +72,21 @@ func (pc *ProfileController) FindByUserId(ctx *gin.Context) {
 		return
 	}
 
-	u, err := pc.usvc.FindUserById(id)
+	u, err := pc.usvc.FindUserById(ctx.Request.Context(), id)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, u)
+	output := views.NewUserResponseView(u)
+
+	ctx.JSON(http.StatusOK, output)
 }
 
 func (pc *ProfileController) FindAllUsers(ctx *gin.Context) {
 
-	users, err := pc.usvc.FindAllUsers()
+	users, err := pc.usvc.FindAllUsers(ctx.Request.Context())
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -85,6 +96,15 @@ func (pc *ProfileController) FindAllUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, users)
 }
 
+// @Summary	Delete an user
+// @Description	Delete user passed id
+// @Tags			users
+// @Param     id path string true "User id"
+// @Produce		json
+// @Success		204
+// @Failure		400	{object}	utils.RestErr
+// @Failure		500	{object}	utils.RestErr
+// @Router		/users/{id} [delete]
 func (pc *ProfileController) Delete(ctx *gin.Context) {
 
 	id := ctx.Param("id")
@@ -96,7 +116,7 @@ func (pc *ProfileController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	err := pc.usvc.Delete(id)
+	err := pc.usvc.Delete(ctx.Request.Context(), id)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)

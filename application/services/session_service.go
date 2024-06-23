@@ -12,8 +12,8 @@ type SessionService struct {
 }
 
 type SessionServiceInterface interface {
-	Set(ctx *gin.Context, key string, v interface{}) error
-	Get(ctx *gin.Context, key string, i interface{})
+	Set(ctx *gin.Context, key string, v any) error
+	Get(ctx *gin.Context, key string, i any)
 	Remove(ctx *gin.Context, key string)
 }
 

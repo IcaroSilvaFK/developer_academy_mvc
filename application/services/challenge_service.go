@@ -1,6 +1,8 @@
 package services
 
 import (
+	"context"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -19,12 +21,12 @@ type ChallengeService struct {
 }
 
 type ChallengeServiceInterface interface {
-	Create(title, description, embedUrl, userId string) *utils.RestErr
-	FindAll(page *int) ([]*models.ChallengeModel, *utils.RestErr)
-	FindById(id string) (*models.ChallengeModel, *utils.RestErr)
-	FindByUserId(id string) ([]*models.ChallengeModel, *utils.RestErr)
-	CountChallenges() (int, *utils.RestErr)
-	Delete(id string) *utils.RestErr
+	Create(ctx context.Context, title, description, embedUrl, userId string) *utils.RestErr
+	FindAll(ctx context.Context, page *int) ([]*models.ChallengeModel, *utils.RestErr)
+	FindById(ctx context.Context, id string) (*models.ChallengeModel, *utils.RestErr)
+	FindByUserId(ctx context.Context, id string) ([]*models.ChallengeModel, *utils.RestErr)
+	CountChallenges(context.Context) (int, *utils.RestErr)
+	Delete(ctx context.Context, id string) *utils.RestErr
 }
 
 func NewChallengeService(
@@ -39,14 +41,14 @@ func NewChallengeService(
 	}
 }
 
-func (c *ChallengeService) Create(title, description, embedUrl, userId string) *utils.RestErr {
+func (c *ChallengeService) Create(ctx context.Context, title, description, embedUrl, userId string) *utils.RestErr {
 
 	if !c.iaservice.VerifyIfIsValidChallenge(title) {
 		return utils.NewBadRequestException("Te request contains params inappropriate")
 	}
 	cm := models.NewChallengeModel(title, description, embedUrl, userId)
 
-	err := c.repo.Create(cm)
+	err := c.repo.Create(ctx, cm)
 
 	if err != nil {
 		message := "Error on create new challenge"
@@ -60,21 +62,19 @@ func (c *ChallengeService) Create(title, description, embedUrl, userId string) *
 		return utils.NewInternalServerError(&message)
 	}
 
-	err = c.hinrepo.Create(cm.ID, hint)
+	if hinErr := c.hinrepo.Create(ctx, cm.ID, hint); hinErr != nil {
+
+		return hinErr
+	}
 
 	if err := c.cache.Delete(c.ck); err != nil {
 		utils.Error("Error on delete cache from challenges", err)
 	}
 
-	if err != nil {
-		message := "Error on create hint from challenge"
-		return utils.NewInternalServerError(&message)
-	}
-
 	return nil
 }
 
-func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.RestErr) {
+func (c *ChallengeService) FindAll(ctx context.Context, page *int) ([]*models.ChallengeModel, *utils.RestErr) {
 
 	var res []*models.ChallengeModel
 
@@ -87,7 +87,7 @@ func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.
 		return res, nil
 	}
 
-	res, err := c.repo.GetAll(page)
+	res, err := c.repo.GetAll(ctx, page)
 
 	if err != nil {
 		message := "Error on get all challenges please try again later"
@@ -101,13 +101,13 @@ func (c *ChallengeService) FindAll(page *int) ([]*models.ChallengeModel, *utils.
 	return res, nil
 }
 
-func (c *ChallengeService) FindById(id string) (*models.ChallengeModel, *utils.RestErr) {
+func (c *ChallengeService) FindById(ctx context.Context, id string) (*models.ChallengeModel, *utils.RestErr) {
 
 	if !infrautils.IsValidId(id) {
 		return nil, utils.NewBadRequestException("ID provided is invalid")
 	}
 
-	r, err := c.repo.GetById(id)
+	r, err := c.repo.GetById(ctx, id)
 
 	if err == gorm.ErrRecordNotFound {
 		return nil, utils.NewNotFoundException("This challenge not exists")
@@ -120,13 +120,13 @@ func (c *ChallengeService) FindById(id string) (*models.ChallengeModel, *utils.R
 	return r, nil
 }
 
-func (c *ChallengeService) FindByUserId(id string) ([]*models.ChallengeModel, *utils.RestErr) {
+func (c *ChallengeService) FindByUserId(ctx context.Context, id string) ([]*models.ChallengeModel, *utils.RestErr) {
 
 	if !infrautils.IsValidId(id) {
 		return nil, utils.NewBadRequestException("Please provide a valid id")
 	}
 
-	r, err := c.repo.GetByUserId(id)
+	r, err := c.repo.GetByUserId(ctx, id)
 
 	if err == gorm.ErrRecordNotFound {
 		return nil, nil
@@ -140,8 +140,8 @@ func (c *ChallengeService) FindByUserId(id string) ([]*models.ChallengeModel, *u
 	return r, nil
 }
 
-func (c *ChallengeService) CountChallenges() (int, *utils.RestErr) {
-	r, err := c.repo.CountChallenges()
+func (c *ChallengeService) CountChallenges(ctx context.Context) (int, *utils.RestErr) {
+	r, err := c.repo.CountChallenges(ctx)
 
 	if err != nil {
 		message := "Error on count challenges"
@@ -151,13 +151,13 @@ func (c *ChallengeService) CountChallenges() (int, *utils.RestErr) {
 	return r, nil
 }
 
-func (c *ChallengeService) Delete(id string) *utils.RestErr {
+func (c *ChallengeService) Delete(ctx context.Context, id string) *utils.RestErr {
 
 	if !infrautils.IsValidId(id) {
 		return utils.NewBadRequestException("ID provided is invalid")
 	}
 
-	err := c.repo.Delete(id)
+	err := c.repo.Delete(ctx, id)
 
 	if err == gorm.ErrRecordNotFound {
 		return utils.NewNotFoundException("Id provide not exists in challenges")

@@ -35,7 +35,7 @@ func (hc *HomeController) Index(ctx *gin.Context) {
 		v = 1
 	}
 
-	challenges, restErr := hc.svc.FindAll(&v)
+	challenges, restErr := hc.svc.FindAll(ctx.Request.Context(), &v)
 
 	if restErr != nil {
 		ctx.Redirect(http.StatusPermanentRedirect, "/error")

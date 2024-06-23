@@ -65,7 +65,6 @@ func TestShouldAddParamsInUrl(t *testing.T) {
 	c := utils.NewHttpClient()
 
 	params := map[string]string{
-
 		"param1": "value1",
 		"param2": "value2",
 	}

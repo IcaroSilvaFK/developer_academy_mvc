@@ -1,0 +1,454 @@
+basePath: /api/v1
+definitions:
+  utils.Causes:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+    type: object
+  utils.RestErr:
+    properties:
+      causes:
+        items:
+          $ref: '#/definitions/utils.Causes'
+        type: array
+      code:
+        type: integer
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  views.CommentChallengeInputView:
+    properties:
+      challenge_id:
+        type: string
+      comment:
+        type: string
+    type: object
+  views.CommentChallengeOutputView:
+    properties:
+      challenge_id:
+        type: string
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  views.CreateChallengeInputView:
+    properties:
+      description:
+        type: string
+      embed_url:
+        type: string
+      title:
+        type: string
+    type: object
+  views.ResponseChallengeOutputView:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      embed_url:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: string
+    type: object
+  views.UserResponseView:
+    properties:
+      avatar_url:
+        type: string
+      bio:
+        type: string
+      create_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+      url:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: icarovsilva1@gmail.com
+    name: Icaro Vieira
+    url: http://
+  description: This api was designed to be able to use the DEVELOPER ACADEMY platform
+    externally
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  termsOfService: http://swagger.io/support
+  title: DEVELOPER ACADEMY
+  version: "1.0"
+paths:
+  /challenges:
+    get:
+      description: Find all challenges
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.ResponseChallengeOutputView'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find all challenges
+      tags:
+      - challenges
+    post:
+      consumes:
+      - application/json
+      description: Create new challenge
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/views.CreateChallengeInputView'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Create new challenge
+      tags:
+      - challenges
+  /challenges/{id}:
+    delete:
+      description: Create new challenge comment
+      parameters:
+      - description: the id from challenge
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Create new challenge comment
+      tags:
+      - challenges
+    get:
+      description: Find all challenges
+      parameters:
+      - description: The id from challegen
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.ResponseChallengeOutputView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find all challenges
+      tags:
+      - challenges
+  /challenges/comments:
+    post:
+      consumes:
+      - application/json
+      description: Create new challenge comment
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/views.CommentChallengeInputView'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/views.CommentChallengeOutputView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Create new challenge comment
+      tags:
+      - comments
+  /challenges/comments/{id}:
+    delete:
+      description: Delete comment
+      parameters:
+      - description: Comment id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Delete comment
+      tags:
+      - comments
+    get:
+      description: Find user comments
+      parameters:
+      - description: Comment id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.CommentChallengeOutputView'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find user comments
+      tags:
+      - comments
+  /challenges/comments/challenge/{challengeId}:
+    get:
+      description: Find user comments
+      parameters:
+      - description: Comment id
+        in: path
+        name: challengeId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.CommentChallengeOutputView'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find user comments
+      tags:
+      - comments
+  /challenges/comments/users/{userId}:
+    get:
+      description: Find user comments
+      parameters:
+      - description: Comment id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.CommentChallengeOutputView'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find user comments
+      tags:
+      - comments
+  /challenges/users/{userId}:
+    get:
+      description: Find all challenges
+      parameters:
+      - description: The id from challegen
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.ResponseChallengeOutputView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find all challenges
+      tags:
+      - challenges
+  /login:
+    get:
+      description: Sigin with platform
+      parameters:
+      - description: Code return on execute signIn with github or gitlab
+        in: query
+        name: code
+        type: string
+      - description: github or gitlab or empty
+        in: query
+        name: provider
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.UserResponseView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Signin with code provides the provider metho to signin now using [github,gitlab]
+      tags:
+      - signin
+  /users/{id}:
+    delete:
+      description: Delete user passed id
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Delete an user
+      tags:
+      - users
+    get:
+      description: Find current user passed id details
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.UserResponseView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: The route returns user details
+      tags:
+      - users
+securityDefinitions:
+  Session:
+    type: basic
+swagger: "2.0"

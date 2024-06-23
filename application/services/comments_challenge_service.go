@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
@@ -16,11 +17,11 @@ type CommentChallengeService struct {
 }
 
 type CommentChallengeServiceInterface interface {
-	Create(challengeId, userId, comment string) (*models.ChallengeCommentModel, *utils.RestErr)
-	FindById(commentId string) (*models.ChallengeCommentModel, *utils.RestErr)
-	FindByUserId(userId string) ([]*models.ChallengeCommentModel, *utils.RestErr)
-	FindByChallengeId(challengeId string) ([]*models.ChallengeCommentModel, *utils.RestErr)
-	Delete(commentId string) *utils.RestErr
+	Create(ctx context.Context, challengeId, userId, comment string) (*models.ChallengeCommentModel, *utils.RestErr)
+	FindById(ctx context.Context, commentId string) (*models.ChallengeCommentModel, *utils.RestErr)
+	FindByUserId(ctx context.Context, userId string) ([]*models.ChallengeCommentModel, *utils.RestErr)
+	FindByChallengeId(ctx context.Context, challengeId string) ([]*models.ChallengeCommentModel, *utils.RestErr)
+	Delete(ctx context.Context, commentId string) *utils.RestErr
 }
 
 func NewCommentChallengeServicer(
@@ -32,14 +33,15 @@ func NewCommentChallengeServicer(
 	}
 }
 
-func (cs *CommentChallengeService) Create(challengeId, userId, comment string) (*models.ChallengeCommentModel, *utils.RestErr) {
+func (cs *CommentChallengeService) Create(ctx context.Context, challengeId, userId, comment string) (*models.ChallengeCommentModel, *utils.RestErr) {
 
 	c := models.NewChallengeCommentModel(challengeId, userId, comment)
+	cacheKey := fmt.Sprintf("%s-%s", cs.challengeKey, challengeId)
 
-	if err := cs.cache.Delete(fmt.Sprintf("%s-%s", cs.challengeKey, challengeId)); err != nil {
+	if err := cs.cache.Delete(cacheKey); err != nil {
 		utils.Error(fmt.Sprintf("Error on delete %s challenge from cache", challengeId), err)
 	}
-	err := cs.repo.Create(c)
+	err := cs.repo.Create(ctx, c)
 
 	if err != nil {
 
@@ -50,12 +52,14 @@ func (cs *CommentChallengeService) Create(challengeId, userId, comment string) (
 
 	return c, nil
 }
-func (cs *CommentChallengeService) FindById(commentId string) (*models.ChallengeCommentModel, *utils.RestErr) {
+func (cs *CommentChallengeService) FindById(ctx context.Context, commentId string) (*models.ChallengeCommentModel, *utils.RestErr) {
 
-	r, err := cs.repo.FindById(commentId)
+	r, err := cs.repo.FindById(ctx, commentId)
 
 	if err == gorm.ErrRecordNotFound {
-		return nil, utils.NewNotFoundException("The id impproved not exists")
+		return nil, utils.NewNotFoundException(
+			fmt.Sprintf("The record with id %s not exists", commentId),
+		)
 	}
 
 	if err != nil {
@@ -66,9 +70,9 @@ func (cs *CommentChallengeService) FindById(commentId string) (*models.Challenge
 	return r, nil
 }
 
-func (cs *CommentChallengeService) FindByUserId(userId string) ([]*models.ChallengeCommentModel, *utils.RestErr) {
+func (cs *CommentChallengeService) FindByUserId(ctx context.Context, userId string) ([]*models.ChallengeCommentModel, *utils.RestErr) {
 
-	r, err := cs.repo.FindByUserId(userId)
+	r, err := cs.repo.FindByUserId(ctx, userId)
 
 	if err == gorm.ErrRecordNotFound {
 		return nil, nil
@@ -83,12 +87,14 @@ func (cs *CommentChallengeService) FindByUserId(userId string) ([]*models.Challe
 	return r, nil
 }
 
-func (cs *CommentChallengeService) FindByChallengeId(challengeId string) ([]*models.ChallengeCommentModel, *utils.RestErr) {
+func (cs *CommentChallengeService) FindByChallengeId(ctx context.Context, challengeId string) ([]*models.ChallengeCommentModel, *utils.RestErr) {
 
-	r, err := cs.repo.FindByChallengeId(challengeId)
+	r, err := cs.repo.FindByChallengeId(ctx, challengeId)
 
 	if err == gorm.ErrRecordNotFound {
-		return nil, nil
+		return nil, utils.NewNotFoundException(
+			fmt.Sprintf("The record with id %s not exists", challengeId),
+		)
 	}
 
 	if err != nil {
@@ -98,12 +104,14 @@ func (cs *CommentChallengeService) FindByChallengeId(challengeId string) ([]*mod
 
 	return r, nil
 }
-func (cs *CommentChallengeService) Delete(commentId string) *utils.RestErr {
+func (cs *CommentChallengeService) Delete(ctx context.Context, commentId string) *utils.RestErr {
 
-	err := cs.repo.Delete(commentId)
+	err := cs.repo.Delete(ctx, commentId)
 
 	if err == gorm.ErrRecordNotFound {
-		return utils.NewNotFoundException("Item not found")
+		return utils.NewNotFoundException(
+			fmt.Sprintf("The record with id %s not exists", commentId),
+		)
 	}
 
 	if err != nil {

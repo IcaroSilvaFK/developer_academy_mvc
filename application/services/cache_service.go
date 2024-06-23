@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -41,7 +40,7 @@ func (c CacheService) Get(key string, dest interface{}) error {
 	r, err := c.cache.Get(ctx, key).Result()
 
 	if err == redis.Nil {
-		return errors.New(fmt.Sprintf("The key %s not exists in redis", key))
+		return fmt.Errorf("THE KEY %s NOT EXISTS IN REDIS", key)
 	}
 
 	if err != nil {

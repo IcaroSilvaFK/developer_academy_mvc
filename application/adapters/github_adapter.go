@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"context"
 	"os"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
@@ -20,24 +21,32 @@ func NewGithubAdapter(
 	}
 }
 
-func (aa *GithubAuthAdpter) SignIn(code string) (dtos.GithubResponse, error) {
+func (aa *GithubAuthAdpter) SignIn(ctx context.Context, code string) (dtos.GithubResponse, *utils.RestErr) {
+	if code == "" {
+		return dtos.GithubResponse{}, utils.NewBadRequestException(utils.CODE_AUTHETICATION_MISSGIN)
+	}
+
 	var res dtos.GithubTokenResponse
 
-	_, err := aa.hc.Post("https://github.com/login/oauth/access_token", map[string]string{
+	_, err := aa.hc.WithContext(ctx).Post(utils.GITHUB_AUTH_URL, map[string]string{
 		"client_id":     os.Getenv(utils.GITHUB_CLIENT_ID),
 		"client_secret": os.Getenv(utils.GITHUB_CLIENT_SECRET),
 		"code":          code,
 	}, &res)
 
 	if err != nil {
-		return dtos.GithubResponse{}, err
+		return dtos.GithubResponse{}, utils.NewBadRequestException(err.Error())
 	}
 
 	var u dtos.GithubResponse
 
-	_, err = aa.hc.Get("https://api.github.com/user", &u, map[string]string{
+	_, err = aa.hc.WithContext(ctx).Get(utils.GITHUB_USER_API, &u, map[string]string{
 		"Authorization": "token " + res.AccessToken,
 	})
+
+	if err != nil {
+		return dtos.GithubResponse{}, utils.NewBadRequestException(err.Error())
+	}
 
 	return u, nil
 }

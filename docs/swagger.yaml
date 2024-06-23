@@ -1,0 +1,20 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact:
+    email: icarovsilva1@gmail.com
+    name: Icaro Vieira
+    url: http://
+  description: This api was designed to be able to use the DEVELOPER ACADEMY platform
+    externally
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  termsOfService: http://swagger.io/support
+  title: DEVELOPER ACADEMY
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  Session:
+    type: basic
+swagger: "2.0"

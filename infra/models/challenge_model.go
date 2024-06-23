@@ -18,7 +18,6 @@ type ChallengeModel struct {
 }
 
 func NewChallengeModel(title, description, embedUrl, userId string) *ChallengeModel {
-
 	return &ChallengeModel{
 		ID:          utils.NewId(),
 		Title:       title,

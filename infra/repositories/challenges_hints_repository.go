@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"context"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/gorm"
 )
@@ -10,10 +12,10 @@ type ChallengesHintsRepository struct {
 }
 
 type ChallengesHintsRepositoryInterface interface {
-	GetByChallengeId(challengedId string) (*models.ChallengeHintsModel, error)
-	GetById(id string) (*models.ChallengeHintsModel, error)
-	Create(*models.ChallengeHintsModel) error
-	Delete(id string) error
+	GetByChallengeId(ctx context.Context, challengedId string) (*models.ChallengeHintsModel, error)
+	GetById(ctx context.Context, id string) (*models.ChallengeHintsModel, error)
+	Create(ctx context.Context, ch *models.ChallengeHintsModel) error
+	Delete(ctx context.Context, id string) error
 }
 
 func NewChallengesHintsRepository(
@@ -24,11 +26,11 @@ func NewChallengesHintsRepository(
 	}
 }
 
-func (ch *ChallengesHintsRepository) GetByChallengeId(challengedId string) (*models.ChallengeHintsModel, error) {
+func (ch *ChallengesHintsRepository) GetByChallengeId(ctx context.Context, challengedId string) (*models.ChallengeHintsModel, error) {
 
 	var r *models.ChallengeHintsModel
 
-	err := ch.db.Model(&models.ChallengeHintsModel{}).Find(&r, "challenge_id = ?", challengedId).Error
+	err := ch.db.WithContext(ctx).Model(&models.ChallengeHintsModel{}).Find(&r, "challenge_id = ?", challengedId).Error
 
 	if err != nil {
 		return nil, err
@@ -36,10 +38,10 @@ func (ch *ChallengesHintsRepository) GetByChallengeId(challengedId string) (*mod
 
 	return r, nil
 }
-func (ch *ChallengesHintsRepository) GetById(id string) (*models.ChallengeHintsModel, error) {
+func (ch *ChallengesHintsRepository) GetById(ctx context.Context, id string) (*models.ChallengeHintsModel, error) {
 	var r *models.ChallengeHintsModel
 
-	err := ch.db.Model(&models.ChallengeHintsModel{}).Find(&r, "id = ?", id).Error
+	err := ch.db.WithContext(ctx).Model(&models.ChallengeHintsModel{}).Find(&r, "id = ?", id).Error
 
 	if err != nil {
 		return nil, err
@@ -48,16 +50,16 @@ func (ch *ChallengesHintsRepository) GetById(id string) (*models.ChallengeHintsM
 	return r, nil
 }
 
-func (ch *ChallengesHintsRepository) Create(i *models.ChallengeHintsModel) error {
+func (ch *ChallengesHintsRepository) Create(ctx context.Context, i *models.ChallengeHintsModel) error {
 
-	err := ch.db.Model(&models.ChallengeHintsModel{}).Create(i).Error
+	err := ch.db.WithContext(ctx).Model(&models.ChallengeHintsModel{}).Create(i).Error
 
 	return err
 }
 
-func (ch *ChallengesHintsRepository) Delete(id string) error {
+func (ch *ChallengesHintsRepository) Delete(ctx context.Context, id string) error {
 
-	err := ch.db.Delete(&models.ChallengeHintsModel{}, id).Error
+	err := ch.db.WithContext(ctx).Delete(&models.ChallengeHintsModel{}, id).Error
 
 	return err
 }

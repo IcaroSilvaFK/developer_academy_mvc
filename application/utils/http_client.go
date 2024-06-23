@@ -17,6 +17,7 @@ type HttpClient struct {
 
 type HttpClientInterface interface {
 	Get(url string, body interface{}, headers map[string]string) (*http.Response, error)
+	WithContext(ctx context.Context) *HttpClient
 	CreateUrl(string, map[string]string) string
 	Post(string, interface{}, interface{}) (*http.Response, error)
 }
@@ -39,6 +40,12 @@ func NewHttpClientWithContext(context context.Context, timeout time.Duration) Ht
 	return &HttpClient{
 		c, context,
 	}
+}
+
+func (c *HttpClient) WithContext(ctx context.Context) *HttpClient {
+	c.ctx = ctx
+
+	return c
 }
 
 func (c *HttpClient) Get(url string, body interface{}, headers map[string]string) (*http.Response, error) {

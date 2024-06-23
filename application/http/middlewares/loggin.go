@@ -12,13 +12,18 @@ func Logger() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
 		init := time.Now()
-		utils.Info("Request initilizade", zap.String("client", ctx.ClientIP()), zap.String("route", ctx.FullPath()))
+		utils.Info(
+			"Request initilizade",
+			zap.String("client", ctx.ClientIP()),
+			zap.String("route", ctx.FullPath()),
+		)
 
 		ctx.Next()
 
 		elapsed := time.Since(init)
 
-		utils.Info("Request finalized",
+		utils.Info(
+			"Request finalized",
 			zap.String("client", ctx.ClientIP()),
 			zap.String("route", ctx.FullPath()),
 			zap.Any("duration", elapsed),

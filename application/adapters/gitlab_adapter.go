@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"context"
 	"os"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
@@ -8,7 +9,7 @@ import (
 )
 
 type AdapterAuthInterface interface {
-	SignIn(code string) (dtos.GithubResponse, error)
+	SignIn(ctx context.Context, code string) (dtos.GithubResponse, *utils.RestErr)
 }
 
 type GitlabAuthAdapter struct {
@@ -23,11 +24,15 @@ func NewGitlabAdapter(
 	}
 }
 
-func (ga *GitlabAuthAdapter) SignIn(code string) (dtos.GithubResponse, error) {
+func (ga *GitlabAuthAdapter) SignIn(ctx context.Context, code string) (dtos.GithubResponse, *utils.RestErr) {
+
+	if code == "" {
+		return dtos.GithubResponse{}, utils.NewBadRequestException(utils.CODE_AUTHETICATION_MISSGIN)
+	}
 
 	var res dtos.GithubTokenResponse
 
-	_, err := ga.hc.Post("https://gitlab.com/oauth/token", map[string]string{
+	_, err := ga.hc.WithContext(ctx).Post(utils.GITLAB_TOKEN_URL, map[string]string{
 		"client_id":     os.Getenv(utils.GITLAB_APP_ID),
 		"client_secret": os.Getenv(utils.GITLAB_SECRET),
 		"code":          code,
@@ -37,17 +42,17 @@ func (ga *GitlabAuthAdapter) SignIn(code string) (dtos.GithubResponse, error) {
 
 	if err != nil {
 
-		return dtos.GithubResponse{}, err
+		return dtos.GithubResponse{}, utils.NewBadRequestException(err.Error())
 	}
 
 	var u dtos.GithubResponse
 
-	_, err = ga.hc.Get("https://gitlab.com/api/v4/user", &u, map[string]string{
+	_, err = ga.hc.WithContext(ctx).Get(utils.GITLAB_USER_API, &u, map[string]string{
 		"Authorization": "Bearer " + res.AccessToken,
 	})
 
 	if err != nil {
-		return dtos.GithubResponse{}, err
+		return dtos.GithubResponse{}, utils.NewBadRequestException(err.Error())
 	}
 
 	return u, nil
