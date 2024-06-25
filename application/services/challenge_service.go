@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -21,7 +22,7 @@ type ChallengeService struct {
 }
 
 type ChallengeServiceInterface interface {
-	Create(ctx context.Context, title, description, embedUrl, userId string) *utils.RestErr
+	Create(ctx context.Context, input views.CreateChallengeInputView, userId string) *utils.RestErr
 	FindAll(ctx context.Context, page *int) ([]*models.ChallengeModel, *utils.RestErr)
 	FindById(ctx context.Context, id string) (*models.ChallengeModel, *utils.RestErr)
 	FindByUserId(ctx context.Context, id string) ([]*models.ChallengeModel, *utils.RestErr)
@@ -41,12 +42,12 @@ func NewChallengeService(
 	}
 }
 
-func (c *ChallengeService) Create(ctx context.Context, title, description, embedUrl, userId string) *utils.RestErr {
+func (c *ChallengeService) Create(ctx context.Context, input views.CreateChallengeInputView, userId string) *utils.RestErr {
 
-	if !c.iaservice.VerifyIfIsValidChallenge(title) {
+	if !c.iaservice.VerifyIfIsValidChallenge(input.Title) {
 		return utils.NewBadRequestException("Te request contains params inappropriate")
 	}
-	cm := models.NewChallengeModel(title, description, embedUrl, userId)
+	cm := models.NewChallengeModel(input.Title, input.Description, input.EmbedUrl, userId, input.Categories)
 
 	err := c.repo.Create(ctx, cm)
 
@@ -55,7 +56,7 @@ func (c *ChallengeService) Create(ctx context.Context, title, description, embed
 		return utils.NewInternalServerError(&message)
 	}
 
-	hint, err := c.iaservice.GenerateHintFromChallenge(title)
+	hint, err := c.iaservice.GenerateHintFromChallenge(input.Title)
 
 	if err != nil {
 		message := "Error on generate hint from challenge"

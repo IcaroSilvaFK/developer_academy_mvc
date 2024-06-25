@@ -12,19 +12,34 @@ type ChallengeModel struct {
 	Description string
 	EmbedUrl    string
 	UserId      string
-	Comments    []*ChallengeCommentModel `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
-	Hint        ChallengeHintsModel      `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
+	Comments    []*ChallengeCommentModel     `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
+	Hint        ChallengeHintsModel          `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
+	Categories  []*ChallengesCategoriesModel `gorm:"many2many:challenges_categories;"`
 	gorm.Model
 }
 
-func NewChallengeModel(title, description, embedUrl, userId string) *ChallengeModel {
-	return &ChallengeModel{
+func NewChallengeModel(
+	title, description, embedUrl, userId string,
+	categoriesId []string,
+) *ChallengeModel {
+
+	c := &ChallengeModel{
 		ID:          utils.NewId(),
 		Title:       title,
 		Description: description,
 		EmbedUrl:    embedUrl,
 		UserId:      userId,
 	}
+
+	if len(categoriesId) > 0 {
+		for _, cat := range categoriesId {
+			c.Categories = append(c.Categories, &ChallengesCategoriesModel{
+				ID: cat,
+			})
+		}
+	}
+
+	return c
 }
 
 func (c *ChallengeModel) BeforeDelete(tx *gorm.DB) (err error) {

@@ -42,7 +42,7 @@ func (c *ChallengeRepository) GetAll(ctx context.Context, _ *int) ([]*models.Cha
 	var r []*models.ChallengeModel
 
 	//TODO implment pagination method
-	tx := c.db.WithContext(ctx).Model(&models.ChallengeModel{}).Order(clause.OrderByColumn{Column: clause.Column{Name: "created_at"}, Desc: true}).Find(&r)
+	tx := c.db.WithContext(ctx).Preload(clause.Associations).Model(&models.ChallengeModel{}).Order(clause.OrderByColumn{Column: clause.Column{Name: "created_at"}, Desc: true}).Find(&r)
 
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -68,7 +68,7 @@ func (c *ChallengeRepository) GetByUserId(ctx context.Context, id string) ([]*mo
 
 	var result []*models.ChallengeModel
 
-	err := c.db.WithContext(ctx).Table("challenges").Find(&result, "user_id = ?", id).Error
+	err := c.db.WithContext(ctx).Table("challenges").Find(&result, "user_id = ?", id).Preload(clause.Associations).Error
 
 	if err != nil {
 		return nil, err

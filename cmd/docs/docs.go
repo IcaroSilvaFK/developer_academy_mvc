@@ -815,6 +815,9 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         },
@@ -852,6 +855,12 @@ const docTemplate = `{
         "views.CreateChallengeInputView": {
             "type": "object",
             "properties": {
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "description": {
                     "type": "string"
                 },

@@ -65,7 +65,7 @@ func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {
 		return
 	}
 
-	if err := cc.svc.Create(ctx.Request.Context(), c.Title, c.Description, c.EmbedUrl, u.ID); err != nil {
+	if err := cc.svc.Create(ctx.Request.Context(), c, u.ID); err != nil {
 		ctx.JSON(err.Code, err)
 		return
 	}
