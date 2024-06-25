@@ -68,12 +68,38 @@
           <i class="ph ph-magnifying-glass"></i>
           <input placeholder="Buscar desafios..." x-on:change.debounce="onSearch" />
         </div>
-        <a href="/new_challenge">
+        <a href="/new_challenge" class="button__action">
           Novo desafio <i class="ph ph-plus"></i>
         </a>
       </div>
     </header>
+    <section
+      class="section__categories"
+    >
+    <caption>Categorias Favoritas</caption>
+    <div>
 
+      <ul>
+        <li>
+          <button>Front-End</button>
+        </li>
+      <li>
+        <button>Back-End</button>
+      </li>
+    <li>
+      <button>React</button>
+    </li>
+  <li>
+    <button
+      
+    >React Native</button>
+  </li>
+</ul>
+<button class="button__action">
+  Adicionar
+</button>
+</div>
+    </section>
     <div class="container__empty_challenges" x-show="filteredChallenges.length <= 0">
       <span>
         Parece que ainda não temos desafios cadastrados. <a href="/new_challenge">Clique aqui</a> para criar um novo.

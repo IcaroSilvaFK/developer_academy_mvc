@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/gorm"
@@ -82,7 +81,7 @@ func (c *ChallengeRepository) Create(ctx context.Context, cm *models.ChallengeMo
 	result := c.db.WithContext(ctx).Create(cm)
 
 	if result.Error != nil {
-		fmt.Println(result.Error)
+
 		return result.Error
 	}
 
