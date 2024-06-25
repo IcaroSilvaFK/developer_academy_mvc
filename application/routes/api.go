@@ -12,12 +12,14 @@ import (
 func NewApiRoutes(engine *gin.Engine) {
 
 	group := engine.Group("/api/v1")
+	authMiddleware := middlewares.AuthMiddleware(services.NewSessionService())
 
 	loginController := di.NewLoginController()
 	createChallengeController := di.NewCreateNewChallengeController()
 	commentsChallengeController := di.NewCommentsChallengeController()
 	challengeController := di.NewChallengeController()
 	uController := di.NewProfileController()
+	challengesCategories := di.NewChallengesCategoriesController()
 
 	group.GET("/heath", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
@@ -28,15 +30,15 @@ func NewApiRoutes(engine *gin.Engine) {
 	group.GET("/login/:code", loginController.SignIn)
 
 	// CHALLENGES
-	group.POST("/challenges", middlewares.AuthMiddleware(services.NewSessionService()), createChallengeController.Create)
-	group.DELETE("/challenges/:id", middlewares.AuthMiddleware(services.NewSessionService()), challengeController.Destroy)
+	group.POST("/challenges", authMiddleware, createChallengeController.Create)
+	group.DELETE("/challenges/:id", authMiddleware, challengeController.Destroy)
 	group.GET("/challenges/:id", challengeController.FindById)
 	group.GET("/challenges", challengeController.GetAllChallenges)
 	group.GET("/challenges/users/:userId", challengeController.FindUserId)
 
 	// comments
-	group.POST("/challenges/comments", middlewares.AuthMiddleware(services.NewSessionService()), commentsChallengeController.Create)
-	group.DELETE("/challenges/comments/:id", middlewares.AuthMiddleware(services.NewSessionService()), commentsChallengeController.Destroy)
+	group.POST("/challenges/comments", authMiddleware, commentsChallengeController.Create)
+	group.DELETE("/challenges/comments/:id", authMiddleware, commentsChallengeController.Destroy)
 	group.GET("/challenges/comments/users/:userId", commentsChallengeController.FindUserComments)
 	group.GET("/challenges/comments/:id", commentsChallengeController.FindCommentById)
 	group.GET("/challenges/comments/challenge/:challengeId", commentsChallengeController.FindChallengesComments)
@@ -44,5 +46,13 @@ func NewApiRoutes(engine *gin.Engine) {
 	//users
 	group.GET("/users", uController.FindAllUsers)
 	group.GET("/users/:id", uController.FindByUserId)
-	group.DELETE("/users/:id", middlewares.AuthMiddleware(services.NewSessionService()), uController.Delete)
+	group.DELETE("/users/:id", authMiddleware, uController.Delete)
+
+	// challenges categories
+	group.POST("/challenges/categories", authMiddleware, challengesCategories.Create)
+	group.DELETE("/challenges/categories/:id", authMiddleware, challengesCategories.Delete)
+	group.GET("/challenges/categories", challengesCategories.FindAll)
+	group.GET("/challenges/categories/:id", challengesCategories.FindById)
+	group.GET("/challenges/categories/users/:userId", challengesCategories.FindByUserId)
+	group.PUT("/challenges/categories/:id", authMiddleware, challengesCategories.Update)
 }

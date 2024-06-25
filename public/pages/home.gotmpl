@@ -12,8 +12,57 @@
 <body>
   {{template "templates/header.tmpl" .}}
   <main x-data="container" class="container__main">
+    <section class="language__section">
+      <h2>As três linguagens de programação mais requisitadas no mercado.</h2>
+
+      <ul>
+        <li class="language__section__card">
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Rust_programming_language_black_logo.svg/242px-Rust_programming_language_black_logo.svg.png"
+            alt="rust"
+          />
+          <div>
+            <span>
+              Rust
+            </span>
+            <p>
+              <b>+ 900</b> vagas
+            </p>
+          </div>
+          
+        </li>
+        <li class="language__section__card">
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/429px-Go_Logo_Blue.svg.png"
+            alt="Go language"
+          />
+          <div>
+            <span>
+              Go language
+            </span>
+            <p>
+              <b>+ 900</b> vagas
+            </p>
+          </div>
+          </li>
+        <li class="language__section__card">
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/520px-Unofficial_JavaScript_logo_2.svg.png"
+            alt="JavaScript"
+          />
+          <div>
+            <span>
+              JavaScript
+            </span>
+            <p>
+              <b>+ 900</b> vagas
+            </p>
+          </div>
+        </li>
+      </ul>
+    </section>
     <header class="main__header">
-      <h1>Desafios</h1>
+      <h2>Desafios</h2>
       <div>
         <div class="header__input">
           <i class="ph ph-magnifying-glass"></i>
@@ -31,50 +80,127 @@
       </span>
       <i class="ph ph-code"></i>
     </div>
-    <ul class="main__list_container">
-      <template x-for="challenge in filteredChallenges">
-        <li>
-          <div class="list_container__content">
-            <h3 x-text="challenge.title"></h3>
-            <p x-text="challenge.description"></p>
+    <div class="container__slider_sub">
+      <ul class="main__list_container swiper">
+        <div class="swiper-wrapper">
+          <template x-for="challenge in filteredChallenges">
+            <div class="swiper-slide">
+              <div class="list_container__content">
+                <h3 x-text="challenge.title"></h3>
+              <p x-text="challenge.description"></p>
             <time x-text="'Criado em ' + formatDate(new Date(challenge.created_at))"></time>
+            <footer>
+              <a 
+              :href="'/challenge/'+challenge.id"
+              >
+                <i class="ph ph-eye"></i>
+                <span>
+                  visualizar
+                </span>
+              </a>
+            </footer>
           </div>
-          <footer>
-            <a :href="'/challenge/'+challenge.id">visualizar</a>
-          </footer>
-        </li>
-      </template>
-    </ul>
-  </main>
+    
+      </div>
+    </template>
+  </div>
+
+</ul>
+<div class="swiper-pagination"></div>
+<button class="button__slide prev-swiper-slide">
+  <i class="ph ph-caret-double-left"></i>
+</button>
+<button class="button__slide next-swiper-slide">
+  <i class="ph ph-caret-double-right"></i>
+</button>
+</div>
+</main>
 
   {{ template "templates/footer.tmpl" }}
 
   <script>
 
+  
+
     document.addEventListener("alpine:init", () => {
       Alpine.data("container", () => ({
         challenges: {{.challenges}},
-      filter: "",
-      filteredChallenges: {{.challenges}},
-      onSearch(ev) {
-      const value = ev.target.value
+        filter: "",
+        mySwiper: {},
+        filteredChallenges: {{.challenges}},
+        onSearch(ev) {
+          const value = ev.target.value
           
           if(!this.challenges) return
 
-    if (!value.trim()) {
-      this.filteredChallenges = this.challenges
-      return
-    }
+          if (!value.trim()) {
+            this.filteredChallenges = this.challenges
+            return
+          }
 
-    this.filteredChallenges = this.challenges.filter(challenge => this.toUpper(challenge.title).includes(this.toUpper(value)) || this.toUpper(challenge.description).includes(this.toUpper(value)))
+          this.filteredChallenges = this.challenges.filter(challenge => 
+            this.toUpper(challenge.title).includes(this.toUpper(value)) || 
+            this.toUpper(challenge.description).includes(this.toUpper(value)))
         },
-    init() {
-      this.filteredChallenges = this.challenges
-    },
-    toUpper(str) {
-      return str.toUpperCase()
-    }
+        init() {
+          this.filteredChallenges = this.challenges
+          this.initSwiper()
+          this.mySwiper.init()
+          this.mySwiper.update()
+        },
+        toUpper(str) {
+          return str.toUpperCase()
+        },
+        initSwiper() {
+          this.mySwiper = new Swiper(".swiper", {
+            init: false,
+            loop: true,
+            // effect: "fade",
+            grabCursor: true,
+            centeredSlides: false,
+            slidesPerView: 3,
+            watchSlidesProgress: true,
+            preloadImages: false,
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true
+            },
+            navigation: {
+              nextEl: ".next-swiper-slide",
+              prevEl: ".prev-swiper-slide"
+            },
+            autoplay: {
+              delay: 4000,
+              disableOnInteraction: false
+            }
+          })
+        },
+      
       }))
+
+
+        // const swiper = new Swiper('.swiper', {
+        //   // Optional parameters
+        //   direction: 'vertical',
+        //   loop: true,
+
+        //   // // If we need pagination
+        //   // pagination: {
+        //   //   el: '.swiper-pagination',
+        //   // },
+
+        //   // // Navigation arrows
+        //   // navigation: {
+        //   //   nextEl: '.swiper-button-next',
+        //   //   prevEl: '.swiper-button-prev',
+        //   // },
+
+        //   // And if we need scrollbar
+        //   scrollbar: {
+        //     el: '.swiper-scrollbar',
+        //   },
+        // });
+
     })
 
     function formatDate(date) {

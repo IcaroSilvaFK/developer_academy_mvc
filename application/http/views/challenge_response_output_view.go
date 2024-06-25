@@ -1,6 +1,9 @@
 package views
 
-import "github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
+import (
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
+)
 
 type ResponseChallengeOutputView struct {
 	ID          string `json:"id"`
@@ -24,14 +27,12 @@ func NewChallengeResponseOutputList(c []*models.ChallengeModel) []ResponseChalle
 
 func NewChallengeResponseOutput(c *models.ChallengeModel) ResponseChallengeOutputView {
 
-	t, _ := c.CreatedAt.UTC().MarshalText()
-
 	return ResponseChallengeOutputView{
 		ID:          c.ID,
 		Title:       c.Title,
 		Description: c.Description,
 		EmbedUrl:    c.EmbedUrl,
 		UserId:      c.UserId,
-		CreatedAt:   string(t),
+		CreatedAt:   utils.ConvertTimeToText(c.CreatedAt),
 	}
 }

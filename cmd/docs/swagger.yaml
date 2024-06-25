@@ -20,6 +20,22 @@ definitions:
       message:
         type: string
     type: object
+  views.ChallengesCategoriesInputView:
+    properties:
+      title:
+        type: string
+      userId:
+        type: string
+    type: object
+  views.ChallengesCategoriesOutputView:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+    type: object
   views.CommentChallengeInputView:
     properties:
       challenge_id:
@@ -199,6 +215,141 @@ paths:
       summary: Find all challenges
       tags:
       - challenges
+  /challenges/categories:
+    get:
+      description: Find all challenge category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.ChallengesCategoriesOutputView'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find all challenge category
+      tags:
+      - challenges categories
+    post:
+      consumes:
+      - application/json
+      description: Create new challenge category
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/views.ChallengesCategoriesInputView'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Create new challenge category
+      tags:
+      - challenges categories
+  /challenges/categories/{id}:
+    delete:
+      description: Delete challenge category
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Delete challenge category
+      tags:
+      - challenges categories
+    get:
+      description: Find by id challenge category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.ChallengesCategoriesOutputView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find by id challenge category
+      tags:
+      - challenges categories
+    put:
+      consumes:
+      - application/json
+      description: Find by user id challenge category
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/views.ChallengesCategoriesInputView'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find by user id challenge category
+      tags:
+      - challenges categories
+  /challenges/categories/users/{id}:
+    get:
+      description: Find by user id challenge category
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.RestErr'
+      summary: Find by user id challenge category
+      tags:
+      - challenges categories
   /challenges/comments:
     post:
       consumes:

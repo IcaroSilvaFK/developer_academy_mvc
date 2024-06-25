@@ -94,6 +94,211 @@
                 }
             }
         },
+        "/challenges/categories": {
+            "get": {
+                "description": "Find all challenge category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "challenges categories"
+                ],
+                "summary": "Find all challenge category",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.ChallengesCategoriesOutputView"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new challenge category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "challenges categories"
+                ],
+                "summary": "Create new challenge category",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/views.ChallengesCategoriesInputView"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/challenges/categories/users/{id}": {
+            "get": {
+                "description": "Find by user id challenge category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "challenges categories"
+                ],
+                "summary": "Find by user id challenge category",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/challenges/categories/{id}": {
+            "get": {
+                "description": "Find by id challenge category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "challenges categories"
+                ],
+                "summary": "Find by id challenge category",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/views.ChallengesCategoriesOutputView"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Find by user id challenge category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "challenges categories"
+                ],
+                "summary": "Find by user id challenge category",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/views.ChallengesCategoriesInputView"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete challenge category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "challenges categories"
+                ],
+                "summary": "Delete challenge category",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.RestErr"
+                        }
+                    }
+                }
+            }
+        },
         "/challenges/comments": {
             "post": {
                 "description": "Create new challenge comment",
@@ -578,6 +783,31 @@
                     "type": "string"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.ChallengesCategoriesInputView": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.ChallengesCategoriesOutputView": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }

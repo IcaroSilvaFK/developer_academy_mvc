@@ -44,7 +44,7 @@ func NewCommentsChallengeController(
 // @Router		/challenges/comments [post]
 func (cc *CommentsChallengeController) Create(ctx *gin.Context) {
 
-	u := utils.GetCurrentUserInRequestContext(ctx)
+	u := utils.GetCurrentUserInRequestContext(ctx).(views.UserResponseView)
 
 	if u.ID == "" {
 		err := utils.NewBadRequestException("Current user is not logged.")

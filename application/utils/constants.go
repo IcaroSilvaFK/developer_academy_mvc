@@ -9,6 +9,7 @@ const (
 	INTERNAL_SERVER_ERROR      = "INTERNAL SERVER ERROR"
 	NOT_FOUND_ERROR            = "NOT FOUND ERROR"
 	FORBIDDEN_ERROR            = "FORBIDDEN ERROR"
+	UNAUTHORIZED_ERROR         = "UNAUTHORIZED ERROR"
 	DATABASE_URL               = "DATABASE_URL"
 	PORT                       = "PORT"
 	MODE                       = "DEV"

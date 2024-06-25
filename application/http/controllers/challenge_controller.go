@@ -47,14 +47,13 @@ func (cc *ChallengeController) Index(ctx *gin.Context) {
 		return
 	}
 
-	d, _ := c.CreatedAt.UTC().MarshalText()
 	u := apputils.GetCurrentUserInRequestContext(ctx)
 
 	countComments := len(c.Comments)
 
 	ctx.HTML(http.StatusOK, "challenge.gotmpl", gin.H{
 		"challenge":        c,
-		"created":          string(d),
+		"created":          apputils.ConvertTimeToText(c.CreatedAt),
 		"quantityComments": countComments,
 		"comments":         views.NewCommentChallengeListOutputView(c.Comments),
 		"id":               id,

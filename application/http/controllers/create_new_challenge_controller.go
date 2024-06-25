@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
@@ -50,9 +49,7 @@ func (cc *CreateNewChallengeController) Index(ctx *gin.Context) {
 // @Router		/challenges [post]
 func (cc *CreateNewChallengeController) Create(ctx *gin.Context) {
 
-	u := utils.GetCurrentUserInRequestContext(ctx)
-
-	fmt.Println("aq")
+	u := utils.GetCurrentUserInRequestContext(ctx).(views.UserResponseView)
 
 	if u.ID == "" {
 		err := utils.NewBadRequestException("ID is required but is missing in current request")
