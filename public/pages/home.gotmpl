@@ -96,7 +96,7 @@
   </li>
 </ul>
 <button class="button__action" @click="handleOpenModal"> 
-  Adicionar
+  Favoritar
 </button>
 </div>
     </section>
@@ -129,6 +129,7 @@
     
       </div>
     </template>
+  
   </div>
 
 </ul>
@@ -140,11 +141,10 @@
   <i class="ph ph-caret-double-right"></i>
 </button>
 </div>
-</main>
-  <div class="modal__categories">
-    <div>
+  <div class="modal__categories" x-show="modalFavoriteCategoryIsOpen" x-transition>
+      <div>
       <header>
-        <h3>Favoritar nova categoria</h3>
+          <h3>Favoritar nova categoria</h3>
       </header>
       <ul>
         <template>
@@ -152,7 +152,10 @@
         </template>
       </ul>
     </div>
+    
   </div>
+</main>
+  
 
   {{ template "templates/footer.tmpl" }}
 
@@ -211,18 +214,21 @@
             }
           })
         },
-        handleOpenModal: async () => {
+        handleToggleVisibleModalCategory(){
+          this.modalFavoriteCategoryIsOpen = !this.modalFavoriteCategoryIsOpen
+        },
+        async handleOpenModal() {
           try{
             const categories = await (await fetch(
               "/api/v1/challenges/categories"
             )).json()
-
-
             console.log(categories)
+            this.handleToggleVisibleModalCategory()
           }catch(err) {
             console.error(err)
           }
-        }
+        },
+        
       }))
 
 

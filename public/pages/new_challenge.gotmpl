@@ -36,6 +36,18 @@
         <textarea name="embed_url" placeholder="Digite a url do vídeo no YouTube"
           @click="removeErrorAttribute"></textarea>
       </div>
+      <div>
+        <header>
+          <span>Categorias</span>
+        </header>
+        <ul>
+          <li>Front-End</li>
+          <li>Back-End</li>
+        </ul>
+        <footer>
+          <span>não encontrou a categoria desejada? <button type="button">Clique aqui</button></span>
+        </footer>
+      </div>
       <footer>
         <button :disabled="loading" type="submit">
           <span x-text="loading ? 'Enviando...' : 'Enviar'"></span>
