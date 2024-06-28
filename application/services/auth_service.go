@@ -33,7 +33,7 @@ func NewAuthService(
 
 func (a *LoginService) Login(ctx context.Context, code, provider string) (*models.UserModel, *utils.RestErr) {
 
-	prov := a.instaceProvider(provider)
+	prov := a.getProvider(provider)
 
 	u, restErr := prov.SignIn(ctx, code)
 
@@ -66,7 +66,7 @@ func (a *LoginService) Login(ctx context.Context, code, provider string) (*model
 	return uExists, nil
 }
 
-func (s *LoginService) instaceProvider(provider string) adapters.AdapterAuthInterface {
+func (s *LoginService) getProvider(provider string) adapters.AdapterAuthInterface {
 	switch provider {
 	case "gitlab":
 		{

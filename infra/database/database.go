@@ -3,6 +3,7 @@ package database
 import (
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
@@ -12,35 +13,45 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+var (
+	sing   sync.Once
+	dbConn *gorm.DB
+)
+
 func GetConnection() *gorm.DB {
 
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags),
-		logger.Config{
-			SlowThreshold:             time.Second,
-			LogLevel:                  logger.Info,
-			IgnoreRecordNotFoundError: false,
-			ParameterizedQueries:      false,
-			Colorful:                  false,
-		},
-	)
+	sing.Do(func() {
+		newLogger := logger.New(
+			log.New(os.Stdout, "\r\n", log.LstdFlags),
+			logger.Config{
+				SlowThreshold:             time.Second,
+				LogLevel:                  logger.Info,
+				IgnoreRecordNotFoundError: false,
+				ParameterizedQueries:      false,
+				Colorful:                  false,
+			},
+		)
 
-	dsn := os.Getenv(utils.DATABASE_URL)
+		dsn := os.Getenv(utils.DATABASE_URL)
+		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+			Logger: newLogger,
+		})
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: newLogger,
+		if err != nil {
+			panic(err)
+		}
+
+		db.AutoMigrate(
+			&models.UserModel{},
+			&models.ChallengeModel{},
+			&models.ChallengeCommentModel{},
+			&models.ChallengeHintsModel{},
+			&models.ChallengesCategoriesModel{},
+			&models.ChallengeCategoriesUsersModel{},
+		)
+
+		dbConn = db
 	})
 
-	if err != nil {
-		panic(err)
-	}
-
-	db.AutoMigrate(
-		&models.UserModel{},
-		&models.ChallengeModel{},
-		&models.ChallengeCommentModel{},
-		&models.ChallengeHintsModel{},
-	)
-
-	return db
+	return dbConn
 }

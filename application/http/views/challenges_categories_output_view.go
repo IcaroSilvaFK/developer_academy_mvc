@@ -13,7 +13,8 @@ type ChallengesCategoriesOutputView struct {
 }
 
 func NewChallengesCategoriesResponseListOutputView(ccs []*models.ChallengesCategoriesModel) []ChallengesCategoriesOutputView {
-	var r []ChallengesCategoriesOutputView
+
+	var r []ChallengesCategoriesOutputView = []ChallengesCategoriesOutputView{}
 
 	for _, v := range ccs {
 		r = append(r, NewChallengeCategoriesResponseOutputView(v))

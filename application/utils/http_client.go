@@ -13,6 +13,7 @@ import (
 type HttpClient struct {
 	client *http.Client
 	ctx    context.Context
+	time   time.Duration
 }
 
 type HttpClientInterface interface {
@@ -38,7 +39,7 @@ func NewHttpClientWithContext(context context.Context, timeout time.Duration) Ht
 	}
 
 	return &HttpClient{
-		c, context,
+		c, context, timeout,
 	}
 }
 
@@ -50,7 +51,7 @@ func (c *HttpClient) WithContext(ctx context.Context) *HttpClient {
 
 func (c *HttpClient) Get(url string, body interface{}, headers map[string]string) (*http.Response, error) {
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequestWithContext(c.ctx, "GET", url, nil)
 
 	c.addDefaultHeaders(req)
 	c.appendHeader(req, headers)
@@ -84,7 +85,7 @@ func (c *HttpClient) Post(url string, body interface{}, result interface{}) (*ht
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bt))
+	req, err := http.NewRequestWithContext(c.ctx, "POST", url, bytes.NewBuffer(bt))
 
 	if err != nil {
 		return nil, err
@@ -109,7 +110,8 @@ func (c *HttpClient) CreateUrl(base string, params map[string]string) string {
 
 	if len(params) > 0 {
 		for k, p := range params {
-			if strings.Contains(base, "?") {
+			baseHasInitializedQuery := strings.Contains(base, "?")
+			if baseHasInitializedQuery {
 				base = base + "&" + k + "=" + p
 			} else {
 				base = base + "?" + k + "=" + p

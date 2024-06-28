@@ -95,7 +95,7 @@
     >React Native</button>
   </li>
 </ul>
-<button class="button__action">
+<button class="button__action" @click="handleOpenModal"> 
   Adicionar
 </button>
 </div>
@@ -141,18 +141,28 @@
 </button>
 </div>
 </main>
+  <div class="modal__categories">
+    <div>
+      <header>
+        <h3>Favoritar nova categoria</h3>
+      </header>
+      <ul>
+        <template>
+
+        </template>
+      </ul>
+    </div>
+  </div>
 
   {{ template "templates/footer.tmpl" }}
 
   <script>
-
-  
-
     document.addEventListener("alpine:init", () => {
       Alpine.data("container", () => ({
         challenges: {{.challenges}},
         filter: "",
         mySwiper: {},
+        modalFavoriteCategoryIsOpen: false,
         filteredChallenges: {{.challenges}},
         onSearch(ev) {
           const value = ev.target.value
@@ -201,7 +211,18 @@
             }
           })
         },
-      
+        handleOpenModal: async () => {
+          try{
+            const categories = await (await fetch(
+              "/api/v1/challenges/categories"
+            )).json()
+
+
+            console.log(categories)
+          }catch(err) {
+            console.error(err)
+          }
+        }
       }))
 
 
