@@ -53,10 +53,31 @@ func (c *ChallengeCategoriesUsersService) Create(ctx context.Context, input view
 
 // Delete implements ChallengeCategoriesUsersServiceInterface.
 func (c *ChallengeCategoriesUsersService) Delete(ctx context.Context, relationId string) *utils.RestErr {
-	panic("unimplemented")
+	if err := c.repo.Delete(ctx, relationId); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			errno := utils.NewBadRequestException(fmt.Sprintf("THE RELATION WITH ID %s NOT EXISTS", relationId))
+
+			return errno
+		}
+
+		errno := utils.NewInternalServerError(nil)
+
+		return errno
+	}
+
+	return nil
 }
 
 // FindByUserId implements ChallengeCategoriesUsersServiceInterface.
 func (c *ChallengeCategoriesUsersService) FindByUserId(ctx context.Context, userId string) ([]*models.ChallengeCategoriesUsersModel, *utils.RestErr) {
-	panic("unimplemented")
+
+	r, err := c.repo.FindByUserId(ctx, userId)
+
+	if err != nil {
+
+		errno := utils.NewInternalServerError(nil)
+		return nil, errno
+	}
+
+	return r, nil
 }
