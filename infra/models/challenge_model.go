@@ -12,6 +12,7 @@ type ChallengeModel struct {
 	Description string
 	EmbedUrl    string
 	UserId      string
+	Rating      int
 	Comments    []*ChallengeCommentModel     `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
 	Hint        ChallengeHintsModel          `gorm:"foreignKey:ChallengeId;references:ID;OnDelete:CASCADE;"`
 	Categories  []*ChallengesCategoriesModel `gorm:"many2many:challenges_categories;"`
@@ -21,6 +22,7 @@ type ChallengeModel struct {
 func NewChallengeModel(
 	title, description, embedUrl, userId string,
 	categoriesId []string,
+	rating int,
 ) *ChallengeModel {
 
 	c := &ChallengeModel{
@@ -29,6 +31,7 @@ func NewChallengeModel(
 		Description: description,
 		EmbedUrl:    embedUrl,
 		UserId:      userId,
+		Rating:      rating,
 	}
 
 	if len(categoriesId) > 0 {

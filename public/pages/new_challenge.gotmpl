@@ -38,21 +38,17 @@
       </div>
       <div class="container__categories">
         <label>Categorias</label>
-        <select 
-          @change="onSelectCategory"
-          placeholder="Selecione as categorias"
-          
-        >
-         <option>Selecione as categorias</option>
+        <select @change="onSelectCategory" placeholder="Selecione as categorias">
+          <option>Selecione as categorias</option>
           <template x-for="c in options">
             <option :value="c.title" x-text="c.title">
-            </option>  
+            </option>
           </template>
         </select>
         <ul>
           <template x-for="c in categories">
-            <li  class="container__category">
-              <span x-text="c.title"></span>  
+            <li class="container__category">
+              <span x-text="c.title"></span>
               <button type="button" @click="onRequestRemove(c)">
                 <i class='ph ph-trash'></i>
               </button>
@@ -60,8 +56,22 @@
           </template>
         </ul>
         <footer>
-          <span>Não encontrou a categoria desejada?<button type="button" @click="onRequestOpenModalAddCategory">Clique aqui</button></span>
+          <span>Não encontrou a categoria desejada?<button type="button" @click="onRequestOpenModalAddCategory">Clique
+              aqui</button></span>
         </footer>
+      </div>
+      <div class="container_rate_challenge">
+        <label for="">Dificuldade</label>
+        <div>
+          <template x-for="d in [1,2,3,4,5]">
+            <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" @click="hoverRate(d)"
+              class="rate__star" x-init="hoverRate(rating)">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+              </path>
+            </svg>
+          </template>
+        </div>
       </div>
       <footer>
         <button :disabled="loading" type="submit">
@@ -70,11 +80,8 @@
       </footer>
     </form>
 
-    <div class="modal__add__category" x-show.important="modalAddCategoryIsOpen" 
-      x-transitions.important.out="fade"
-      x-transitions.important.in="fade"
-      x-cloak
-    >
+
+    <div class="modal__add__category" x-show.important="modalAddCategoryIsOpen" x-transition x-cloak>
       <form @submit.prevent="onRequestAddCategory" id="form__add__category">
         <header>
           <h3>
@@ -86,12 +93,7 @@
           </button>
         </header>
         <div>
-          <input 
-          placeholder="Digite o nome da categoria"
-          class="input__base"
-          required
-          name="category_name"
-          />
+          <input placeholder="Digite o nome da categoria" class="input__base" required name="category_name" />
         </div>
         <footer>
           <button type="button" @click="onRequestCloseModalAddCategory">Cancelar</button>
@@ -109,109 +111,156 @@
         loading: false,
         categories: [],
         modalAddCategoryIsOpen: false,
-        options : {{ .categories }},
-        allOptions: {{ .categories }},
-        changeLoading() {
-          this.loading = !this.loading
-        },
-        async handleSubmit(ev) {
-          const target = ev.target
+        options: {{ .categories }},
+      rating : 2,
+      allOptions: {{ .categories }},
+      changeLoading() {
+      this.loading = !this.loading
+    },
+      async handleSubmit(ev) {
+      const target = ev.target
           const formKeys = ["title", "embed_url", "description"]
           const payload = {}
-          for (const key of formKeys) {
-            const currentTargetValue = target[key].value
-            if (!currentTargetValue.trim()) {
-              target[key].setAttribute("error", "true")
-              continue
-            }
-            payload[key] = currentTargetValue
-          }
+          for(const key of formKeys) {
+        const currentTargetValue = target[key].value
+        if (!currentTargetValue.trim()) {
+          target[key].setAttribute("error", "true")
+          continue
+        }
+        payload[key] = currentTargetValue
+      }
 
-          if (!Object.keys(payload).length) return
+          if(!Object.keys(payload).length) return
+    if (!this.rating) {
+      bulmaToast.toast({
+        type: "is-danger",
+        message: "Selecione a dificuldade do desafio!"
+      })
+      return
+    }
 
-          try {
-            this.changeLoading()
-            await axios({
-              method: "POST",
-              url: "/api/v1/challenges",
-              data: payload
-            })
+    if (!this.categories.length) {
+      bulmaToast.toast({
+        type: "is-danger",
+        message: "Selecione pelo menos uma categoria!"
+      })
+      return
+    }
 
-            for (const key of formKeys) {
-              target[key].value = ""
-            }
 
-            bulmaToast.toast({
-              type: "is-success",
-              message: "Desafio criado com sucesso!"
-            })
-          } catch (err) {
-            console.log(err)
-            bulmaToast.toast({
-              type: "is-danger",
-              message: "Parece que ocorreu um erro ao criar o desafio!"
-            })
-          } finally {
-            this.changeLoading()
-          }
-        },
-        removeErrorAttribute: (ev) => {
-          ev.target.removeAttribute("error")
-        },
-        onSelectCategory(ev) {
-          const target = ev.target
-          const selected = target.value
-          
-          if(!selected) return
+    try {
+      this.changeLoading()
+      await axios({
+        method: "POST",
+        url: "/api/v1/challenges",
+        data: {
+          ...payload,
+          rating: this.rating,
+          categories: this.categories.map(c => c.id)
+        }
+      })
 
-          this.updateCategories(selected)
-          ev.target.value = ""
-        },
-        updateCategories(cat) {
-          const categorySelected = this.allOptions.find(c => c.title === cat)
+      for (const key of formKeys) {
+        target[key].value = ""
+      }
 
-          if(this.categories.some(c => c.title === cat)) {
-            this.categories = this.categories.filter(c => c.title !== cat)
-            this.options = [...this.options, categorySelected]
-            return
-          }
-          this.categories = [...this.categories, categorySelected]
-          this.options = this.options.filter(o => o.title !== cat)
+      bulmaToast.toast({
+        type: "is-success",
+        message: "Desafio criado com sucesso!"
+      })
+
+      this.rating = 0;
+      this.categories = []
+      this.hoverRate(0)
+    } catch (err) {
+      console.log(err)
+      bulmaToast.toast({
+        type: "is-danger",
+        message: "Parece que ocorreu um erro ao criar o desafio!"
+      })
+    } finally {
+      this.changeLoading()
+    }
         },
-        onRequestRemove(cat) {
-          this.updateCategories(cat.title)
-        },
-        onRequestOpenModalAddCategory() {
-          this.modalAddCategoryIsOpen = true
-        },
-        onRequestCloseModalAddCategory() {
-          this.modalAddCategoryIsOpen = false
-        },
+    removeErrorAttribute: (ev) => {
+      ev.target.removeAttribute("error")
+    },
+      onSelectCategory(ev) {
+      const target = ev.target
+      const selected = target.value
+
+      if (!selected) return
+
+      this.updateCategories(selected)
+      ev.target.value = ""
+    },
+    updateCategories(cat) {
+      const categorySelected = this.allOptions.find(c => c.title === cat)
+
+      if (this.categories.some(c => c.title === cat)) {
+        this.categories = this.categories.filter(c => c.title !== cat)
+        this.options = [...this.options, categorySelected]
+        return
+      }
+      this.categories = [...this.categories, categorySelected]
+      this.options = this.options.filter(o => o.title !== cat)
+    },
+    onRequestRemove(cat) {
+      this.updateCategories(cat.title)
+    },
+    onRequestOpenModalAddCategory() {
+      this.modalAddCategoryIsOpen = true
+    },
+    onRequestCloseModalAddCategory() {
+      this.modalAddCategoryIsOpen = false
+    },
         async onRequestAddCategory(ev) {
-            try{
+      try {
 
-              const target = ev.target
-              const cat = target.category_name.value
-              if(!cat) return
-              const {data} = await axios({
-                method: "POST",
-                url: "/api/v1/challenges/categories",
-                data: {
-                  title: cat
-                }
-              })
-              target.category_name.value = ""
-              this.modalAddCategoryIsOpen = false
-              this.options = [...this.options, data]
-
-              bulmaToast.toast({
-                type: "is-success",
-                message: "Nova categoria criada com sucesso!"
-              })
-            }catch(err) {
-              console.error(err)
-            }
+        const target = ev.target
+        const cat = target.category_name.value
+        if (!cat) return
+        const { data } = await axios({
+          method: "POST",
+          url: "/api/v1/challenges/categories",
+          data: {
+            title: cat
           }
+        })
+        target.category_name.value = ""
+        this.modalAddCategoryIsOpen = false
+
+        this.options = [...this.options, data]
+        this.allOptions = [...this.allOptions, data]
+
+        bulmaToast.toast({
+          type: "is-success",
+          message: "Nova categoria criada com sucesso!"
+        })
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    hoverRate(val) {
+
+      const stars = Array.from(document.querySelectorAll(".rate__star"))
+
+      if (!val) {
+        stars.forEach(star => star.classList.remove("is-active"))
+        return
+      }
+
+      const lengthFromRating = Array.from({ length: val }, (_, i) => i)
+
+
+      stars.forEach(star => star.classList.remove("is-active"))
+
+      for (const rate of lengthFromRating) {
+        stars[rate].classList.add("is-active")
+      }
+
+      this.rating = val
+    }
       }))
 
     })

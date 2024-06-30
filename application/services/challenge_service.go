@@ -44,10 +44,14 @@ func NewChallengeService(
 
 func (c *ChallengeService) Create(ctx context.Context, input views.CreateChallengeInputView, userId string) *utils.RestErr {
 
+	if input.Rating <= 0 {
+		return utils.NewBadRequestException("Rating must be greater than 0")
+	}
+
 	if !c.iaservice.VerifyIfIsValidChallenge(input.Title) {
 		return utils.NewBadRequestException("Te request contains params inappropriate")
 	}
-	cm := models.NewChallengeModel(input.Title, input.Description, input.EmbedUrl, userId, input.Categories)
+	cm := models.NewChallengeModel(input.Title, input.Description, input.EmbedUrl, userId, input.Categories, input.Rating)
 
 	err := c.repo.Create(ctx, cm)
 
@@ -64,7 +68,6 @@ func (c *ChallengeService) Create(ctx context.Context, input views.CreateChallen
 	}
 
 	if hinErr := c.hinrepo.Create(ctx, cm.ID, hint); hinErr != nil {
-
 		return hinErr
 	}
 
@@ -79,9 +82,9 @@ func (c *ChallengeService) FindAll(ctx context.Context, page *int) ([]*models.Ch
 
 	var res []*models.ChallengeModel
 
-	if err := c.cache.Get(c.ck, &res); err != nil {
-		utils.Error("Erro on get in cache", err)
-	}
+	// if err := c.cache.Get(c.ck, &res); err != nil {
+	// 	utils.Error("Erro on get in cache", err)
+	// }
 
 	if len(res) > 0 {
 		utils.Info("Response from cache", zap.String("redis", "ok"))

@@ -16,6 +16,8 @@ func NewHomeController() controllers.HomeControllerInterface {
 	iaService := services.NewAIService()
 	cacheSvc := services.NewCacheService()
 	svc := services.NewChallengeService(repo, hintSvc, iaService, cacheSvc)
+	catRepo := repositories.NewChallengesCategoriesRepository(db)
+	catService := services.NewChallengesCategoriesService(catRepo)
 
-	return controllers.NewHomeController(svc)
+	return controllers.NewHomeController(svc, catService)
 }

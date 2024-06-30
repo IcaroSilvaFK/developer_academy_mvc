@@ -40,19 +40,30 @@
   gap: 6px;
 }
 
-.section__categories > div > ul > li {
+/* .section__categories > div > ul > li {
+  padding: 2px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--gray-900);
+  font-size: 12px;
+} */
+
+.pill {
   padding: 2px 12px;
   border-radius: 16px;
   border: 1px solid var(--gray-900);
   font-size: 12px;
 }
-
-.section__categories > div > ul > li > button {
+.pill > button {
   background: transparent;
   border: none;
 }
-.section__categories > div > ul > li:hover {
-  background: var(--gray-200);
+.pill:hover {
+  background: var(--gray-900);
+  transition: all 0.3s linear;
+}
+.pill:hover button {
+  color: var(--white);
+  transition: all 0.3s linear;
 }
 
 .language__section__card {
@@ -102,6 +113,19 @@
   align-items: center;
   justify-content: center;
 } */
+
+.list_container__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.list_container__categories > li {
+  padding: 2px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--gray-900);
+  font-size: 12px;
+}
 
 .button__action {
   background: var(--black);
@@ -187,10 +211,9 @@
   color: var(--gray-900);
   padding-bottom: 16px;
   border: 1px solid var(--gray-200);
-  margin: 0 12px;
+  margin: 0 8px;
   padding: 12px;
   border-radius: var(--base-radius);
-  height: 154px;
 }
 
 .list_container__content:hover {
@@ -280,6 +303,113 @@
 
 .swiper-pagination-bullet-active {
   background: var(--gray-900) !important;
+}
+
+.list_container__rate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.list_container__rate {
+  display: flex;
+  gap: 6px;
+}
+
+.list_container__rate > svg {
+  width: 20px;
+  height: 20px;
+}
+.rate__star--active {
+  fill: var(--yellow-400);
+}
+
+.list_container__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal__categories {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s linear;
+  z-index: 2;
+}
+
+.modal__categories > div {
+  background: var(--white);
+  border-radius: var(--base-radius);
+  width: 100%;
+  max-width: 600px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.modal__categories > div > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal__categories > div > header > button {
+  color: var(--red-500);
+  background: transparent;
+}
+
+.modal__categories > div > header > button:hover {
+  filter: brightness(0.8);
+}
+
+.modal__categories > div > ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.modal__categories > div > footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.modal__categories > div > footer > button:last-child {
+  background: var(--gray-900);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.modal__categories > div > footer > button:first-child {
+  background: var(--red-500);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+.modal__categories > div > footer > button:first-child:hover {
+  filter: brightness(0.8);
+  transition: all 0.3s linear;
+}
+
+.modal__categories > div > footer > button:last-child:disabled {
+  background: var(--gray-300);
+  color: var(--gray-900);
+}
+
+.pill--active {
+  background: var(--gray-900);
+}
+.pill--active button {
+  color: var(--white);
 }
 
 @media screen and (max-width: 500px) {

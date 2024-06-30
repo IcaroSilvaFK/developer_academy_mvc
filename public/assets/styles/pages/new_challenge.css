@@ -180,8 +180,32 @@ form > .container__categories select {
   transition: all 0.3s linear;
 }
 
+.container_rate_challenge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.container_rate_challenge > div {
+  display: flex;
+  gap: 6px;
+}
+.container_rate_challenge > div svg {
+  width: 20px;
+  height: 20px;
+}
+
 form > .container__categories > ul {
   margin: 12px 0;
+}
+
+.container_rate_challenge svg {
+  cursor: pointer;
+}
+
+.is-active {
+  fill: var(--yellow-400);
 }
 
 form > .container__categories > ul > .container__category {

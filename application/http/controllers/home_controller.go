@@ -11,7 +11,8 @@ import (
 )
 
 type HomeController struct {
-	svc services.ChallengeServiceInterface
+	svc        services.ChallengeServiceInterface
+	catService services.ChallengesCategoriesServiceInterface
 }
 
 type HomeControllerInterface interface {
@@ -20,9 +21,10 @@ type HomeControllerInterface interface {
 
 func NewHomeController(
 	svc services.ChallengeServiceInterface,
+	catService services.ChallengesCategoriesServiceInterface,
 ) HomeControllerInterface {
 	return &HomeController{
-		svc,
+		svc, catService,
 	}
 }
 
@@ -41,6 +43,11 @@ func (hc *HomeController) Index(ctx *gin.Context) {
 		ctx.Redirect(http.StatusPermanentRedirect, "/error")
 		return
 	}
+	categories, restErr := hc.catService.GetAll(ctx.Request.Context(), "")
+
+	if restErr != nil {
+		utils.Error("Error on get all categories", err)
+	}
 
 	u := utils.GetCurrentUserInRequestContext(ctx)
 
@@ -49,5 +56,6 @@ func (hc *HomeController) Index(ctx *gin.Context) {
 	ctx.HTML(200, "home.gotmpl", gin.H{
 		"challenges": r,
 		"user":       u,
+		"categories": categories,
 	})
 }
