@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"gorm.io/gorm"
 )
@@ -13,7 +14,7 @@ type ChallengesCategoriesRepository struct {
 }
 
 type ChallengesCategoriesRepositoryInterface interface {
-	Create(ctx context.Context, userId string, title string) error
+	Create(ctx context.Context, userId string, title string) (*models.ChallengesCategoriesModel, error)
 	GetAll(ctx context.Context, query string) ([]*models.ChallengesCategoriesModel, error)
 	GetById(ctx context.Context, id string) (*models.ChallengesCategoriesModel, error)
 	Update(ctx context.Context, id string, title string) error
@@ -29,15 +30,16 @@ func NewChallengesCategoriesRepository(
 }
 
 // Create implements ChallengesCategoriesRepositoryInterface.
-func (c *ChallengesCategoriesRepository) Create(ctx context.Context, userId string, title string) error {
+func (c *ChallengesCategoriesRepository) Create(ctx context.Context, userId string, title string) (*models.ChallengesCategoriesModel, error) {
 
 	cat := models.NewChallengesCategoriesModel(title, userId)
 
 	if err := c.db.WithContext(ctx).Table(c.tableName).Create(&cat).Error; err != nil {
-		return err
+		utils.Error("Error on create category", err)
+		return nil, err
 	}
 
-	return nil
+	return cat, nil
 }
 
 // Delete implements ChallengesCategoriesRepositoryInterface.
@@ -63,7 +65,7 @@ func (c *ChallengesCategoriesRepository) GetAll(ctx context.Context, query strin
 
 	var r []*models.ChallengesCategoriesModel
 
-	if err := c.db.WithContext(ctx).Table(c.tableName).Find(&r, "title LIKE ?", "%"+query+"%").Error; err != nil {
+	if err := c.db.WithContext(ctx).Table(c.tableName).Find(&r).Error; err != nil {
 		return nil, err
 	}
 

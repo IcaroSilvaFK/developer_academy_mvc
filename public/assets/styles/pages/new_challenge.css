@@ -4,12 +4,12 @@
   padding-bottom: 22px;
 }
 
-.container__main>header {
+.container__main > header {
   padding: 22px 0;
   border-bottom: 1px solid var(--gray-200);
 }
 
-.container__main>form {
+.container__main > form {
   margin-top: 12px;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,8 @@
   color: var(--gray-900);
 }
 
-.container__input input {
+.container__input input,
+.input__base {
   border: 1px;
   padding: 8px 12px;
   border: 1px solid var(--gray-200);
@@ -46,11 +47,11 @@
   height: 150px;
 }
 
-.container__main>form>footer {
+.container__main > form > footer {
   margin-top: 16px;
 }
 
-.container__main>form>footer>button {
+.container__main > form > footer > button {
   background-color: var(--black);
   color: var(--white);
   width: 100%;
@@ -60,7 +61,168 @@
   font-size: 1rem;
 }
 
-.container__main>form>footer>button:hover {
+form > .container__categories {
+  display: flex;
+  flex-direction: column;
+}
+
+form > .container__categories > label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--gray-900);
+}
+form > .container__categories > ul {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+form > .container__categories select {
+  border: 1px solid var(--gray-200);
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  width: 100%;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+  position: relative;
+}
+.modal__add__category {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s linear;
+}
+
+.modal__add__category > form {
+  background: var(--white);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 40%;
+  width: 100%;
+}
+
+.modal__add__category > form > header {
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px;
+}
+.modal__add__category > form > header > button {
+  background: transparent;
+}
+.modal__add__category > form > header > button > i {
+  color: var(--red-500);
+  font-size: 1.25rem;
+}
+.modal__add__category > form > header > button:hover {
+  filter: brightness(0.8);
+  transition: all 0.3s linear;
+}
+
+.modal__add__category > form > header > h3 {
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.modal__add__category > form > div {
+  padding: 12px 22px;
+}
+
+.modal__add__category > form > div > input {
+  width: 100%;
+}
+
+.modal__add__category > form > footer {
+  padding: 12px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+
+  border-top: 1px solid var(--gray-200);
+}
+
+.modal__add__category > form > footer > button:last-child {
+  background: var(--gray-900);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.modal__add__category > form > footer > button:first-child {
+  background: transparent;
+  color: var(--red-500);
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--red-500);
+}
+
+.modal__add__category > form > footer > button:first-child:hover {
+  background: var(--red-500);
+  color: var(--white);
+  transition: all 0.3s linear;
+}
+
+.modal__add__category > form > footer > button:last-child:hover {
+  background: var(--hover-button);
+  transition: all 0.3s linear;
+}
+
+form > .container__categories > ul {
+  margin: 12px 0;
+}
+
+form > .container__categories > ul > .container__category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gray-200);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+form > .container__categories > ul > .container__category button {
+  color: var(--red-500);
+  background: transparent;
+}
+
+form > .container__categories > ul > .container__category button:hover {
+  filter: brightness(0.8);
+  transition: all 0.3s linear;
+}
+
+form > .container__categories > footer > span {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+form > .container__categories > footer > span > button {
+  background: transparent;
+  text-decoration: underline;
+}
+form > .container__categories > footer > span > button:hover {
+  filter: brightness(0.8);
+  text-decoration: none;
+  transition: all 0.3s linear;
+}
+
+.container__main > form > footer > button:hover {
   background: var(--hover-button);
   transition: all 0.3s linear;
 }

@@ -10,8 +10,9 @@ import (
 )
 
 type CreateNewChallengeController struct {
-	svc            services.ChallengeServiceInterface
-	sessionService services.SessionServiceInterface
+	svc             services.ChallengeServiceInterface
+	sessionService  services.SessionServiceInterface
+	categoryService services.ChallengesCategoriesServiceInterface
 }
 
 type CreateNewChallengeControllerInterface interface {
@@ -22,9 +23,10 @@ type CreateNewChallengeControllerInterface interface {
 func NewCreateNewChallengeController(
 	svc services.ChallengeServiceInterface,
 	sessionService services.SessionServiceInterface,
+	categoryService services.ChallengesCategoriesServiceInterface,
 ) CreateNewChallengeControllerInterface {
 	return &CreateNewChallengeController{
-		svc, sessionService,
+		svc, sessionService, categoryService,
 	}
 }
 
@@ -32,8 +34,15 @@ func (cc *CreateNewChallengeController) Index(ctx *gin.Context) {
 
 	u := utils.GetCurrentUserInRequestContext(ctx)
 
+	cats, err := cc.categoryService.GetAll(ctx.Request.Context(), "")
+
+	if err != nil {
+		utils.Error("Error on get all categories", err)
+	}
+
 	ctx.HTML(http.StatusOK, "new_challenge.gotmpl", gin.H{
-		"user": u,
+		"user":       u,
+		"categories": cats,
 	})
 }
 

@@ -17,6 +17,8 @@ func NewCreateNewChallengeController() controllers.CreateNewChallengeControllerI
 	cacheService := services.NewCacheService()
 	cService := services.NewChallengeService(repo, hintSvc, aiService, cacheService)
 	sessionService := services.NewSessionService()
+	catRepo := repositories.NewChallengesCategoriesRepository(db)
+	catService := services.NewChallengesCategoriesService(catRepo)
 
-	return controllers.NewCreateNewChallengeController(cService, sessionService)
+	return controllers.NewCreateNewChallengeController(cService, sessionService, catService)
 }

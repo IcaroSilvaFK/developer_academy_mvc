@@ -47,6 +47,10 @@ func NewBadRequestValidationException(message string, causes []Causes) *RestErr 
 }
 
 func NewInternalServerError(message *string) *RestErr {
+	if message == nil {
+		message = new(string)
+	}
+
 	return &RestErr{
 		Code:    http.StatusInternalServerError,
 		Err:     INTERNAL_SERVER_ERROR,

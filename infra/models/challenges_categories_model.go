@@ -6,7 +6,7 @@ import (
 )
 
 type ChallengesCategoriesModel struct {
-	Title  string
+	Title  string `gorm:"uniqueIndex"`
 	ID     string
 	UserId string
 

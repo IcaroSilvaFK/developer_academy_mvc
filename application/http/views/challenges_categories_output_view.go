@@ -1,6 +1,8 @@
 package views
 
 import (
+	"fmt"
+
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 )
@@ -24,6 +26,8 @@ func NewChallengesCategoriesResponseListOutputView(ccs []*models.ChallengesCateg
 }
 
 func NewChallengeCategoriesResponseOutputView(cc *models.ChallengesCategoriesModel) ChallengesCategoriesOutputView {
+
+	fmt.Println(cc)
 
 	return ChallengesCategoriesOutputView{
 		ID:        cc.ID,

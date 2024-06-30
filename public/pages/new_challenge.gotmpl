@@ -36,16 +36,31 @@
         <textarea name="embed_url" placeholder="Digite a url do vídeo no YouTube"
           @click="removeErrorAttribute"></textarea>
       </div>
-      <div>
-        <header>
-          <span>Categorias</span>
-        </header>
+      <div class="container__categories">
+        <label>Categorias</label>
+        <select 
+          @change="onSelectCategory"
+          placeholder="Selecione as categorias"
+          
+        >
+         <option>Selecione as categorias</option>
+          <template x-for="c in options">
+            <option :value="c.title" x-text="c.title">
+            </option>  
+          </template>
+        </select>
         <ul>
-          <li>Front-End</li>
-          <li>Back-End</li>
+          <template x-for="c in categories">
+            <li  class="container__category">
+              <span x-text="c.title"></span>  
+              <button type="button" @click="onRequestRemove(c)">
+                <i class='ph ph-trash'></i>
+              </button>
+            </li>
+          </template>
         </ul>
         <footer>
-          <span>não encontrou a categoria desejada? <button type="button">Clique aqui</button></span>
+          <span>Não encontrou a categoria desejada?<button type="button" @click="onRequestOpenModalAddCategory">Clique aqui</button></span>
         </footer>
       </div>
       <footer>
@@ -54,15 +69,48 @@
         </button>
       </footer>
     </form>
+
+    <div class="modal__add__category" x-show.important="modalAddCategoryIsOpen" 
+      x-transitions.important.out="fade"
+      x-transitions.important.in="fade"
+      x-cloak
+    >
+      <form @submit.prevent="onRequestAddCategory" id="form__add__category">
+        <header>
+          <h3>
+            Adicionar Nova Categoria
+          </h3>
+
+          <button @click="onRequestCloseModalAddCategory">
+            <i class="ph ph-x"></i>
+          </button>
+        </header>
+        <div>
+          <input 
+          placeholder="Digite o nome da categoria"
+          class="input__base"
+          required
+          name="category_name"
+          />
+        </div>
+        <footer>
+          <button type="button" @click="onRequestCloseModalAddCategory">Cancelar</button>
+          <button type="submit" form="form__add__category">Adicionar</button>
+        </footer>
+      </form>
+    </div>
   </main>
 
   {{ template "templates/footer.tmpl" }}
 
   <script>
     document.addEventListener("alpine:init", () => {
-
       Alpine.data("main", () => ({
         loading: false,
+        categories: [],
+        modalAddCategoryIsOpen: false,
+        options : {{ .categories }},
+        allOptions: {{ .categories }},
         changeLoading() {
           this.loading = !this.loading
         },
@@ -97,8 +145,6 @@
               type: "is-success",
               message: "Desafio criado com sucesso!"
             })
-
-
           } catch (err) {
             console.log(err)
             bulmaToast.toast({
@@ -112,6 +158,60 @@
         removeErrorAttribute: (ev) => {
           ev.target.removeAttribute("error")
         },
+        onSelectCategory(ev) {
+          const target = ev.target
+          const selected = target.value
+          
+          if(!selected) return
+
+          this.updateCategories(selected)
+          ev.target.value = ""
+        },
+        updateCategories(cat) {
+          const categorySelected = this.allOptions.find(c => c.title === cat)
+
+          if(this.categories.some(c => c.title === cat)) {
+            this.categories = this.categories.filter(c => c.title !== cat)
+            this.options = [...this.options, categorySelected]
+            return
+          }
+          this.categories = [...this.categories, categorySelected]
+          this.options = this.options.filter(o => o.title !== cat)
+        },
+        onRequestRemove(cat) {
+          this.updateCategories(cat.title)
+        },
+        onRequestOpenModalAddCategory() {
+          this.modalAddCategoryIsOpen = true
+        },
+        onRequestCloseModalAddCategory() {
+          this.modalAddCategoryIsOpen = false
+        },
+        async onRequestAddCategory(ev) {
+            try{
+
+              const target = ev.target
+              const cat = target.category_name.value
+              if(!cat) return
+              const {data} = await axios({
+                method: "POST",
+                url: "/api/v1/challenges/categories",
+                data: {
+                  title: cat
+                }
+              })
+              target.category_name.value = ""
+              this.modalAddCategoryIsOpen = false
+              this.options = [...this.options, data]
+
+              bulmaToast.toast({
+                type: "is-success",
+                message: "Nova categoria criada com sucesso!"
+              })
+            }catch(err) {
+              console.error(err)
+            }
+          }
       }))
 
     })

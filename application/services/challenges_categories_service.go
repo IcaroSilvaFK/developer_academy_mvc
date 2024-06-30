@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
@@ -15,7 +16,7 @@ type ChallengesCategoriesService struct {
 }
 
 type ChallengesCategoriesServiceInterface interface {
-	Create(ctx context.Context, input *views.ChallengesCategoriesInputView) *utils.RestErr
+	Create(ctx context.Context, input *views.ChallengesCategoriesInputView) (views.ChallengesCategoriesOutputView, *utils.RestErr)
 	GetAll(ctx context.Context, query string) ([]views.ChallengesCategoriesOutputView, *utils.RestErr)
 	GetById(ctx context.Context, id string) (views.ChallengesCategoriesOutputView, *utils.RestErr)
 	Update(ctx context.Context, id string, title string, userId string) *utils.RestErr
@@ -30,19 +31,23 @@ func NewChallengesCategoriesService(
 	return &ChallengesCategoriesService{repo}
 }
 
-func (c *ChallengesCategoriesService) Create(ctx context.Context, input *views.ChallengesCategoriesInputView) *utils.RestErr {
+func (c *ChallengesCategoriesService) Create(ctx context.Context, input *views.ChallengesCategoriesInputView) (views.ChallengesCategoriesOutputView, *utils.RestErr) {
 
-	err := c.repo.Create(ctx, input.Title, input.UserId)
+	cat, err := c.repo.Create(ctx, input.UserId, input.Title)
 
 	if err != nil {
+		r := views.ChallengesCategoriesOutputView{}
 		if err == gorm.ErrDuplicatedKey {
-			return utils.NewBadRequestException(fmt.Sprintf("THE %s CATEGORY EXISTS.", input.Title))
+			return r, utils.NewBadRequestException(fmt.Sprintf("THE %s CATEGORY EXISTS.", input.Title))
+		}
+		if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+			return r, utils.NewBadRequestException(fmt.Sprintf("THE %s CATEGORY EXISTS.", input.Title))
 		}
 
-		return utils.NewInternalServerError(nil)
+		return r, utils.NewInternalServerError(nil)
 	}
 
-	return nil
+	return views.NewChallengeCategoriesResponseOutputView(cat), nil
 }
 
 // Delete implements ChallengesCategoriesServiceInterface.

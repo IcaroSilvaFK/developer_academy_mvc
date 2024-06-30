@@ -56,14 +56,14 @@ func (c *ChallengesCategoriesController) Create(ctx *gin.Context) {
 
 	input.UserId = u.ID
 
-	err := c.svc.Create(goContext, input)
+	cat, err := c.svc.Create(goContext, input)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
 		return
 	}
 
-	ctx.JSON(http.StatusNoContent, nil)
+	ctx.JSON(http.StatusCreated, cat)
 }
 
 // @Summary	Delete challenge category
