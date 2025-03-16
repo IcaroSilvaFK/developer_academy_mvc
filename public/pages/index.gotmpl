@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/assets/styles/base.css">
   <link rel="stylesheet" href="/assets/styles/pages/index.css">
-  {{ template "templates/scripts.tmpl" }}
   {{ template "templates/head.tmpl" }}
+  {{ template "templates/scripts.tmpl" }}
   <title>DEVELOPER ACADEMY | Login</title>
 </head>
 
@@ -73,11 +73,8 @@
           </a>
         </header>
       </div>
-      <ul class="section__cards">
-        <card-component></card-component>
-        <card-component></card-component>
-        <card-component></card-component>
-      </ul>
+      {{ template "pages/challenge_list.tmpl"}}
+
       <!-- <ul class="section__cards">
         <template x-for="f in featuredChallenges">
           <li :node-key="f.id" class="card">

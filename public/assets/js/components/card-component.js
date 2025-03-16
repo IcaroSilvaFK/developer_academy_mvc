@@ -1,6 +1,7 @@
-import { LitElement, css, html } from 'https://cdn.jsdelivr.net/npm/lit@3.1.1/+esm'
+import { LitElement, css, html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 
-import "./pill-component.js"
+import "./pill-component.js";
 
 class CardComponent extends LitElement {
   static styles = css`
@@ -107,61 +108,98 @@ class CardComponent extends LitElement {
       padding: .5rem 1rem;
       border-radius: calc(.5rem - 2px);
       border: 0;
+      transition: filter .3s linear;
+    }
+    .card>footer>button>div {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .card>footer>div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card>footer>div>svg {
+      width: 18px;
+      height: 18px;
+      color: rgb(234 179 8 / 1);
+    }
+    .card>footer>div>span {
+      font-size: .875rem;
+      line-height: 1.25rem;
+      color:var(--muted-foreground);
+    }
+    .card>footer>button svg {
+      width: 18px;
+      height: 18px;
+    }
+    .card>footer>button:hover{
+      filter: brightness(.9)
     }
   `
   static properties = {
-    title: {type: String}
+    title: {type: String},
+    description: {type: String},
+    tags: {type: Array},
+    score: {type: Number},
+    difficulty: {type: String},
   }
 
   constructor() {
     super()
-    this.title = "Hello World!"
+    this.title =""
+    this.description = ""
+    this.tags = ""
+    this.score = 0
+    this.difficulty = ""
   } 
 
   render() {
+    const classes = {
+      pill: true,
+      intermediate: this.difficulty === "intermediate",
+      beginner: this.difficulty === "beginner",
+      advanced: this.difficulty === "advanced",
+    }
    return html/* html */`
       <li class="card">
         <header>
-          <h3>Build a Responsive Dashboard</h3>
+          <h3>${this.title}</h3>
           <span>
-            <span class="advanced pill">Advanced</span>
+            <span class="${classMap(classes)}">${this.difficulty}</span>
           </span>
         </header>
         <p>
-        Create a responsive admin dashboard with charts and data visualization
+        ${this.description}
         </p>
-
         <ul>
           ${
-            Array.from({length: 3}).map((_,idx) => html`<pill-component text="test-${idx}"></pill-component>`)
+            this.tags.map((tag) => html`<pill-component text="${tag}"></pill-component>`)
           }
-          <template x-for="t in f.tags">
-            <li x-text="t"></li>
-          </template>
         </ul>
         <footer>
           <div>
-            <i data-lucide="book"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
             <span>
               Popularity:
-              <span x-text="f.popularity"></span>
+              <span>${this.score}</span>
             </span>
           </div>
-          <button>
+          <button @click="${this.handleClickViewChallenge}">
             <div>
-              <i data-lucide="code"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
               <span>View Challenge</span>
             </div>
-            <i data-lucide="arrow-right"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
         </footer>
       </li>
     `
   }
 
-
-  changeTitle() {
-    this.title = 'Lit';
+  handleClickViewChallenge() {
+    console.log("clicou")
   }
 }
 

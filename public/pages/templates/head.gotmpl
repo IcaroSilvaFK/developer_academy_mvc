@@ -1,6 +1,5 @@
 {{ define "templates/head.tmpl" }}
 
-<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 <link rel="stylesheet" href="/assets/styles/base.css">
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="https://unpkg.com/dayjs@1.8.21/plugin/isBetween.js"></script>
@@ -21,4 +20,19 @@
   dayjs.extend(window.dayjs_plugin_relativeTime)
   dayjs.locale('pt-br')
 </script>
+<script type="importmap">
+  {
+    "imports": {
+      "lit": "https://unpkg.com/lit/index.js",
+      "lit/": "https://unpkg.com/lit/",
+      "@lit/reactive-element": "https://unpkg.com/@lit/reactive-element/reactive-element.js",
+      "@lit/reactive-element/": "https://unpkg.com/@lit/reactive-element/",
+      "lit-element": "https://unpkg.com/lit-element/index.js",
+      "lit-element/": "https://unpkg.com/lit-element/",
+      "lit-html": "https://unpkg.com/lit-html/lit-html.js",
+      "lit-html/": "https://unpkg.com/lit-html/",
+      "axios": "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
+    }
+  }
+  </script>
 {{end}}

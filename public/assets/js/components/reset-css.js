@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'https://cdn.jsdelivr.net/npm/lit@3.1.1/+esm';
+import { LitElement, css, html } from 'lit';
 
 class ResetCssComponent extends LitElement {
   static styles = css`
