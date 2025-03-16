@@ -2,6 +2,7 @@ package services
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 
 	"github.com/gin-contrib/sessions"
@@ -22,6 +23,11 @@ func NewSessionService() SessionServiceInterface {
 }
 
 func (ss *SessionService) Set(ctx *gin.Context, key string, v interface{}) error {
+
+	if ctx == nil {
+		return errors.New("ctx is required but is missing in current request")
+	}
+
 	s := ss.initialize(ctx)
 
 	bt, err := json.Marshal(v)
@@ -36,6 +42,11 @@ func (ss *SessionService) Set(ctx *gin.Context, key string, v interface{}) error
 }
 
 func (ss *SessionService) Get(ctx *gin.Context, key string, i interface{}) {
+
+	if ctx == nil {
+		return
+	}
+
 	s := ss.initialize(ctx)
 
 	r := s.Get(key)
@@ -53,6 +64,11 @@ func (ss *SessionService) Get(ctx *gin.Context, key string, i interface{}) {
 }
 
 func (ss *SessionService) Remove(ctx *gin.Context, key string) {
+
+	if ctx == nil {
+		return
+	}
+
 	s := ss.initialize(ctx)
 
 	s.Delete(key)

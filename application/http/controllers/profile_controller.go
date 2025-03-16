@@ -86,7 +86,9 @@ func (pc *ProfileController) FindByUserId(ctx *gin.Context) {
 
 func (pc *ProfileController) FindAllUsers(ctx *gin.Context) {
 
-	users, err := pc.usvc.FindAllUsers(ctx.Request.Context())
+	goContext := ctx.Request.Context()
+
+	users, err := pc.usvc.FindAllUsers(goContext)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)
@@ -116,7 +118,9 @@ func (pc *ProfileController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	err := pc.usvc.Delete(ctx.Request.Context(), id)
+	goContext := ctx.Request.Context()
+
+	err := pc.usvc.Delete(goContext, id)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)

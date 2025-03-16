@@ -1,100 +1,68 @@
 .header__container {
   display: flex;
   justify-content: center;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .header__container>div {
   max-width: 1200px;
   width: 100%;
-  padding: 22px;
+  height: 64px;
   display: flex;
   justify-content: space-between;
-  /* flex-wrap: wrap;*/
+  align-items: center;
 }
-
-.header__title {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.header__title>div {
+.header__container>div>a{
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--gray-400);
-  font-size: 1rem;
-}
-
-.header__title>div>i {
-  font-size: 1.625rem;
-}
-
-.header__title>span {
-  color: var(--gray-400);
-  font-size: 0.875rem;
-}
-
-.header__title>div>h2 {
-  font-size: 1rem;
-}
-
-.header__profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header__container>div>.header__profile>a>div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
   gap: 4px;
 }
-
-.header__profile>div>span:first-child {
+.header__container>div>a>span {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
   font-weight: bold;
-  font-size: 1rem;
-  font-style: italic;
+}
+.header__container>div>a:hover {
+  color: inherit;
+}
+
+.header__container>div>a>svg {
+  color: var(--primary);
+}
+
+.header__container {
+  color: var(--foreground);
+}
+.header__container>div>nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header__container>div>nav>a{
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.header__container>div>nav>a>svg {
+  width: 18px;
+  height: 18px;
+}
+.header__container>div>nav>button {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0 12px;
+  height: 2.25rem;
+  border-radius: calc(.5rem - 2px);
+  transition: filter linear .3s;
+}
+
+.header__container>div>nav>button>a{
+  color: var(--primary-foreground);
 }
 
 
-.header__profile>a {
-  color: inherit
+
+.header__container>div>nav>button:hover{
+  filter: brightness(.9)
 }
 
-.header__profile>div>span:last-child {
-  font-size: 0.875rem;
-  color: var(--gray-400);
-}
-
-.header__profile>img {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-
-  object-fit: cover;
-}
-
-@media screen and (max-width: 500px) {
-  .header__container>div {
-    justify-content: flex-start
-  }
-
-  .header__profile {
-    font-size: 12px;
-  }
-
-  .header__profile>a>div>span {
-    text-wrap: nowrap;
-  }
-
-  .header__profile>a>div>span:last-child {
-    display: none
-  }
-
-  .header__profile>img {
-    width: 45px;
-    height: 45px;
-  }
-}

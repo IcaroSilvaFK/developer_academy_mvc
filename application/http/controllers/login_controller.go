@@ -36,15 +36,15 @@ func NewLoginController(
 
 func (c *LoginController) Login(ctx *gin.Context) {
 
-	users, top, err := c.usvc.GetTenFirstUserAndCount(ctx.Request.Context())
+	goContext := ctx.Request.Context()
+
+	users, top, err := c.usvc.GetTenFirstUserAndCount(goContext)
 
 	if err != nil {
 		utils.Error("Error on request top ten users", err)
 	}
 
-	countchallenges, err := c.challengeservice.CountChallenges(
-		ctx.Request.Context(),
-	)
+	countchallenges, err := c.challengeservice.CountChallenges(goContext)
 
 	if err != nil {
 		utils.Error("Error on count challenges", err)
@@ -56,7 +56,7 @@ func (c *LoginController) Login(ctx *gin.Context) {
 		r = append(r, *views.NewUserResponseView(u))
 	}
 
-	ctx.HTML(http.StatusOK, "login.gotmpl", gin.H{
+	ctx.HTML(http.StatusOK, "index.gotmpl", gin.H{
 		"users":            r,
 		"quantity":         top,
 		"error":            err,
@@ -86,8 +86,8 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 		ctx.JSON(err.Code, err)
 		return
 	}
-
-	u, err := c.svc.Login(ctx.Request.Context(), code, provider)
+	goContext := ctx.Request.Context()
+	u, err := c.svc.Login(goContext, code, provider)
 
 	if err != nil {
 		ctx.JSON(err.Code, err)

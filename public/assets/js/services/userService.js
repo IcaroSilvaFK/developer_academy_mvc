@@ -16,7 +16,6 @@ export class UserService {
 
   getProfile() {
     const user = localStorage.getItem(this.#key);
-    console.log(user)
     if (!user) {
       window.location.replace("/login");
     }

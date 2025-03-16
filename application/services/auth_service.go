@@ -73,6 +73,11 @@ func (s *LoginService) getProvider(provider string) adapters.AdapterAuthInterfac
 			utils.Info("gitlab login")
 			return s.gitlabAdapter
 		}
+	case "github":
+		{
+			utils.Info("github login")
+			return s.githubAdapter
+		}
 	default:
 		{
 			utils.Info("github login")

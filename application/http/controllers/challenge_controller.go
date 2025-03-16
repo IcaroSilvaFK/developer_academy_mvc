@@ -79,7 +79,9 @@ func (cc *ChallengeController) Destroy(ctx *gin.Context) {
 		return
 	}
 
-	if err := cc.svc.Delete(ctx.Request.Context(), id); err != nil {
+	goContext := ctx.Request.Context()
+
+	if err := cc.svc.Delete(goContext, id); err != nil {
 		ctx.JSON(err.Code, err)
 		return
 	}
@@ -172,5 +174,4 @@ func (cc *ChallengeController) FindUserId(ctx *gin.Context) {
 	r := views.NewChallengeResponseOutputList(c)
 
 	ctx.JSON(http.StatusOK, r)
-
 }

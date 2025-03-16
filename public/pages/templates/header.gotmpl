@@ -2,22 +2,28 @@
 <link rel="stylesheet" href="/assets/styles/components/header.css">
 <header class="header__container">
   <div>
-    <a class="header__title" href="/home">
-      <div>
-        <i class="ph ph-flag"></i>
-        <h2>DEVELOPER ACADEMY</h2>
-      </div>
-      <span>Plataforma para desafios do desenvolvedor</span>
+    <a href="/">
+      <i data-lucide="code"></i>
+      <span>DevVault</span>
     </a>
-    <div class="header__profile">
-      <a href="/profile/{{ .user.ID }}">
-        <div>
-          <span>@{{ .user.Name }}</span>
-          <span>{{ .user.Email }}</span>
-        </div>
+
+    <nav>
+      <a href="/challgens">
+        <i data-lucide="swords"></i>
+        Challenges
       </a>
-      <img src="{{ .user.AvatarUrl }}" alt="{{ .user.Name }}'s avatar" />
-    </div>
+      <a href="/challgens">
+        <i data-lucide="briefcase"></i>
+        Vacancies
+      </a>
+      <a href="/challgens">
+        <i data-lucide="book"></i>
+        Courses
+      </a>
+      <button>
+        <a>Login</a>
+      </button>
+    </nav>
   </div>
 </header>
 {{ end }}

@@ -1,0 +1,163 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 90%;
+}
+.section {
+  position: relative;
+  width: 100%;
+  height: 90dvh;
+}
+.section>section:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  text-align: center;
+  padding-top: 6rem;
+  padding-bottom: 8rem;
+  max-width: 768px;
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
+}
+
+.section>section:first-child>h2{
+  font-size: 3.75rem;
+  line-height: 1;
+  text-align: center;
+  color:var(--foreground);
+}
+.section>section:first-child>p{
+  line-height: 1;
+  text-align: center;
+  color:var(--muted-foreground);
+}
+
+.section__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+}
+
+.section__buttons button a {
+  font-size: .875rem;
+  line-height: 1.25rem;
+  padding: 1.25rem 1.5rem ;
+  border-radius: calc(.5rem - 2px);
+
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  height: 2.75rem;
+}
+.section__buttons button:first-child a {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.section__buttons button:first-child:hover  a {
+  filter: brightness(.9)
+}
+.section__buttons button:last-child a {
+  background: var(--primary-foreground);
+  border: 1px solid var(--input)
+}
+.section__buttons button:last-child:hover a {
+  border-color:var(--primary)
+}
+.section__buttons button svg {
+  width: 16px;
+  height: 16px;
+}
+.effect {
+  filter: blur(64px);
+  position: absolute;
+  top: calc(100% - 30rem);
+  /* top: calc(100% - 30rem); */
+  width: 100%;
+  transform: translate3d(0, 0, 0) rotate(0) skew(0) skewY(0) scaleX(1) scaleY(1);
+
+  overflow: hidden;
+}
+.effect svg {
+  left: calc(50% + 13rem);
+  transform: translate(-50%, 0) rotate(0) skew(0) skewY(0) scaleX(1) scaleY(1);
+  left: calc(50% + 36rem);
+  position: relative;
+}
+.feature_challenges {
+  background: var(--secondary-50);
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  width: 100%;
+  height: 42.375rem;
+}
+
+.feature_challenges > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.feature_challenges > div > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.feature_challenges > div > header> div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.feature_challenges > div > header> div>h3 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+.feature_challenges > div > header> div>p {
+  color: var(--muted-foreground);
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.feature_challenges > div > header> a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--white);
+  color: var(--black);
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-duration: .15s;
+  padding: .5rem 1rem;
+  border-radius: calc(.5rem - 2px);
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+.feature_challenges > div > header> a:hover {
+  background-color: var(--accent);
+  color: var(--primary);
+}
+.feature_challenges > div > header> a>svg {
+  width: 18px;
+  height: 18px;
+}
+.section__cards {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 2rem;
+}

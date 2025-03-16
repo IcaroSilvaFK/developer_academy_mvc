@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/styles/base.css">
+  <link rel="stylesheet" href="/assets/styles/pages/index.css">
+  {{ template "templates/scripts.tmpl" }}
+  {{ template "templates/head.tmpl" }}
+  <title>DEVELOPER ACADEMY | Login</title>
+</head>
+
+<body>
+  <reset-css-component></reset-css-component>
+  {{ template "templates/header.tmpl" }}
+  <main class="container">
+    <div class="section">
+      <section>
+        <h2>
+          Your one-stop platform for developer growth
+        </h2>
+        <p>
+          Find coding challenges to improve your skills, discover job vacancies that match your expertise, and read
+          honest
+          reviews about programming courses.
+        </p>
+
+        <div class="section__buttons">
+          <button>
+            <a href="">
+              <i data-lucide="code"></i>
+              <span>Explore Challenges</span>
+            </a>
+          </button>
+          <button>
+            <a href="">
+              <i data-lucide="briefcase"></i>
+              <span>Find Jobs</span>
+            </a>
+          </button>
+        </div>
+
+      </section>
+      <div class="effect">
+        <svg
+          class="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
+          viewBox="0 0 1155 678">
+          <path fill="url(#gradient)" fill-opacity=".3"
+            d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z">
+          </path>
+          <defs>
+            <linearGradient id="gradient" x1="1155.49" x2="-78.208" y1=".177" y2="474.645"
+              gradientUnits="userSpaceOnUse">
+              <stop stop-color="#9089FC"></stop>
+              <stop offset="1" stop-color="#FF80B5"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+
+    <section class="feature_challenges">
+      <div>
+        <header>
+          <div>
+            <h3>Featured Challenges</h3>
+            <p>Take on these coding challenges to improve your skills</p>
+          </div>
+          <a href="#">
+            View All challenges <i data-lucide="arrow-right"></i>
+          </a>
+        </header>
+      </div>
+      <ul class="section__cards">
+        <card-component></card-component>
+        <card-component></card-component>
+        <card-component></card-component>
+      </ul>
+      <!-- <ul class="section__cards">
+        <template x-for="f in featuredChallenges">
+          <li :node-key="f.id" class="card">
+            <header>
+              <h3 x-text="f.title">
+              </h3>
+              <span>
+                <span x-text="f.level" :class="f.level + ' pill'"></span>
+              </span>
+            </header>
+            <p x-text="f.description"></p>
+
+            <ul>
+              <template x-for="t in f.tags">
+                <li x-text="t"></li>
+              </template>
+            </ul>
+            <footer>
+              <div>
+                <i data-lucide="book"></i>
+                <span>
+                  Popularity:
+                  <span x-text="f.popularity"></span>
+                </span>
+              </div>
+              <button>
+                <div>
+                  <i data-lucide="code"></i>
+                  <span>View Challenge</span>
+                </div>
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </footer>
+          </li>
+        </template>
+      </ul> -->
+    </section>
+  </main>
+
+  {{ template "templates/footer.tmpl"}}
+
+  <script>
+    // Mock data - Featured challenges
+    const featuredChallenges = [
+      {
+        id: "1",
+        title: "Build a Responsive Dashboard",
+        description: "Create a responsive admin dashboard with charts and data visualization",
+        level: "intermediate",
+        tags: ["React", "CSS", "Chart.js"],
+        popularity: 4.8,
+      },
+      {
+        id: "2",
+        title: "E-commerce Product Page",
+        description: "Design and implement a product detail page with image gallery and cart functionality",
+        level: "beginner",
+        tags: ["HTML", "CSS", "JavaScript"],
+        popularity: 4.5,
+      },
+      {
+        id: "3",
+        title: "Real-time Chat Application",
+        description: "Build a chat application with real-time messaging using WebSockets",
+        level: "advanced",
+        tags: ["React", "Node.js", "WebSockets"],
+        popularity: 4.9,
+      },
+    ];
+    async function onLogin() {
+      window.open(
+        "https://github.com/login/oauth/authorize?client_id={{.client_id}}",
+        "_self"
+      )
+    }
+    function loginWithGitlab() {
+      const url = `${window.location.href}?provider=gitlab`
+
+      window.open(
+        `https://gitlab.com/oauth/authorize?client_id={{.gitlab_client_id}}&redirect_uri=${url}&response_type=code&scope=read_user`,
+        "_self"
+      )
+    }
+    // document.addEventListener('alpine:init', () => {
+    //   Alpine.data('container', () => ({
+    //     featuredChallenges,
+    //   }))
+    // })
+
+  </script>
+
+  <!-- <script type="module">
+    import {
+      UserService
+    } from '/assets/js/index.js'
+
+    window.addEventListener("load", async () => {
+      const url = new URL(window.location.href)
+      const code = url.searchParams.get("code")
+      let provider = url.searchParams.get("provider")
+
+      if (!provider) {
+        provider = "github"
+      }
+
+      if (code) {
+        const authIsSuccess = await userService.auth(code, provider)
+
+        if (authIsSuccess) {
+          window.location.replace("/home")
+        }
+      }
+    })
+  </script> -->
+</body>
+
+</html>
