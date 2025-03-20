@@ -152,6 +152,67 @@
   width: 18px;
   height: 18px;
 }
+
+.latest_jobs {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  width: 100%;
+  height: 42.375rem;
+}
+
+.latest_jobs > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.latest_jobs > div > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.latest_jobs > div > header> div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.latest_jobs > div > header> div>h3 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+.latest_jobs > div > header> div>p {
+  color: var(--muted-foreground);
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.latest_jobs > div > header> a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--white);
+  color: var(--black);
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-duration: .15s;
+  padding: .5rem 1rem;
+  border-radius: calc(.5rem - 2px);
+  font-size: .875rem;
+  line-height: 1.25rem;
+  border: 1px solid var(--muted-foreground);
+}
+.latest_jobs > div > header> a:hover {
+  background-color: var(--accent);
+  color: var(--primary);
+  border: 0;
+}
+
 /* .section__cards {
   display: flex;
   gap: 12px;

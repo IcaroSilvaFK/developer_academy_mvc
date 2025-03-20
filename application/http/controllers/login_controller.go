@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/http/views"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/services"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
@@ -81,9 +82,26 @@ func (c *LoginController) SignIn(ctx *gin.Context) {
 	code := ctx.Param("code")
 	provider := ctx.Query("provider")
 
-	if code == "" {
-		err := utils.NewBadRequestException("Missing a param code in request")
-		ctx.JSON(err.Code, err)
+	if code == "" && ctx.Request.Method == "POST" {
+		input := new(dtos.LoginInputDto)
+
+		if err := ctx.ShouldBindJSON(input); err != nil {
+			errno := utils.NewBadRequestException(err.Error())
+			ctx.JSON(errno.Code, errno)
+			return
+		}
+
+		r, err := c.svc.LoginWithPassword(ctx.Request.Context(), input)
+
+		if err != nil {
+			ctx.JSON(err.Code, err)
+			return
+		}
+		u := views.NewUserResponseView(r)
+
+		c.sessionservice.Set(ctx, "user", u)
+
+		ctx.JSON(http.StatusOK, u)
 		return
 	}
 	goContext := ctx.Request.Context()

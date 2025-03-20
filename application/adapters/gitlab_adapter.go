@@ -25,7 +25,6 @@ func NewGitlabAdapter(
 }
 
 func (ga *GitlabAuthAdapter) SignIn(ctx context.Context, code string) (dtos.GithubResponse, *utils.RestErr) {
-
 	if code == "" {
 		return dtos.GithubResponse{}, utils.NewBadRequestException(utils.CODE_AUTHETICATION_MISSGIN)
 	}

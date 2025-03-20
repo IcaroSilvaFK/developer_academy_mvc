@@ -74,43 +74,20 @@
         </header>
       </div>
       {{ template "pages/challenge_list.tmpl"}}
-
-      <!-- <ul class="section__cards">
-        <template x-for="f in featuredChallenges">
-          <li :node-key="f.id" class="card">
-            <header>
-              <h3 x-text="f.title">
-              </h3>
-              <span>
-                <span x-text="f.level" :class="f.level + ' pill'"></span>
-              </span>
-            </header>
-            <p x-text="f.description"></p>
-
-            <ul>
-              <template x-for="t in f.tags">
-                <li x-text="t"></li>
-              </template>
-            </ul>
-            <footer>
-              <div>
-                <i data-lucide="book"></i>
-                <span>
-                  Popularity:
-                  <span x-text="f.popularity"></span>
-                </span>
-              </div>
-              <button>
-                <div>
-                  <i data-lucide="code"></i>
-                  <span>View Challenge</span>
-                </div>
-                <i data-lucide="arrow-right"></i>
-              </button>
-            </footer>
-          </li>
-        </template>
-      </ul> -->
+    </section>
+    <section class="latest_jobs">
+      <div>
+        <header>
+          <div>
+            <h3>Latest Job Vacancies</h3>
+            <p>find your next opportunity as a developer</p>
+          </div>
+          <a href="#">
+            View All Jobs <i data-lucide="arrow-right"></i>
+          </a>
+        </header>
+      </div>
+      {{ template "pages/list_jobs.tmpl"}}
     </section>
   </main>
 

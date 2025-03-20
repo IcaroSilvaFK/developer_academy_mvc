@@ -2,9 +2,15 @@
   display: flex;
   justify-content: center;
   border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: hsl(210 40% 98% / 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 2;
 }
 
-.header__container>div {
+.header__container > div {
   max-width: 1200px;
   width: 100%;
   height: 64px;
@@ -12,57 +18,54 @@
   justify-content: space-between;
   align-items: center;
 }
-.header__container>div>a{
+.header__container > div > a {
   display: flex;
   align-items: center;
   gap: 4px;
 }
-.header__container>div>a>span {
+.header__container > div > a > span {
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: bold;
 }
-.header__container>div>a:hover {
+.header__container > div > a:hover {
   color: inherit;
 }
 
-.header__container>div>a>svg {
+.header__container > div > a > svg {
   color: var(--primary);
 }
 
 .header__container {
   color: var(--foreground);
 }
-.header__container>div>nav {
+.header__container > div > nav {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.header__container>div>nav>a{
+.header__container > div > nav > a {
   display: flex;
   align-items: center;
   gap: 2px;
 }
-.header__container>div>nav>a>svg {
+.header__container > div > nav > a > svg {
   width: 18px;
   height: 18px;
 }
-.header__container>div>nav>button {
+.header__container > div > nav > button {
   background: var(--primary);
   color: var(--primary-foreground);
   padding: 0 12px;
   height: 2.25rem;
-  border-radius: calc(.5rem - 2px);
-  transition: filter linear .3s;
+  border-radius: calc(0.5rem - 2px);
+  transition: filter linear 0.3s;
 }
 
-.header__container>div>nav>button>a{
+.header__container > div > nav > button > a {
   color: var(--primary-foreground);
 }
 
-
-
-.header__container>div>nav>button:hover{
-  filter: brightness(.9)
+.header__container > div > nav > button:hover {
+  filter: brightness(0.9);
 }
-

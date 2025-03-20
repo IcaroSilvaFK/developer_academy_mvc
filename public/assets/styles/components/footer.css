@@ -1,12 +1,109 @@
 .container__footer {
   display: flex;
-  justify-content: center;
-  align-items: center;
-
-  padding: 12px;
+  flex-direction: column;
+  gap: 22px;
+  padding: 1.5rem;
+  border-top: 1px solid var(--input);
 }
 
-.container__footer span {
-  font-size: 14px;
-  color: var(--gray-400)
+.container__links_main {
+  border-bottom: 1px solid var(--input);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  padding-bottom: 1.5rem;
+}
+
+.container__links_main > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.container__links_main > div > nav:not(.community) {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.container__links_main > div > b {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+.container__links_main > div > nav:not(.community) > a {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--muted-foreground);
+  transition: color linear 0.3s;
+}
+.container__links_main > div > nav:not(.community) > a:hover {
+  color: var(--primary);
+}
+.informations svg {
+  color: var(--primary);
+  width: 18px;
+  height: 18px;
+}
+.informations a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.informations a > span {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+.informations > span {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--muted-foreground);
+}
+
+.community {
+  display: flex;
+  gap: 22px;
+}
+
+.community svg {
+  width: 16px;
+  height: 16px;
+}
+
+.community a {
+  border: 1px solid var(--input);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  transition: all linear 0.3s;
+}
+
+.community a:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: 0;
+}
+
+.last__line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.last__line {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--muted-foreground);
+}
+
+.last__line > div {
+  display: flex;
+  gap: 12px;
 }

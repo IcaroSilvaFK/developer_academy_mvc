@@ -23,7 +23,7 @@ var ctx = context.Background()
 func TestShouldCreateUser(t *testing.T) {
 	repo := setupUserRepo()
 
-	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user")
+	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user", nil)
 
 	err := repo.Create(ctx, u)
 
@@ -34,7 +34,7 @@ func TestShouldFindByEmailUser(t *testing.T) {
 
 	repo := setupUserRepo()
 	uEmail := "test2@test.com"
-	u := models.NewUserModel(uEmail, "test", "https://", "http://", "test create new user")
+	u := models.NewUserModel(uEmail, "test", "https://", "http://", "test create new user", nil)
 
 	err := repo.Create(ctx, u)
 
@@ -50,7 +50,7 @@ func TestShouldFindByEmailUser(t *testing.T) {
 func TestShouldFindByIdUser(t *testing.T) {
 
 	repo := setupUserRepo()
-	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user")
+	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user", nil)
 
 	err := repo.Create(ctx, u)
 
@@ -69,7 +69,7 @@ func TestShouldFindAllUsers(t *testing.T) {
 	expectedQuantityUsers := 10
 
 	for i := 0; i < expectedQuantityUsers; i++ {
-		u := models.NewUserModel(fmt.Sprintf("test%d@test.com", i), "test", "https://", "http://", "test create new user")
+		u := models.NewUserModel(fmt.Sprintf("test%d@test.com", i), "test", "https://", "http://", "test create new user", nil)
 		repo.Create(ctx, u)
 	}
 
@@ -86,7 +86,7 @@ func TestShouldFindTenAndCountUsers(t *testing.T) {
 	expectedQuantityUsers := 20
 
 	for i := 0; i < expectedQuantityUsers; i++ {
-		u := models.NewUserModel(fmt.Sprintf("test%d@test.com", i), "test", "https://", "http://", "test create new user")
+		u := models.NewUserModel(fmt.Sprintf("test%d@test.com", i), "test", "https://", "http://", "test create new user", nil)
 		repo.Create(ctx, u)
 	}
 
@@ -101,7 +101,7 @@ func TestShouldDeleteUser(t *testing.T) {
 
 	repo := setupUserRepo()
 
-	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user")
+	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user", nil)
 
 	repo.Create(ctx, u)
 
@@ -116,7 +116,7 @@ func TestShouldCountUsers(t *testing.T) {
 	expectedQuantityUsers := 20
 
 	for i := 0; i < expectedQuantityUsers; i++ {
-		u := models.NewUserModel(fmt.Sprintf("test%d@test.com", i), "test", "https://", "http://", "test create new user")
+		u := models.NewUserModel(fmt.Sprintf("test%d@test.com", i), "test", "https://", "http://", "test create new user", nil)
 		repo.Create(ctx, u)
 	}
 

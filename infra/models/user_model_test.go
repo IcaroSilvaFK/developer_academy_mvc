@@ -9,7 +9,7 @@ import (
 
 func TestShouldCreateNewUserWhenPassValidData(t *testing.T) {
 
-	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user")
+	u := models.NewUserModel("test@test.com", "test", "https://", "http://", "test create new user", nil)
 
 	assert.NotNil(t, u.ID)
 	assert.NotNil(t, u.Email)

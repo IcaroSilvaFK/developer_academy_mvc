@@ -2,8 +2,10 @@ package services
 
 import (
 	"context"
+	"time"
 
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/adapters"
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -18,6 +20,7 @@ type LoginService struct {
 
 type LoginServiceInterface interface {
 	Login(ctx context.Context, code, provider string) (*models.UserModel, *utils.RestErr)
+	LoginWithPassword(ctx context.Context, dto *dtos.LoginInputDto) (*models.UserModel, *utils.RestErr)
 }
 
 func NewAuthService(
@@ -53,7 +56,7 @@ func (a *LoginService) Login(ctx context.Context, code, provider string) (*model
 	}
 	if err == gorm.ErrRecordNotFound {
 		uExists = models.NewUserModel(
-			u.Email, u.Name, u.AvatarUrl, u.Url, u.Bio,
+			u.Email, u.Name, u.AvatarUrl, u.Url, u.Bio, nil,
 		)
 		err = a.ur.Create(ctx, uExists)
 
@@ -84,4 +87,22 @@ func (s *LoginService) getProvider(provider string) adapters.AdapterAuthInterfac
 			return s.githubAdapter
 		}
 	}
+}
+
+func (a *LoginService) LoginWithPassword(ctx context.Context, dto *dtos.LoginInputDto) (*models.UserModel, *utils.RestErr) {
+	user, err := a.ur.FindByEmail(ctx, dto.Email)
+
+	if err != nil {
+		message := "Error on find user"
+		return nil, utils.NewInternalServerError(&message)
+	}
+
+	if !user.VerifyPassword(dto.Password) {
+		return nil, utils.NewBadRequestException("Email or password invalid")
+	}
+
+	// this is for brute force atack
+	time.Sleep(2 * time.Second)
+
+	return user, nil
 }

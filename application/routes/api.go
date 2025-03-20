@@ -27,7 +27,7 @@ func NewApiRoutes(engine *gin.Engine) {
 		})
 	})
 
-	group.GET("/login/:code", loginController.SignIn)
+	group.Any("/login/:code", loginController.SignIn)
 
 	// CHALLENGES
 	group.POST("/challenges", authMiddleware, createChallengeController.Create)

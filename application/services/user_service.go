@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/IcaroSilvaFK/developer_academy_mvc/application/dtos"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/application/utils"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/models"
 	"github.com/IcaroSilvaFK/developer_academy_mvc/infra/repositories"
@@ -19,6 +20,7 @@ type UserServiceInterface interface {
 	FindAllUsers(context.Context) ([]*models.UserModel, *utils.RestErr)
 	FindUserById(context.Context, string) (*models.UserModel, *utils.RestErr)
 	Delete(context.Context, string) *utils.RestErr
+	CreateUser(context.Context, *dtos.CreateUserInputDto) (*models.UserModel, *utils.RestErr)
 }
 
 func NewUserService(
@@ -28,6 +30,18 @@ func NewUserService(
 	return &UserService{
 		ur,
 	}
+}
+
+func (us *UserService) CreateUser(ctx context.Context, dto *dtos.CreateUserInputDto) (*models.UserModel, *utils.RestErr) {
+	u := models.NewUserModel(dto.Email, dto.Name, "https://cataas.com/cat", "", "Hello, start here with your bio!", &dto.Password)
+
+	err := us.ur.Create(ctx, u)
+
+	if err != nil {
+		return nil, utils.NewInternalServerError(nil)
+	}
+
+	return u, nil
 }
 
 func (us *UserService) GetTenFirstUserAndCount(ctx context.Context) ([]*models.UserModel, int, *utils.RestErr) {
